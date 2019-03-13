@@ -379,4 +379,9 @@
         <a class="pp-cta extra-action" href="http://bit.ly/shards-dashboard-pro">Download</a>
       </div>
     </div>
+    <script>
+      $(document).ready(function() {
+        index();
+      });
+    </script>
     @include("footer");

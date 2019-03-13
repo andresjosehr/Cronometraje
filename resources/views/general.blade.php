@@ -7,7 +7,7 @@
     <meta name="description" content="A high-quality &amp; free Bootstrap admin dashboard template pack that comes with lots of templates and components.">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
@@ -20,7 +20,7 @@
     </script>
   </head>
   <body class="h-100">
-    <div class="color-switcher animated">
+    {{-- <div class="color-switcher animated">
       <h5>Accent Color</h5>
       <ul class="accent-colors">
         <li class="accent-primary active" data-color="primary">
@@ -53,7 +53,6 @@
           <h5 class="my-2">Help us Grow</h5>
           <div class="inner-wrapper">
             <a class="github-button" href="https://github.com/DesignRevision/shards-dashboard" data-icon="octicon-star" data-show-count="true" aria-label="Star DesignRevision/shards-dashboard on GitHub">Star</a>
-            <!-- <iframe style="width: 91px; height: 21px;"src="https://yvoschaap.com/producthunt/counter.html#href=https%3A%2F%2Fwww.producthunt.com%2Fr%2Fp%2F112998&layout=wide" width="56" height="65" scrolling="no" frameborder="0" allowtransparency="true"></iframe> -->
           </div>
         </div>
         <div id="social-share" data-url="https://designrevision.com/downloads/shards-dashboard-lite/" data-text="🔥 Check out Shards Dashboard Lite, a free and beautiful Bootstrap 4 admin dashboard template!" data-title="share"></div>
@@ -67,7 +66,7 @@
     </div>
     <div class="color-switcher-toggle animated pulse infinite">
       <i class="material-icons">settings</i>
-    </div>
+    </div> --}}
     <div class="container-fluid">
       <div class="row">
         <!-- Main Sidebar -->

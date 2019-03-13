@@ -10,6 +10,10 @@
 |
 */
 
+Route::get('/',function()
+{
+	return redirect("login");
+});
 
 Route::group([], function() {
 	Route::get('login', array('uses' => 'LoginController@index')); 
