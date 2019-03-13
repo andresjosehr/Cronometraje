@@ -5,16 +5,16 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-	require('./../../node_modules/popper.js/dist/popper.js');
-	require('./../../node_modules/bootstrap/dist/js/bootstrap.js');
-	require('./../../node_modules/chart.js/dist/chart.js');
-	require('./../../node_modules/shards-ui/dist/js/shards.js');
-	require('./../../node_modules/sharrre/dist/jquery.sharrre.min.js');
-	require('./../../node_modules/sweetalert/dist/sweetalert.min');
-	require('./../../resources/js/template/extras.1.1.0.min.js');
-	require('./../../resources/js/template/shards-dashboards.1.1.0.js');
-	require('./../../resources/js/template/app-blog-overview.1.1.0.js');
-	require('./../../resources/js/template/login.js');
+	// require('./../../node_modules/popper.js/dist/popper.js');
+	// require('./../../node_modules/bootstrap/dist/js/bootstrap.js');
+	// require('./../../node_modules/chart.js/dist/chart.js');
+	// require('./../../node_modules/shards-ui/dist/js/shards.js');
+	// require('./../../node_modules/sharrre/dist/jquery.sharrre.min.js');
+	// require('./../../node_modules/sweetalert/dist/sweetalert.min');
+	// require('./../../resources/js/template/extras.1.1.0.min.js');
+	// require('./../../resources/js/template/shards-dashboards.1.1.0.js');
+	// require('./../../resources/js/template/app-blog-overview.1.1.0.js');
+	// require('./../../resources/js/template/login.js');
 
 	require('./../../resources/js/custom/general.js');
 	require('./../../resources/js/custom/login.js');
