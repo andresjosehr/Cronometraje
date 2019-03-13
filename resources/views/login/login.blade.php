@@ -5,7 +5,7 @@
 		<div class="container-login100">
 			<div class="wrap-login100">
 				<div class="login100-pic js-tilt" data-tilt>
-					<img src="{{ asset('img/login/img-01.png') }}" alt="IMG">
+					<img src="{{ asset('public/img/login/img-01.png') }}" alt="IMG">
 				</div>
 				
 				<div id="login_contenedor"></div>

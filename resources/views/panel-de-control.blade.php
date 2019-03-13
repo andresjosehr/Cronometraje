@@ -182,7 +182,7 @@
                   <div class="card-body p-0">
                     <div class="blog-comments__item d-flex p-3">
                       <div class="blog-comments__avatar mr-3">
-                        <img src="{{asset('img/avatars/2.jpg')}}" alt="User avatar" /> </div>
+                        <img src="{{asset('public/img/avatars/2.jpg')}}" alt="User avatar" /> </div>
                       <div class="blog-comments__content">
                         <div class="blog-comments__meta text-muted">
                           <a class="text-secondary" href="#">James Johnson</a> on
@@ -210,7 +210,7 @@
                     </div>
                     <div class="blog-comments__item d-flex p-3">
                       <div class="blog-comments__avatar mr-3">
-                        <img src="{{asset('img/avatars/2.jpg')}}" alt="User avatar" /> </div>
+                        <img src="{{asset('public/img/avatars/2.jpg')}}" alt="User avatar" /> </div>
                       <div class="blog-comments__content">
                         <div class="blog-comments__meta text-muted">
                           <a class="text-secondary" href="#">James Johnson</a> on
@@ -238,7 +238,7 @@
                     </div>
                     <div class="blog-comments__item d-flex p-3">
                       <div class="blog-comments__avatar mr-3">
-                        <img src="{{asset('img/avatars/3.jpg')}}" alt="User avatar" /> </div>
+                        <img src="{{asset('public/img/avatars/3.jpg')}}" alt="User avatar" /> </div>
                       <div class="blog-comments__content">
                         <div class="blog-comments__meta text-muted">
                           <a class="text-secondary" href="#">James Johnson</a> on
