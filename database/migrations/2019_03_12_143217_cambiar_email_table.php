@@ -16,7 +16,7 @@ class CambiarEmailTable extends Migration
         Schema::create('cambiar_email', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('email_viejo');
+            $table->string('email_viejo')->unique();
             $table->foreign('email_viejo')->references('email')->on('usuarios');
             $table->string('email_nuevo');
             $table->string('codigo');

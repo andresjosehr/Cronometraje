@@ -40,15 +40,15 @@ class DatabaseSeeder extends Seeder
 
 
         DB::table("usuarios")->insert(array(
-            'nombre'     => 'Jose Andres',
-            'email' => 'Epale@gmail.com',
-            'dni' => '24572052',
+            'nombre'     => 'Usuario Prueba',
+            'email' => 'usuario@gmail.com',
+            'dni' => '123456',
             'direccion' => 'El Faro',
             'ciudad' => 'Maturin',
             'estado' => 'Monagas',
             'codigo_postal' => '1070',
             'rol' => '1',
-            'password' => Hash::make('Paralelepipe2')
+            'password' => Hash::make('12345678')
         ));
     }
 }
