@@ -24,14 +24,14 @@ class UsuariosController extends Controller
     	if (session()->get("email")==$Request->email) {
     		$v = \Validator::make($Request->except('email'), [
 	            'nombre' => 'required',
-	            'email'    => 'email|unique:Usuarios',
+	            'email'    => 'email|unique:usuarios',
         	]);
     	}
 
     	if (session()->get("email")!=$Request->email) {
     		$v = \Validator::make($Request->all(), [
 	            'nombre' => 'required',
-	            'email'    => 'email|unique:Usuarios',
+	            'email'    => 'email|unique:usuarios',
         	]);
     	}
 
@@ -56,26 +56,27 @@ class UsuariosController extends Controller
 					
 
 							if(CambiarEmail::where('email_viejo', session()->get("email"))->update(['email_nuevo' => $Request->email])==0){
-									CambiarEmail::insert([
-							          'email_viejo' => session()->get("email"),
-							          'email_nuevo' => $Request->email,
-							          'codigo' => self::GenerarCodigo(),
-							        ]);
+                                try {
+                                    CambiarEmail::insert([
+                                      'email_viejo' => session()->get("email"),
+                                      'email_nuevo' => $Request->email,
+                                      'codigo' => self::GenerarCodigo(),
+                                    ]);
+                                } catch (\Exception $e) {   
+                                }
 							        ?><script>
 					        			swal("Listo!", "Hemos actualizado tus datos correctamente", "success")
 											.then((value) => {
 											  swal("Una cosa mas", "Hemos mandado un correo electronico al nuevo email que ingresaste para completar el cambio de email", "warning");
 											});
 									</script><?php
-							}else{
-							      
 							}
 
         	}
         }
         ?><script>
-        	$( ".perfil_loading" ).fadeOut("slow", function () {
-		    	$( ".edit_us_btn" ).fadeIn("slow");
+        	$( ".perfil_loading" ).fadeOut(250, function () {
+		    	$( ".edit_us_btn" ).fadeIn(250);
 		    });
         </script><?php
     }
@@ -89,8 +90,8 @@ class UsuariosController extends Controller
 		swal("Listo!", "Tu nueva contraseña ha sido registrada exitosamente", "success");
 		document.getElementById('pass1').value="";
 		document.getElementById('pass2').value="";
-		$( ".contra_loading" ).fadeOut("slow", function () {
-			$( ".contra_btn" ).fadeIn("slow");
+		$( ".contra_loading" ).fadeOut(250, function () {
+			$( ".contra_btn" ).fadeIn(250);
 		});
 
 	</script><?php

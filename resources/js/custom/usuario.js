@@ -34,8 +34,8 @@ window.EditarUsuario=function() {
     }
 
     if (validado==0) {
-    	$( ".edit_us_btn" ).fadeOut("slow", function () {
-	    	$( ".perfil_loading" ).fadeIn("slow");
+    	$( ".edit_us_btn" ).fadeOut(250, function () {
+	    	$( ".perfil_loading" ).fadeIn(250);
 	    });
     	$("#perfil_edit").load(url+"/editar_perfil",{
     		nombre: $("#nombre").val(),
@@ -63,8 +63,8 @@ window.CambiarContraseña= function () {
 	} else{
 		
 	    if (pass.length>6) {
-	    	$( ".contra_btn" ).fadeOut("slow", function () {
-		    	$( ".contra_loading" ).fadeIn("slow");
+	    	$( ".contra_btn" ).fadeOut(250, function () {
+		    	$( ".contra_loading" ).fadeIn(250);
 		    });
 		      $("#perfil_edit").load(url+"/editar_contrasena",{
 	    		password: pass

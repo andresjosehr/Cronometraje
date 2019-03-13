@@ -16,6 +16,7 @@
 	require('./../../resources/js/template/app-blog-overview.1.1.0.js');
 	require('./../../resources/js/template/login.js');
 
+	require('./../../resources/js/custom/general.js');
 	require('./../../resources/js/custom/login.js');
 	require('./../../resources/js/custom/usuario.js');
 	require('./../../resources/js/custom/resetear_contrasena.js');

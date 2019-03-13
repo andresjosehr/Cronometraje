@@ -39518,6 +39518,8 @@ __webpack_require__(/*! ./../../resources/js/template/app-blog-overview.1.1.0.js
 
 __webpack_require__(/*! ./../../resources/js/template/login.js */ "./resources/js/template/login.js");
 
+__webpack_require__(/*! ./../../resources/js/custom/general.js */ "./resources/js/custom/general.js");
+
 __webpack_require__(/*! ./../../resources/js/custom/login.js */ "./resources/js/custom/login.js");
 
 __webpack_require__(/*! ./../../resources/js/custom/usuario.js */ "./resources/js/custom/usuario.js");
@@ -39546,6 +39548,30 @@ __webpack_require__(/*! ./../../resources/js/custom/resetear_contrasena.js */ ".
 
 /***/ }),
 
+/***/ "./resources/js/custom/general.js":
+/*!****************************************!*\
+  !*** ./resources/js/custom/general.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+window.onload = function () {
+  var parts = window.location.pathname.split('/');
+  var urlPath = parts.pop() || parts.pop(); // handle potential trailing slash
+
+  if (urlPath == "panel-de-control") {
+    $(".sidebar_panel").addClass("active");
+  }
+
+  if (urlPath == "perfil") {
+    $(".sidebar_perfil").addClass("active");
+  }
+
+  $(".pp-intro-bar").remove();
+};
+
+/***/ }),
+
 /***/ "./resources/js/custom/login.js":
 /*!**************************************!*\
   !*** ./resources/js/custom/login.js ***!
@@ -39562,8 +39588,8 @@ window.login = function (e) {
     if (pass == "") {
       swal("Espera!", "Debes introducir Contraseña valida", "warning");
     } else {
-      $(".login100-form-btn").fadeOut("slow", function () {
-        $(".login_loading").fadeIn("slow");
+      $(".login100-form-btn").fadeOut(250, function () {
+        $(".login_loading").fadeIn(250);
       });
       $("#login_contenedor").load(url + "/login", {
         Email: email,
@@ -39576,8 +39602,8 @@ window.login = function (e) {
 };
 
 window.login_MostrarBoton = function () {
-  $(".login_loading").fadeOut("slow", function () {
-    $(".login100-form-btn").fadeIn("slow");
+  $(".login_loading").fadeOut(250, function () {
+    $(".login100-form-btn").fadeIn(250);
   });
 };
 
@@ -39645,8 +39671,8 @@ window.EditarUsuario = function () {
   }
 
   if (validado == 0) {
-    $(".edit_us_btn").fadeOut("slow", function () {
-      $(".perfil_loading").fadeIn("slow");
+    $(".edit_us_btn").fadeOut(250, function () {
+      $(".perfil_loading").fadeIn(250);
     });
     $("#perfil_edit").load(url + "/editar_perfil", {
       nombre: $("#nombre").val(),
@@ -39672,8 +39698,8 @@ window.CambiarContraseña = function () {
     $("#campos_contra").after('<small id="con_error" style="color:red;">Las contraseñas no coinciden</small>');
   } else {
     if (pass.length > 6) {
-      $(".contra_btn").fadeOut("slow", function () {
-        $(".contra_loading").fadeIn("slow");
+      $(".contra_btn").fadeOut(250, function () {
+        $(".contra_loading").fadeIn(250);
       });
       $("#perfil_edit").load(url + "/editar_contrasena", {
         password: pass

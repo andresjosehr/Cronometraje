@@ -17420,7 +17420,11 @@ iframe {
 	   @-webkit-keyframes vina-loading{
 	   0%{-webkit-transform:rotate(0deg)}
 	   100%{-webkit-transform:rotate(360deg)}
-   }.custom_dropdown{
+   }
+
+   .limiter {
+    		height: 50%;
+    }.custom_dropdown{
 	width: 208px;
     text-align: -webkit-center;
 }

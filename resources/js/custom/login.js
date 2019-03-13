@@ -7,8 +7,8 @@ window.login=function(e){
     	if (pass=="") {
     		swal("Espera!", "Debes introducir Contraseña valida", "warning");
     	} else{
-    		$( ".login100-form-btn" ).fadeOut("slow", function () {
-    			$( ".login_loading" ).fadeIn("slow");
+    		$( ".login100-form-btn" ).fadeOut(250, function () {
+    			$( ".login_loading" ).fadeIn(250);
     		});
     		$("#login_contenedor").load(url+"/login", {Email: email, Pass: pass});
     	}
@@ -18,7 +18,7 @@ window.login=function(e){
 }
 
 window.login_MostrarBoton = function () {
-	$( ".login_loading" ).fadeOut("slow", function () {
-    	$( ".login100-form-btn" ).fadeIn("slow");
+	$( ".login_loading" ).fadeOut(250, function () {
+    	$( ".login100-form-btn" ).fadeIn(250);
     });
 }

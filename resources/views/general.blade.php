@@ -96,12 +96,18 @@
           <div class="nav-wrapper">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link active" href="index.html">
+                <a class="nav-link sidebar_panel" href="panel-de-control">
                   <i class="material-icons">edit</i>
-                  <span>Blog Dashboard</span>
+                  <span>Panel de Control</span>
                 </a>
               </li>
               <li class="nav-item">
+                <a class="nav-link sidebar_perfil " href="perfil">
+                  <i class="material-icons">person</i>
+                  <span>Perfil de Usuario</span>
+                </a>
+              </li>
+              {{-- <li class="nav-item">
                 <a class="nav-link " href="components-blog-posts.html">
                   <i class="material-icons">vertical_split</i>
                   <span>Blog Posts</span>
@@ -126,17 +132,11 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link " href="user-profile-lite.html">
-                  <i class="material-icons">person</i>
-                  <span>User Profile</span>
-                </a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link " href="errors.html">
                   <i class="material-icons">error</i>
                   <span>Errors</span>
                 </a>
-              </li>
+              </li> --}}
             </ul>
           </div>
         </aside>
