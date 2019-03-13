@@ -1,0 +1,20 @@
+.custom_dropdown{
+	width: 208px;
+    text-align: -webkit-center;
+}
+
+.custom_dropdown .d-md-inline-block{
+	padding-top: 10px;
+}
+
+.perfil_loading{
+	left: 34px;
+	width: 35px;
+	height: 35px;
+}
+
+.contra_loading{
+	left: 6px;
+	width: 35px;
+	height: 35px;
+}

@@ -1,0 +1,23 @@
+	.loading{
+	   border-radius:150px;
+	   border:6px solid #797979;
+	   border-top-color:rgba(0,0,0,0.3);
+	   box-sizing:border-box;
+	   position: relative;
+	   animation:vina-loading 1.2s linear infinite;
+	   -webkit-animation:vina-loading 1.2s linear infinite;
+	   z-index: 1;
+	   display: none;
+	   }
+	   .login_loading{
+		   width: 50px;
+		   height: 50px;
+	   }
+	   @keyframes vina-loading{
+	   0%{transform:rotate(0deg)}
+	   100%{transform:rotate(360deg)}
+	   }
+	   @-webkit-keyframes vina-loading{
+	   0%{-webkit-transform:rotate(0deg)}
+	   100%{-webkit-transform:rotate(360deg)}
+   }
