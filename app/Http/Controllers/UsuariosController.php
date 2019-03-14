@@ -117,8 +117,9 @@ class UsuariosController extends Controller
 
        $Datos = ResetearContrasena::join('usuarios', 'resetear_password.id_usuario', '=', 'usuarios.id')
                      ->where($Request->all())->getQuery() ->get();
-        if ($Datos!="[]") {
-            // self::emailUsuario($Request->email, "Cambio de contraseña", "Para cambiar su contraseña haga <a href='".request()->getHttpHost()."/".$Datos->codigo."'>click aqui </a> ");
+     
+        if ($Datos=="[]") {
+             ?><script>swal("Error!", "El email ingresado no coincide con nuestros registros", "warning")</script><?php
         } else{
              $codigo = self::GenerarCodigo();
                 $Datos = Usuarios::where('email', $Request->email)->first();
@@ -126,13 +127,12 @@ class UsuariosController extends Controller
                     'id_usuario' =>  $Datos->id,
                     'codigo' => $codigo,
                 ]);
-            // self::emailUsuario($Request->email, "Cambio de contraseña", "Para cambiar su contraseña haga <a href='".request()->getHttpHost()."/".$codigo."'>click aqui </a> ");
-        }
-
-        ?><script>
+             self::emailUsuario($Request->email, "Cambio de contraseña", "Para cambiar su contraseña haga <a href='".request()->getHttpHost()."/".$codigo."'>click aqui </a> ");
+          
+          ?><script>
             swal("Listo!", "Hemos enviado un correo electronico para el cambio de contraseña", "success");
         </script><?php
-
+        }
         
     }
 
