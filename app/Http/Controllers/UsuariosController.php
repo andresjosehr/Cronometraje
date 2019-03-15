@@ -9,6 +9,7 @@ use App\CambiarEmail;
 use App\ResetearContrasena;
 use Hash;
 use Route;
+use View;
 
 class UsuariosController extends Controller
 {
@@ -57,13 +58,18 @@ class UsuariosController extends Controller
 
 							if(CambiarEmail::where('email_viejo', session()->get("email"))->update(['email_nuevo' => $Request->email])==0){
                                 try {
+                                    $codigo= self::GenerarCodigo();
                                     CambiarEmail::insert([
                                       'email_viejo' => session()->get("email"),
                                       'email_nuevo' => $Request->email,
-                                      'codigo' => self::GenerarCodigo(),
+                                      'codigo' => $codigo,
                                     ]);
                                 } catch (\Exception $e) {   
+                                   $Da = CambiarEmail::where('email_viejo', session()->get("email"))->first();
+                                   $codigo=$Da->codigo;
                                 }
+
+                                self::emailUsuario($Request->email, $codigo, "cambiar_email");
 							        ?><script>
 					        			swal("Listo!", "Hemos actualizado tus datos correctamente", "success")
 											.then((value) => {
@@ -98,15 +104,23 @@ class UsuariosController extends Controller
     }
 
     function confirmarEmail(){
+
     	$Usuario=CambiarEmail::where("codigo", Route::input('codigo'))->first();
     	if ($Usuario) {
+            CambiarEmail::where("codigo", Route::input('codigo'))->delete();
     		Usuarios::where("email", $Usuario->email_viejo)->update(["email" => $Usuario->email_nuevo]);
-    		CambiarEmail::where("codigo", Route::input('codigo'))->delete();
-    		session()->put('email', $Usuario->email_nuevo);
-    		?><script>
-    			alert("Email actualizado exitosamente");
-    			window.location.href = "../../panel-de-control";
-    		</script><?php
+            if (session()->get('sesion')=="true") {
+                session()->forget('sesion');
+                echo "<script src='https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js'></script>";
+                ?><script>
+                window.onload=function(){
+                    swal("Listo!", "Email actualizado exitosamente", "success")
+                    .then(()=>{
+                        window.location.href = "../panel-de-control";
+                    });
+                }
+            </script><?php
+            }
     	} else{
     		return redirect("panel-de-control");
     	}
@@ -115,25 +129,65 @@ class UsuariosController extends Controller
     public function resetearContrasena(Request $Request){
 
 
-       $Datos = ResetearContrasena::join('usuarios', 'resetear_password.id_usuario', '=', 'usuarios.id')
-                     ->where($Request->all())->getQuery() ->get();
-     
-        if ($Datos=="[]") {
-             ?><script>swal("Error!", "El email ingresado no coincide con nuestros registros", "warning")</script><?php
-        } else{
-             $codigo = self::GenerarCodigo();
-                $Datos = Usuarios::where('email', $Request->email)->first();
+        $Datos = usuarios::select('usuarios.id', 'resetear_password.codigo')->leftJoin('resetear_password', 'usuarios.id', '=', 'resetear_password.id_usuario')
+                     ->where($Request->all())->getQuery()->get();
+        $Datos = json_decode(json_encode($Datos), true);
+        if (!isset($Datos[0])) {
+            ?><script>
+                swal("Error!", "Este email no coincide con nuestros registros", "warning");
+            </script><?php
+        } else {
+            if (isset($Datos[0]["codigo"])) {
+                $codigo=$Datos[0]["codigo"];
+            } else{
+                $codigo = self::GenerarCodigo();
                 ResetearContrasena::insert([
-                    'id_usuario' =>  $Datos->id,
-                    'codigo' => $codigo,
+                  'codigo' => $codigo,
+                  'id_usuario' => $Datos[0]["id"],
                 ]);
-             self::emailUsuario($Request->email, "Cambio de contraseña", "Para cambiar su contraseña haga <a href='".request()->getHttpHost()."/".$codigo."'>click aqui </a> ");
-          
-          ?><script>
-            swal("Listo!", "Hemos enviado un correo electronico para el cambio de contraseña", "success");
-        </script><?php
+            }
+
+            self::emailUsuario($Request->email, $codigo, "resetear_pass");
+            ?><script>
+                swal("Listo!", "Hemos enviado un correo electronico para el cambio de contraseña", "success");
+            </script><?php
         }
+
+        ?><script>
+            $( ".login_loading" ).fadeOut(250, function () {
+                $( ".login100-form-btn" ).fadeIn(250);
+            });
+        </script><?php
+
+
         
+    }
+
+    public function resetearContrasenaFinal(Request $Request, $codigo)
+    {
+        $v = \Validator::make(["codigo" => $codigo], [
+                'codigo' => 'exists:resetear_password'
+            ]);
+                if ($v->fails()){
+                    return redirect("panel-de-control");
+                } else{
+                    return view("login.resetear_contrasena_final", ["info" => ResetearContrasena::where("codigo", $codigo)->first()]);
+                }
+    }
+    public function resetearContrasenaFinalRegistro(Request $Request){
+        
+        Usuarios::where("id", $Request->id)->update(["password" => Hash::make($Request->password)]);
+        ResetearContrasena::where("id_usuario", $Request->id)->delete();
+
+        ?><script>
+            $( ".login_loading" ).fadeOut(250, function () {
+                $( ".login100-form-btn" ).fadeIn(250);
+            });
+            swal("Listo!", "Tu contraseña ha sido cambiada exitosamente", "success")
+            .then(()=>{
+                window.location="login";
+            });
+        </script><?php
     }
 
     public function GenerarCodigo(){
@@ -148,8 +202,21 @@ class UsuariosController extends Controller
         return $codigo;
     }
 
-    public function emailUsuario($destinatario, $asunto, $mensaje){
+    public function emailUsuario($destinatario, $codigo, $tipo){
 
-        mail($destinatario, $asunto, $mensaje);
+
+        $header = "From: Cronometraje <no-responder@cronometraje.com> \r\n";
+        $header .= "Bcc: cronometraje@gmail.com \r\n";
+        $header .= "X-Mailer: PHP/" . phpversion() . " \r\n";
+        $header .= "Mime-Version: 1.0 \r\n";
+        $header .= "Content-Type: text/html";
+        if ($tipo=="resetear_pass") {
+            $body=(string)View::make('emails.resetear_contrasena', ["codigo" => $codigo]);
+           mail($destinatario, "Cronometraje - Reseteo de contraseña", $body, $header) or die("No Enviado");
+        }
+        if ($tipo=="cambiar_email") {
+            $body=(string)View::make('emails.cambiar_email', ["codigo" => $codigo]);
+            mail($destinatario, "Cronometraje - Cambio de email", $body, $header) or die("No Enviado");
+        }
     }
 }

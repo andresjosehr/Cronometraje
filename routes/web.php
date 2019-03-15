@@ -20,12 +20,16 @@ Route::group([], function() {
 	Route::get('resetear-contrasena/', function (){
 	 	return view("login.resetear_contrasena");
 	 });
+	Route::get('resetear-contrasena/{codigo}', "UsuariosController@resetearContrasenaFinal");
+	Route::get('prueba',function(){
+		return view("emails.resetear_contrasena");
+	});
 });
 
 Route::group([], function() {
 	Route::post('login', array('uses' => 'LoginController@validar'));
 	Route::post('resetear-contrasena', "UsuariosController@resetearContrasena");
-	Route::post('resetear-contrasena/{codigo}', "UsuariosController@resetearContrasenaFinal");
+	Route::post('resetear-contrasena/{codigo}', "UsuariosController@resetearContrasenaFinalRegistro");
 });
 Route::group(['middleware' => ['VerificarSesion']], function () {
     Route::get('panel-de-control', function(){

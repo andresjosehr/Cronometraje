@@ -11,19 +11,26 @@
 				<div id="reseteo_contenedor"></div>
 				<div class="login100-form validate-form">
 					<span class="login100-form-title">
-						Introduce tu correo electronico
+						Introduce tu nueva contraseña
 					</span>
 
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-						<input class="input100" type="text" id="email" placeholder="Email">
+						<input class="input100" type="password" id="pass1" placeholder="Contraseña">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
-							<i class="fa fa-envelope" aria-hidden="true"></i>
+							<i class="fa fa-lock" aria-hidden="true"></i>
 						</span>
 					</div>					
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+						<input class="input100" type="password" id="pass2" placeholder="Repite la contraseña">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+					</div>
 					<div class="container-login100-form-btn">
-						<button onclick="resetearContrasena();" class="login100-form-btn">
-							Resetear
+						<button onclick="resetearContrasenaFinal('{{$info->codigo}}', '{{$info->id_usuario}}');" class="login100-form-btn">
+							Resetear Contraseña
 						</button>
 						<div class="login_loading loading"></div>
 					</div>
