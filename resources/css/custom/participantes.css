@@ -1,64 +1,4 @@
-	.loading{
-	   border-radius:150px;
-	   border:6px solid #797979;
-	   border-top-color:rgba(0,0,0,0.3);
-	   box-sizing:border-box;
-	   position: relative;
-	   animation:vina-loading 1.2s linear infinite;
-	   -webkit-animation:vina-loading 1.2s linear infinite;
-	   z-index: 1;
-	   display: none;
-	   }
-	   .login_loading{
-		   width: 50px;
-		   height: 50px;
-	   }
-	   @keyframes vina-loading{
-	   0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}
-	   100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}
-	   }
-	   @-webkit-keyframes vina-loading{
-	   0%{-webkit-transform:rotate(0deg)}
-	   100%{-webkit-transform:rotate(360deg)}
-   }
-
-   .limiter {
-    		height: 50%;
-    }.custom_dropdown{
-	width: 208px;
-    text-align: -webkit-center;
-}
-
-.custom_dropdown .d-md-inline-block{
-	padding-top: 10px;
-}
-
-.perfil_loading{
-	left: 34px;
-	width: 35px;
-	height: 35px;
-}
-
-.contra_loading{
-	left: 6px;
-	width: 35px;
-	height: 35px;
-}.loading_admin{
-		width: 35px;
-		height: 35px;
-		text-align: -webkit-center;
-}
-.from_per{
-	display: block !important;
-}
-
-.reg_login100-form{
-	width: 100%;
-}
-
-.reg_admin_table{
-	    text-align: center;
-}#participantes_table_filter{
+#participantes_table_filter{
           text-align: left;
         }
 
@@ -186,11 +126,4 @@ div .page-item {
   	-webkit-box-align:center;
     -webkit-box-pack:center;
     display:-webkit-box;
-}/*	@import "~../../node_modules/font-awesome/scss/font-awesome.scss";
-	@import "~../../node_modules/bootstrap/dist/css/bootstrap.css";
-	@import "~../../resources/css/template/shards-dashboards.1.1.0.css";
-	@import "~../../resources/css/template/extras.1.1.0.min.css";
-	@import "~../../resources/css/template/login1.css";
-	@import "~../../resources/css/template/login2.css";
-	@import '~./../../node_modules/datatables/media/css/jquery.dataTables.min.css';*/
-
+}

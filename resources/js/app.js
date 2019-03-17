@@ -11,15 +11,19 @@
 	// require('./../../node_modules/shards-ui/dist/js/shards.js');
 	// require('./../../node_modules/sharrre/dist/jquery.sharrre.min.js');
 	// require('./../../node_modules/sweetalert/dist/sweetalert.min');
+	// require('./../../node_modules/datatables/media/js/jquery.dataTables.min.js');
 	// require('./../../resources/js/template/extras.1.1.0.min.js');
 	// require('./../../resources/js/template/shards-dashboards.1.1.0.js');
 	// require('./../../resources/js/template/app-blog-overview.1.1.0.js');
+	// require('./../../resources/js/template/login.js');
 	// require('./../../resources/js/template/login.js');
 
 	require('./../../resources/js/custom/general.js');
 	require('./../../resources/js/custom/login.js');
 	require('./../../resources/js/custom/usuario.js');
 	require('./../../resources/js/custom/resetear_contrasena.js');
+	require('./../../resources/js/custom/registrar_admin.js');
+	require('./../../resources/js/custom/participantes.js');
 
 // window.Vue = require('vue');
 

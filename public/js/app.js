@@ -104,9 +104,11 @@
 // require('./../../node_modules/shards-ui/dist/js/shards.js');
 // require('./../../node_modules/sharrre/dist/jquery.sharrre.min.js');
 // require('./../../node_modules/sweetalert/dist/sweetalert.min');
+// require('./../../node_modules/datatables/media/js/jquery.dataTables.min.js');
 // require('./../../resources/js/template/extras.1.1.0.min.js');
 // require('./../../resources/js/template/shards-dashboards.1.1.0.js');
 // require('./../../resources/js/template/app-blog-overview.1.1.0.js');
+// require('./../../resources/js/template/login.js');
 // require('./../../resources/js/template/login.js');
 __webpack_require__(/*! ./../../resources/js/custom/general.js */ "./resources/js/custom/general.js");
 
@@ -114,7 +116,11 @@ __webpack_require__(/*! ./../../resources/js/custom/login.js */ "./resources/js/
 
 __webpack_require__(/*! ./../../resources/js/custom/usuario.js */ "./resources/js/custom/usuario.js");
 
-__webpack_require__(/*! ./../../resources/js/custom/resetear_contrasena.js */ "./resources/js/custom/resetear_contrasena.js"); // window.Vue = require('vue');
+__webpack_require__(/*! ./../../resources/js/custom/resetear_contrasena.js */ "./resources/js/custom/resetear_contrasena.js");
+
+__webpack_require__(/*! ./../../resources/js/custom/registrar_admin.js */ "./resources/js/custom/registrar_admin.js");
+
+__webpack_require__(/*! ./../../resources/js/custom/participantes.js */ "./resources/js/custom/participantes.js"); // window.Vue = require('vue');
 
 /**
  * The following block of code may be used to automatically register your
@@ -157,6 +163,10 @@ window.onload = function () {
     $(".sidebar_perfil").addClass("active");
   }
 
+  if (urlPath == "registrar-admin") {
+    $(".sidebar_registrar_admin").addClass("active");
+  }
+
   $(".pp-intro-bar").remove();
 };
 
@@ -195,6 +205,198 @@ window.login_MostrarBoton = function () {
   $(".login_loading").fadeOut(250, function () {
     $(".login100-form-btn").fadeIn(250);
   });
+};
+
+/***/ }),
+
+/***/ "./resources/js/custom/participantes.js":
+/*!**********************************************!*\
+  !*** ./resources/js/custom/participantes.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+window.onload = function () {
+  $('#participantes_table').DataTable();
+  $.trim($($('#tabla_de')[0].nextSibling).remove());
+  $(".dataTables_length label").contents()[0].textContent = "Mostrar";
+  $(".dataTables_length label").contents()[2].textContent = "Participantes";
+  $("#participantes_table_filter label").contents()[0].textContent = "Buscar: ";
+  $(".dataTables_wrapper .dataTables_filter input").css("margin-left", "0em");
+  $("#participantes_table_previous a").html("Anterior");
+  $("#participantes_table_next a").html("Seguiente");
+  $("#participantes_table_paginate").click(function () {
+    $("#participantes_table_previous a").html("Anterior");
+    $("#participantes_table_next a").html("Seguiente");
+  });
+  $(".dataTables_info").empty();
+  $(".dataTables_info").remove();
+  $('#nacimiento').datepicker({
+    dateFormat: 'yyy-mm-dd'
+  });
+};
+
+window.editarParticipante = function (participante) {
+  participante = JSON.parse(participante);
+  $("#nombre").val(participante["nombre_participante"]);
+  $("#email").val(participante["email_participante"]);
+  $("#apellido").val(participante["apellido"]);
+  $("#dni").val(participante["dni"]);
+  $("#iden").val(participante["dni"]);
+  $("#nacimiento").val(participante["nacimiento"]);
+  $("#sexo").val(participante["sexo"]);
+  $("#id_categoria").val(participante["id_categoria"]);
+  $("#cate").val(participante["id_categoria"]);
+  $("#id_estado_inscripcion").val(participante["id_estado_inscripcion"]);
+  $("#id_part").val(participante["id_participante"]);
+  $(".editar_modal").click();
+  $("#myselect").val(3);
+};
+
+window.actualizarParticipante = function () {
+  $("#email, #nombre, #email, #dni").removeClass("is-invalid");
+  $("small").remove();
+  emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+  var val = 0;
+
+  if (!emailRegex.test($("#email").val())) {
+    $("#email").addClass("is-invalid");
+    $("#email").after('<small id="us_error err_part" style="color:red;">Debes introducir un email valido</small>');
+    val++;
+  }
+
+  if ($("#nombre").val() == "") {
+    $("#nombre").addClass("is-invalid");
+    $("#nombre").after('<small id="us_error err_part" style="color:red;">Debes introducir un nombre</small>');
+    val++;
+  }
+
+  if ($("#apellido").val() == "") {
+    $("#apellido").addClass("is-invalid");
+    $("#apellido").after('<small id="us_error err_part" style="color:red;">Debes introducir un apellido</small>');
+    val++;
+  }
+
+  if ($("#dni").val() == "") {
+    $("#dni").addClass("is-invalid");
+    $("#dni").after('<small id="us_error err_part" style="color:red;">Debes introducir el DNI del participante</small>');
+    val++;
+  }
+
+  var date = $("#nacimiento").val();
+  var nacimiento = date.split("/").reverse().join("-");
+  var hoy = new Date();
+  var cumpleanos = new Date(date);
+  var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+  var m = hoy.getMonth() - cumpleanos.getMonth();
+
+  if (m < 0 || m === 0 && hoy.getDate() < cumpleanos.getDate()) {
+    edad--;
+  }
+
+  if ($("#id_categoria option:selected").val() != $("#cate").val() && val == 0) {
+    swal({
+      title: "Advertencia",
+      text: "La categoria del usuario esta a punto de ser cambiada, esta categoria fue asignada a este usuario automaticamente por el sistema, ¿Estas seguto de querer cambiarla?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true
+    }).then(function (willDelete) {
+      if (willDelete) {
+        actualizarParticipanteUPD(nacimiento, edad);
+      }
+    });
+  } else {
+    actualizarParticipanteUPD(nacimiento, edad);
+  }
+};
+
+window.actualizarParticipanteUPD = function (nacimiento_, edad_) {
+  // $( ".upd_participante_btn" ).fadeOut(250, function () {
+  //     $( ".upd_participante_loading" ).fadeIn(250);
+  //   });
+  $("#contenedor_editar_participante").load(url + "/participantes", {
+    id_participante: $("#id_part").val(),
+    nombre_participante: $("#nombre").val(),
+    apellido: $("#apellido").val(),
+    email_participante: $("#email").val(),
+    dni: $("#dni").val(),
+    nacimiento: nacimiento_,
+    edad: edad_,
+    sexo: $("#sexo option:selected").val(),
+    id_categoria: $("#id_categoria option:selected").val(),
+    id_estado_inscripcion: $("#id_estado_inscripcion option:selected").val()
+  });
+};
+
+window.exitoUpdatePart = function () {
+  swal("Datos actualizados exitosamente");
+};
+
+/***/ }),
+
+/***/ "./resources/js/custom/registrar_admin.js":
+/*!************************************************!*\
+  !*** ./resources/js/custom/registrar_admin.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+window.registrarAdmin = function () {
+  $('#email_admin, #rol').removeClass("is-invalid");
+  $('#invalid-feedback').remove();
+  emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+
+  if (!emailRegex.test($("#email_admin").val())) {
+    $('#email_admin').addClass("is-invalid");
+    $('#email_admin').after('<small id="invalid-feedback" style="color:red;">Debes ingresar un email valido</small>');
+  } else {
+    if ($("#rol").val() == 0) {
+      $('#rol').addClass("is-invalid");
+      $('#rol').after('<small id="invalid-feedback" style="color:red;">Debes elegir un rol para el administrador</small>');
+    } else {
+      $(".reg_admin_btn").fadeOut(250, function () {
+        $(".loading_admin").fadeIn(250);
+      });
+      $("#registrar_admin_contenedor").load(url + "/registrar-admin", {
+        email: $("#email_admin").val(),
+        rol: $("#rol").val()
+      });
+    }
+  }
+};
+
+window.registrarAdminFinal = function (data) {
+  if ($("#password").val() != "" || $("#password2").val() != "") {
+    if ($("#nombre").val() == "") {
+      swal("Error", "Debes introducir un nombre valido", "warning");
+    } else {
+      if ($("#password").val() != $("#password2").val()) {
+        swal("Error", "Las contraseñas no coinciden", "warning");
+      } else {
+        if ($("#password").val().length < 6) {
+          swal("Error", "La contraseña debe tener una longitud minima de 6 caracteres", "warning");
+        } else {
+          $(".login100-form-btn").fadeOut(250, function () {
+            $(".login_loading").fadeIn(250);
+          });
+          data = JSON.parse('[' + data + ']');
+          $("#registro_contenedor").load(url + "/registrar-admin/" + data[0][0]["codigo"], {
+            nombre: $("#nombre").val(),
+            email: data[0][0]["email"],
+            password: $("#password").val(),
+            rol: data[0][0]["rol"],
+            direccion: $("#direccion").val(),
+            ciudad: $("#ciudad").val(),
+            estado: $("#estado").val(),
+            codigo_postal: $("#codigo_postal").val()
+          });
+        }
+      }
+    }
+  } else {
+    swal("Error", "Debes introducir las contraseñas correctamente", "warning");
+  }
 };
 
 /***/ }),

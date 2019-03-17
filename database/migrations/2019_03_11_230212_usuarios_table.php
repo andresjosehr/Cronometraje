@@ -20,7 +20,7 @@ class UsuariosTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verificado')->nullable();
             $table->string('password');
-            $table->string('dni');
+            $table->string('dni')->nullable();
             $table->string('direccion')->nullable();
             $table->string('ciudad')->nullable();
             $table->string('estado')->nullable();

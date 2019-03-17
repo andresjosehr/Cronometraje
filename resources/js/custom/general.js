@@ -8,5 +8,9 @@ window.onload=function () {
 	if (urlPath=="perfil") {
 		$(".sidebar_perfil").addClass("active");
 	}
+
+	if (urlPath=="registrar-admin") {
+		$(".sidebar_registrar_admin").addClass("active");
+	}
 	$(".pp-intro-bar").remove();
 }

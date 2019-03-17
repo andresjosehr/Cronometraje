@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
     <script>
       var url = '{{Request::root()}}';
       $.ajaxSetup({
@@ -106,6 +108,18 @@
                 <a class="nav-link sidebar_perfil " href="perfil">
                   <i class="material-icons">person</i>
                   <span>Perfil de Usuario</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link sidebar_registrar_admin" href="registrar-admin">
+                  <i class="material-icons">person_add</i>
+                  <span>Registrar Admin</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link sidebar_registrar_admin" href="participantes">
+                  <i class="material-icons">accessibility</i>
+                  <span>Participantes</span>
                 </a>
               </li>
               {{-- <li class="nav-item">

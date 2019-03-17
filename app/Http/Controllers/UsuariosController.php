@@ -7,9 +7,11 @@ use App\RolesDeUsuario;
 use App\Usuarios;
 use App\CambiarEmail;
 use App\ResetearContrasena;
+use App\RegistroAdminTemp;
 use Hash;
 use Route;
 use View;
+use Illuminate\Support\Facades\Input;
 
 class UsuariosController extends Controller
 {
@@ -147,7 +149,7 @@ class UsuariosController extends Controller
                 ]);
             }
 
-            self::emailUsuario($Request->email, $codigo, "resetear_pass");
+            self::emailUsuario($Request->email, $codigo, "resetear_contrasena");
             ?><script>
                 swal("Listo!", "Hemos enviado un correo electronico para el cambio de contraseña", "success");
             </script><?php
@@ -210,13 +212,88 @@ class UsuariosController extends Controller
         $header .= "X-Mailer: PHP/" . phpversion() . " \r\n";
         $header .= "Mime-Version: 1.0 \r\n";
         $header .= "Content-Type: text/html";
-        if ($tipo=="resetear_pass") {
-            $body=(string)View::make('emails.resetear_contrasena', ["codigo" => $codigo]);
-           mail($destinatario, "Cronometraje - Reseteo de contraseña", $body, $header) or die("No Enviado");
+
+        $body=(string)View::make('emails.'.$tipo, ["codigo" => $codigo]);
+        mail($destinatario, "Cronometraje - Reseteo de contraseña", $body, $header) or die("No Enviado");
+    }
+
+    public function registrarAdmin(){
+        return view("registrar-admin", ["Roles" => RolesDeUsuario::where("id", ">=", session()->get('rol'))->get(), "AdminTemps" => RegistroAdminTemp::where("id_usuario_padre", session()->get("id"))->get()]);
+    }
+
+    public function registrarAdmin_paso2(Request $Request){
+
+        $v = \Validator::make($Request->all(), [
+            'email' => 'email|unique:usuarios,email|unique:cambiar_email,email_nuevo|unique:registro_admin_temp,email',
+            'rol'    => 'gt: '.((int)session()->get('rol')-1)
+        ]);
+
+
+        if ($v->fails()) {
+            foreach (json_decode(json_encode($v->errors()), true) as $campo => $error) {
+                ?><script>
+                    $('[name="<?php echo $campo; ?>"]').addClass("is-invalid");
+                    $('[name="<?php echo $campo; ?>"]').after('<small id="invalid-feedback" style="color:red;"><?php echo $error[0] ?></small>');
+                </script><?php
+            }
+
+        } else{
+            $Request->merge(['codigo' => self::GenerarCodigo(), 'id_usuario_padre' => session()->get("id")]);
+
+            RegistroAdminTemp::insert($Request->all());
+
+             self::emailUsuario($Request->email, $Request->codigo, "registrar_admin");
+            ?><script>
+                var rol=$('#rol option[value="<?php echo $Request->rol ?>"]').text();
+                $("#pre_admin_show").append('<tr><td><?php echo $Request->email ?></td><td>'+rol+'</td><td><button type="button" class="mb-2 btn btn-sm btn-primary mr-1">Enviar email de nuevo</button><button type="button" class="mb-2 btn btn-sm btn-secondary mr-1">Editar</button><button type="button" class="mb-2 btn btn-sm btn-danger mr-1">Eliminar</button></td></tr>')
+                swal("Listo", "Hemos enviado un correo electronico para el registro del administrador seleccionado", "success");
+            </script><?php
         }
-        if ($tipo=="cambiar_email") {
-            $body=(string)View::make('emails.cambiar_email', ["codigo" => $codigo]);
-            mail($destinatario, "Cronometraje - Cambio de email", $body, $header) or die("No Enviado");
+        ?><script>
+            $( ".loading_admin" ).fadeOut(250, function () {
+                    $( ".reg_admin_btn" ).fadeIn(250);
+                });
+        </script><?php
+    }
+
+    public function registrarAdmin_paso3(Request $Request, $codigo){
+        if (session()->get('sesion')=="true") {
+            session()->forget('sesion');
         }
+        $Reg=RegistroAdminTemp::where(["codigo" => $codigo])->get();
+        if ($Reg!="[]") {
+            return view::make("login.registro_admin")->with('data', $Reg);   
+        } else{
+            return redirect("/");
+        }
+    }
+
+    public function registrarAdmin_paso4(Request $Request)
+    {   
+        $Request->merge(['password' => Hash::make($Request->password)]);
+        $v = \Validator::make($Request->all(), [
+            'email' => 'email|unique:usuarios,email',
+            'nombre' => 'required'
+        ]);
+
+        if ($v->fails()) {
+            ?><script>alert("Error, contacte al administrador del sistema")</script><?php
+        } else{
+            Usuarios::insert($Request->all());
+            RegistroAdminTemp::where($Request->only("email"))->delete();
+        }
+        ?><script>
+            swal("Listo!", "Tu registro ha sido exitoso", "success")
+            .then(()=>{
+                window.location="../";
+            });
+        </script><?php
+
+
+    }
+
+    public function EnviarPreAdmin()
+    {
+        ?><script>alert()</script><?php
     }
 }

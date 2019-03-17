@@ -19,3 +19,13 @@ mix.setResourceRoot ('../public/')
 	    $: 'jquery',
 	    jquery: 'jquery'
 	});
+
+
+ //   mix.setResourceRoot ('../public/')
+ //   .js('resources/js/app.js', 'public/js/default.min.js')
+ //   .sass('resources/sass/app.scss', 'public/css/default.min.css')
+ //   .autoload({
+	//     jQuery: 'jquery',
+	//     $: 'jquery',
+	//     jquery: 'jquery'
+	// });
