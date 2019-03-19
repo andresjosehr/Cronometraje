@@ -15,7 +15,7 @@ class Categorias extends Migration
     {
         Schema::create('categorias', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('id_categoria');
+            $table->increments('id');
             $table->string('nombre_categoria');
             $table->integer('edad_minima');
             $table->integer('edad_maxima');

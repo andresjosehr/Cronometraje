@@ -127,3 +127,17 @@ div .page-item {
     -webkit-box-pack:center;
     display:-webkit-box;
 }
+
+.participantes_lista_acciones .btn-outline-primary:hover {
+    color: #fff;
+    background-color: #42a202;
+    border-color: #42a202;
+    box-shadow: 0 5px 15px rgba(0,0,0,.05), 0 4px 10px rgba(0,123,255,.25);
+}
+
+.participantes_lista_acciones .pul {
+    color: #fff;
+    background-color: #42a202;
+    border-color: #42a202;
+    box-shadow: 0 5px 15px rgba(0,0,0,.05), 0 4px 10px rgba(0,123,255,.25);
+}

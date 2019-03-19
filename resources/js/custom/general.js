@@ -1,4 +1,4 @@
-window.onload=function () {
+$(document).ready(function() {
 	var parts = window.location.pathname.split('/');
 	var urlPath = parts.pop() || parts.pop();  // handle potential trailing slash
 
@@ -12,5 +12,8 @@ window.onload=function () {
 	if (urlPath=="registrar-admin") {
 		$(".sidebar_registrar_admin").addClass("active");
 	}
+	if (urlPath=="participantes") {
+		$(".sidebar_participantes").addClass("active");
+	}
 	$(".pp-intro-bar").remove();
-}
+	});

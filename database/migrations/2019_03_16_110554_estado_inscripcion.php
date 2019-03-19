@@ -14,7 +14,7 @@ class EstadoInscripcion extends Migration
     public function up()
     {
         Schema::create('estado_inscripcion', function (Blueprint $table) {
-            $table->increments('id_estado_inscripcion');
+            $table->increments('id');
             $table->string('nombre_estado_inscripcion');
         });
     }

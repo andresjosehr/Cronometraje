@@ -16,13 +16,13 @@ class ParticipantesController extends Controller
      */
     public function index()
     {
-        $Participantes = Participantes::join("categorias", "participantes.id_categoria", "=", "categorias.id_categoria")
-                            ->join("eventos", "categorias.id_evento", "=", "eventos.id_evento")
-                            ->join("estado_inscripcion", "participantes.id_estado_inscripcion", "=", "estado_inscripcion.id_estado_inscripcion")
-                            ->orderBy("id_participante", "ASC")
-                            ->where("eventos.id_usuario", session()->get("id"))->get();
+         $Participantes = Participantes::select('participantes.id as id_participante', 'participantes.*', 'categorias.id as id_categoria_cat', 'categorias.*', 'estado_inscripcion.id as id_estado_inscripcion_ins', 'estado_inscripcion.nombre_estado_inscripcion')
+                            ->Join("categorias", "participantes.id_categoria", "=", "categorias.id")
+                            ->Join("eventos", "categorias.id_evento", "=", "eventos.id")
+                            ->Join("estado_inscripcion", "participantes.id_estado_inscripcion", "=", "estado_inscripcion.id")
+                            ->where("eventos.id_usuario", session()->get("id"))->get(); 
 
-        $Categorias = Categorias::join("eventos", "categorias.id_evento", "=", "eventos.id_evento")->where("eventos.id_usuario", session()->get("id"))->get();
+        $Categorias = Categorias::select('categorias.id', 'categorias.nombre_categoria')->join("eventos", "categorias.id_evento", "=", "eventos.id")->where("eventos.id_usuario", session()->get("id"))->get();
 
 
         return view("participantes.participantes", ["Participantes" => $Participantes, "Categorias" => $Categorias]);
@@ -34,7 +34,7 @@ class ParticipantesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $Request)
     {
         //
     }
@@ -45,34 +45,78 @@ class ParticipantesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    public function createPost(Request $Request)
+    {
+        $v = \Validator::make($Request->all(), [
+            'nombre_participante'   => 'required',
+            'apellido'              => 'required',
+            'email_participante'    => 'required|unique:participantes',
+            'dni'                   => 'required|unique:participantes',
+            'nacimiento'            => 'required|date|date_format:Y-m-d',
+            'sexo'                  => 'required|numeric',
+            'id_categoria'          => 'numeric',
+            'id_estado_inscripcion' => 'required|numeric',
+        ]);
+       if ($v->fails()){
+            return $v->errors();
+       }
+       else{
+
+        Participantes::insert($Request->all());
+        return Participantes::select('participantes.id as id_participante', 'participantes.*', 'categorias.id as id_categoria_cat', 'categorias.*', 'estado_inscripcion.id as id_estado_inscripcion_ins', 'estado_inscripcion.nombre_estado_inscripcion')
+                                        ->Join("categorias", "participantes.id_categoria", "=", "categorias.id")
+                                        ->Join("eventos", "categorias.id_evento", "=", "eventos.id")
+                                        ->Join("estado_inscripcion", "participantes.id_estado_inscripcion", "=", "estado_inscripcion.id")
+                                        ->where("participantes.email_participante", $Request->email_participante)->first(); 
+       }
+    }
+
+
     public function store(Request $Request)
     {
+        if ($Request->nombre_participante) {
 
-        if (session()->get("email")!=$Request->email) {
-                $v = \Validator::make($Request->all(), [
-                'id_participante'       => 'required',
-                'nombre_participante'   => 'required',
-                'apellido'              => 'required',
-                'email_participante'    => 'required|unique:participantes,id_participante'.$Request->id_participante,
-                'dni'                   => 'required|unique:participantes,id_participante'.$Request->id_participante,
-                'nacimiento'            => 'required|date|date_format:Y-m-d',
-                'sexo'                  => 'required|numeric',
-                'id_categoria'          => 'required|numeric',
-                'id_estado_inscripcion' => 'required|numeric',
-            ]);
+            if (session()->get("email")!=$Request->email) {
+                    $v = \Validator::make($Request->all(), [
+                    'id'       => 'required',
+                    'nombre_participante'   => 'required',
+                    'apellido'              => 'required',
+                    'email_participante'    => 'required|unique:participantes,id,'.$Request->id,
+                    'dni'                   => 'required|unique:participantes,id,'.$Request->id,
+                    'nacimiento'            => 'required|date|date_format:Y-m-d',
+                    'sexo'                  => 'required|numeric',
+                    'id_categoria'          => 'required|numeric',
+                    'id_estado_inscripcion' => 'required|numeric',
+                ]);
+            }
+     
+            if ($v->fails()){
+
+                foreach (json_decode(json_encode($v->errors()), true) as $campo => $error) {
+                    ?><script>
+                        $('#edit_path [name="<?php echo $campo; ?>"]').addClass("is-invalid");
+                        $('#edit_path [name="<?php echo $campo; ?>"]').after('<small id="invalid-feedback" style="color:red;"><?php echo $error[0] ?></small>');
+                    </script><?php
+                }   
+            } else{
+             Participantes::where("id", $Request->id)->update($Request->except('id'));
+             $ParticipanteActualizado = Participantes::select('participantes.id as id_participante', 'participantes.*', 'categorias.id as id_categoria_cat', 'categorias.*', 'estado_inscripcion.id as id_estado_inscripcion_ins', 'estado_inscripcion.nombre_estado_inscripcion')
+                                        ->Join("categorias", "participantes.id_categoria", "=", "categorias.id")
+                                        ->Join("eventos", "categorias.id_evento", "=", "eventos.id")
+                                        ->Join("estado_inscripcion", "participantes.id_estado_inscripcion", "=", "estado_inscripcion.id")
+                                        ->where("participantes.id", $Request->id)->first(); 
+
+                    ?><script>
+                    var ParticipanteActualizado = '<?php echo json_encode($ParticipanteActualizado); ?>';
+                    ParticipanteActualizado=JSON.parse(ParticipanteActualizado);
+                    exitoUpdatePart(ParticipanteActualizado);
+                    </script><?php
+            }
         }
- 
-        if ($v->fails()){
 
-            foreach (json_decode(json_encode($v->errors()), true) as $campo => $error) {
-                ?><script>
-                    $('[name="<?php echo $campo; ?>"]').addClass("is-invalid");
-                    $('[name="<?php echo $campo; ?>"]').after('<small id="invalid-feedback" style="color:red;"><?php echo $error[0] ?></small>');
-                </script><?php
-            }   
-        } else{
-            Participantes::where("id_participante", $Request->id_participante)->update($Request->except('id_participante'));
-            ?><script>exitoUpdatePart()</script><?php
+        if ($Request->id_estado_inscripcion) {
+            Participantes::where("id", $Request->id)->update($Request->except("id"));
         }
     }
 

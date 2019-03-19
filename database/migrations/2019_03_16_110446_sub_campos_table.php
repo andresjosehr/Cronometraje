@@ -14,12 +14,12 @@ class SubCamposTable extends Migration
     public function up()
     {
         Schema::create('sub_campos', function (Blueprint $table) {
-            $table->increments('id_sub_campo');
+            $table->increments('id');
             $table->string('tipo');
             $table->string('nombre_sub_campo');
             $table->string('descripcion');
             $table->integer('id_campo')->unsigned();
-            $table->foreign('id_campo')->references('id_campo')->on('campos');
+            $table->foreign('id_campo')->references('id')->on('campos');
         });
     }
 

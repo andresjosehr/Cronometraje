@@ -27,30 +27,30 @@ class DatabaseSeeder extends Seeder
                     ]);
 
                     DB::table("estado_inscripcion")->insert([
-                                ['id_estado_inscripcion'     => '1', 'nombre_estado_inscripcion'     => 'Pre-inscrito'],
-                                ['id_estado_inscripcion'     => '2', 'nombre_estado_inscripcion'     => 'Inscrito'],
-                                ['id_estado_inscripcion'     => '3', 'nombre_estado_inscripcion'     => 'Acreditado'],
-                                ['id_estado_inscripcion'     => '4', 'nombre_estado_inscripcion'     => 'Anulado'],
+                                ['id'     => '1', 'nombre_estado_inscripcion'     => 'Pre-inscrito'],
+                                ['id'     => '2', 'nombre_estado_inscripcion'     => 'Inscrito'],
+                                ['id'     => '3', 'nombre_estado_inscripcion'     => 'Acreditado'],
+                                ['id'     => '4', 'nombre_estado_inscripcion'     => 'Anulado'],
                             ]);
 
                     DB::table("tipo_evento")->insert([
-                        ['id_tipo_evento'     => '1', 'nombre_tipo_evento'     => 'Basico'],
-                        ['id_tipo_evento'     => '2', 'nombre_tipo_evento'     => 'Premium'],
+                        ['id'     => '1', 'nombre_tipo_evento'     => 'Basico'],
+                        ['id'     => '2', 'nombre_tipo_evento'     => 'Premium'],
                     ]);
 
 
 
                     DB::table("usuarios")->insert([
                         'id'     => '1',
-                        'nombre'     => 'Jose Andres',
-                        'email' => 'joseandreshernandezross@gmail.com',
+                        'nombre'     => 'Usuario',
+                        'email' => 'usuario@gmail.com',
                         'dni' => '24572052',
                         'direccion' => 'El Faro',
                         'ciudad' => 'Maturin',
                         'estado' => 'Monagas',
                         'codigo_postal' => '1070',
                         'rol' => '1',
-                        'password' => Hash::make('Paralelepipe2')
+                        'password' => Hash::make('secret')
                     ]);
 
 
@@ -78,7 +78,7 @@ class DatabaseSeeder extends Seeder
                     $i=1;
                     foreach (range(1,20) as $index) {
                         DB::table("eventos")->insert([
-                            'id_evento' => $i,
+                            'id' => $i,
                             'nombre_evento'     => "Evento ".$i,
                             'email_evento' => $faker->email,
                             'fecha' => $faker->date,
@@ -95,10 +95,10 @@ class DatabaseSeeder extends Seeder
                     }
 
                     $i=1;
-                    foreach (range(1,160) as $index) {
+                    foreach (range(1,50) as $index) {
                         $EdadMinima=$faker->numberBetween(10,50);
                         DB::table("categorias")->insert([
-                            'id_categoria' => $i,
+                            'id' => $i,
                             'nombre_categoria'     => "Categoria ".$i,
                             'edad_minima' => "10",
                             'edad_maxima' => "100",
@@ -109,9 +109,9 @@ class DatabaseSeeder extends Seeder
                     }
 
                     $i=1;
-                    foreach (range(1,1500) as $index) {
+                    foreach (range(1,750) as $index) {
                         DB::table("participantes")->insert([
-                            'id_participante' => $i,
+                            'id' => $i,
                             'nombre_participante'     => $faker->firstName,
                             'apellido'     => $faker->lastname,
                             'email_participante'     => $faker->email,

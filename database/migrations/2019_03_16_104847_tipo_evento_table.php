@@ -14,7 +14,7 @@ class TipoEventoTable extends Migration
     public function up()
     {
         Schema::create('tipo_evento', function (Blueprint $table) {
-            $table->increments('id_tipo_evento');
+            $table->increments('id');
             $table->string('nombre_tipo_evento');
         });
     }

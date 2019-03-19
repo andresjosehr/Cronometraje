@@ -14,10 +14,10 @@ class Formularios extends Migration
     public function up()
     {
         Schema::create('formularios', function (Blueprint $table) {
-            $table->increments('id_formulario');
+            $table->increments('id');
             $table->string('nombre_formulario');
             $table->integer('id_evento')->unsigned();
-            $table->foreign('id_evento')->references('id_evento')->on('eventos');
+            $table->foreign('id_evento')->references('id')->on('eventos');
         });
     }
 

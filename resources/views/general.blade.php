@@ -20,6 +20,9 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+      if(typeof chrome.app.isInstalled!=='undefined'){
+         chrome.runtime.sendMessage()
+      }
     </script>
   </head>
   <body class="h-100">
@@ -117,7 +120,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link sidebar_registrar_admin" href="participantes">
+                <a class="nav-link sidebar_participantes" href="participantes">
                   <i class="material-icons">accessibility</i>
                   <span>Participantes</span>
                 </a>

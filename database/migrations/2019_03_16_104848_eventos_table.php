@@ -15,13 +15,13 @@ class EventosTable extends Migration
     {
         Schema::create('eventos', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('id_evento');
+            $table->increments('id');
             $table->string('nombre_evento');
             $table->date('fecha');
             $table->string('email_evento')->unique();
             $table->string('localidad')->nullable();
             $table->integer('tipo')->unsigned();
-            $table->foreign('tipo')->references('id_tipo_evento')->on('tipo_evento');
+            $table->foreign('tipo')->references('id')->on('tipo_evento');
             $table->string('estado_pago')->nullable();
             $table->string('precio')->nullable();
             $table->boolean('inscripcion_habilitada');

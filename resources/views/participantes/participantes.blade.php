@@ -16,6 +16,7 @@
             <div class="col-lg-12 col-md-12 col-sm-12 mb-4">
                 <div class="card card-small">
                   <div class="card-header border-bottom">
+                    <div id='contenedor_status_participante'></div>
                     <h6 class="m-0">Parcitipantes</h6>
                   </div>
                   <div class="card-body" id="participantes">
@@ -26,7 +27,7 @@
                             <a class="nav-link tab1 active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Vista de Participantes</a>
                           </li>
                           <li class="nav-item participante_tab_crear">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Agregar Participante</a>
+                            <a onclick="limp()" class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Agregar Participante</a>
                           </li>
                         </ul>
                       </div>
@@ -35,7 +36,9 @@
                       <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                         @include("participantes.lista")
                       </div>
-                      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        @include("participantes.crear")
+                      </div>
                     </div>
                   </div>
                 </div>

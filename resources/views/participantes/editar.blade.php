@@ -6,9 +6,8 @@
     <div class="modal-content">
       <div class="row vdivide edit_sub">
         <div id="contenedor_editar_participante"></div>
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-6" id="edit_path">
           <strong class="text-muted d-block mb-2">Datos Predefinidos</strong>
-          <form>
             <div class="form-row">
               <div class="form-group col-md-6">
                 <strong class="text-muted d-block mb-2">Nombre</strong>
@@ -47,7 +46,7 @@
                 <strong class="text-muted d-block mb-2">Categoria</strong>
                 <select class="form-control" id="id_categoria" name="id_categoria">
                   @foreach ($Categorias as $Categoria)
-                    <option value="{{$Categoria->id_categoria}}" >{{$Categoria->nombre_categoria}}</option>
+                    <option value="{{$Categoria->id}}" >{{$Categoria->nombre_categoria}}</option>
                   @endforeach
                 </select>
               </div>
@@ -64,7 +63,6 @@
             <input type="hidden" id="cate">
             <input type="hidden" id="id_part">
             <input type="hidden" id="iden">
-          </form>
         </div>
         <div class="col-sm-12 col-md-6">
           <strong class="text-muted d-block mb-2">Datos de Formulario personalizado</strong>

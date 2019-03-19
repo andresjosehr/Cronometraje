@@ -14,12 +14,12 @@ class CamposTable extends Migration
     public function up()
     {
         Schema::create('campos', function (Blueprint $table) {
-            $table->increments('id_campo');
+            $table->increments('id');
             $table->string('tipo');
             $table->integer('nombre_formulario');
             $table->integer('descripcion');
             $table->integer('id_formulario')->unsigned();
-            $table->foreign('id_formulario')->references('id_formulario')->on('formularios');
+            $table->foreign('id_formulario')->references('id')->on('formularios');
         });
     }
 
