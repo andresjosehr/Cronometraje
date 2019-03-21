@@ -1,0 +1,159 @@
+.crear_form_card{
+		background: #dedede;
+	}
+	.crear_form{
+		padding-top: 20px;
+	}
+
+	.material_create{
+		font-size: 22px !important;
+		transition: 0.3s;
+	}
+
+	.form_option{
+		color:white;
+		font-size: 20px
+	}
+
+	.tootltip_title{
+		color: white;
+	    text-align: center;
+	    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+	    font-size: 1.625rem;
+	    font-weight: 500;
+	    line-height: 1;
+	    margin: 0;
+	    padding: 0;
+	}
+
+	.tool_tooltip {
+	  position: relative;
+	  display: block;
+	}
+
+	.tool_tooltip .tool_tooltiptext {
+	  visibility: hidden;
+	  width: 100%;
+	  background-color: #000000a3;
+	  color: #fff;
+	  text-align: center;
+	  border-radius: 6px;
+	  padding: 26px 0;
+	  position: absolute;
+	  z-index: 1;
+	  top: 150%;
+	  margin-left: -17px;
+	  margin-bottom: 90px;
+	}
+
+	.tool_tooltip .tool_tooltiptext::after {
+	  content: "";
+	  position: absolute;
+	  bottom: 100%;
+	  left: 50%;
+	  margin-left: -5px;
+	  border-width: 5px;
+	  border-style: solid;
+	  border-color: #000000a3 transparent transparent transparent;
+	}
+
+	.tool_tooltip .tool_tooltiptext {
+	  visibility: hidden;
+	}
+
+	#btn_create_form{
+		display: none;
+	}
+
+	.row_options{
+		padding-top: 60px;
+	}
+	.crear_form .col-md-2:hover .material_create{
+		color: #007bff;
+	}
+
+	.crear_form_custom_control-label {
+	    margin-right: 322px !important;
+	}
+
+	.crear_form_card-body{
+		    background: #d4d4d4;
+    margin-bottom: 24px;
+	}
+
+	.input_form_file{
+		background: white !important; 
+	}
+
+	.form_div_file{
+		display: flex;
+	}
+
+	.label_from_file{
+		margin-bottom: 0px;
+	}
+
+	.select_field_create{
+		max-height: 238px;
+	    width: 100%;
+	    padding: 0;
+	    overflow-y: auto;
+	    margin-bottom: 60px;
+	}
+	.invalid_create_1{
+		margin-top: 3px;
+    	margin-bottom: 13px;
+	}
+
+	.invalid_create_2{
+		margin-top: -15px;
+		margin-bottom: 13px;
+	}
+
+ .btn-group, .multiselect-container, .multiselect-container label {
+        width: 100% !important;
+    }
+    .multiselect-container li:hover{
+    	background: #006fe6;
+    	transition: 0.3s;
+    }
+    .multiselect-container li:hover a{
+    	color: white;
+    }
+    .multiselect-container{
+		padding: 27px 0px;
+    }
+
+     .btn-group .dropdown-toggle{
+	    height: auto;
+		padding: .4375rem .75rem;
+		font-size: .8125rem;
+		line-height: 1.5;
+		color: #495057;
+		background-color: #fff;
+		border: 1px solid #e1e5eb;
+		font-weight: 300;
+		will-change: border-color,box-shadow;
+		border-radius: .25rem;
+		box-shadow: none;
+		transition: box-shadow .25s cubic-bezier(.27,.01,.38,1.06),border .25s cubic-bezier(.27,.01,.38,1.06);
+    }
+
+    #multi_create_form button:active{
+		color: #495057;
+	    background-color: #fff;
+	    box-shadow: 0 0.313rem 0.719rem rgba(0,123,255,.1), 0 0.156rem 0.125rem rgba(0,0,0,.06);
+    }
+
+    .multiselect-native-select{
+    	width: 100%
+    }
+
+    .btn-group{
+		    margin-bottom: 16px;
+    }
+
+    .nom_create_form{
+    	text-align: center !important;
+    	min-width: 100%;
+    }

@@ -1,5 +1,9 @@
 window.onload=function(){
 
+  var parts = window.location.pathname.split('/');
+  var urlPath = parts.pop() || parts.pop();  // handle potential trailing slash
+  if (urlPath=="participantes") {
+
       $('#participantes_table').DataTable();
       $.trim($($('#tabla_de')[0].nextSibling).remove())
       $(".dataTables_length label").contents()[0].textContent="Mostrar";
@@ -18,6 +22,7 @@ window.onload=function(){
       $('#edit_path #nacimiento, .crear_usr #nacimiento').datepicker({
           dateFormat: 'yyy-mm-dd'
       });
+    }
 }
 window.editarParticipante=function(participante, convert) {
   if (convert==1) {

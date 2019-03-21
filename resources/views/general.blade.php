@@ -13,6 +13,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Include the plugin's CSS and JS: -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
     <script>
       var url = '{{Request::root()}}';
       $.ajaxSetup({
@@ -26,53 +29,7 @@
     </script>
   </head>
   <body class="h-100">
-    {{-- <div class="color-switcher animated">
-      <h5>Accent Color</h5>
-      <ul class="accent-colors">
-        <li class="accent-primary active" data-color="primary">
-          <i class="material-icons">check</i>
-        </li>
-        <li class="accent-secondary" data-color="secondary">
-          <i class="material-icons">check</i>
-        </li>
-        <li class="accent-success" data-color="success">
-          <i class="material-icons">check</i>
-        </li>
-        <li class="accent-info" data-color="info">
-          <i class="material-icons">check</i>
-        </li>
-        <li class="accent-warning" data-color="warning">
-          <i class="material-icons">check</i>
-        </li>
-        <li class="accent-danger" data-color="danger">
-          <i class="material-icons">check</i>
-        </li>
-      </ul>
-      <div class="actions mb-4">
-        <a class="mb-2 btn btn-sm btn-primary w-100 d-table mx-auto extra-action" href="https://designrevision.com/downloads/shards-dashboard-lite/">
-          <i class="material-icons">cloud</i> Download</a>
-        <a class="mb-2 btn btn-sm btn-white w-100 d-table mx-auto extra-action" href="https://designrevision.com/docs/shards-dashboard-lite">
-          <i class="material-icons">book</i> Documentation</a>
-      </div>
-      <div class="social-wrapper">
-        <div class="social-actions">
-          <h5 class="my-2">Help us Grow</h5>
-          <div class="inner-wrapper">
-            <a class="github-button" href="https://github.com/DesignRevision/shards-dashboard" data-icon="octicon-star" data-show-count="true" aria-label="Star DesignRevision/shards-dashboard on GitHub">Star</a>
-          </div>
-        </div>
-        <div id="social-share" data-url="https://designrevision.com/downloads/shards-dashboard-lite/" data-text="🔥 Check out Shards Dashboard Lite, a free and beautiful Bootstrap 4 admin dashboard template!" data-title="share"></div>
-        <div class="loading-overlay">
-          <div class="spinner"></div>
-        </div>
-      </div>
-      <div class="close">
-        <i class="material-icons">close</i>
-      </div>
-    </div>
-    <div class="color-switcher-toggle animated pulse infinite">
-      <i class="material-icons">settings</i>
-    </div> --}}
+
     <div class="container-fluid">
       <div class="row">
         <!-- Main Sidebar -->
@@ -125,36 +82,12 @@
                   <span>Participantes</span>
                 </a>
               </li>
-              {{-- <li class="nav-item">
-                <a class="nav-link " href="components-blog-posts.html">
-                  <i class="material-icons">vertical_split</i>
-                  <span>Blog Posts</span>
+              <li class="nav-item">
+                <a class="nav-link sidebar_formularios" href="formularios">
+                  <i class="material-icons">format_list_numbered</i>
+                  <span>Formularios</span>
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link " href="add-new-post.html">
-                  <i class="material-icons">note_add</i>
-                  <span>Add New Post</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link " href="form-components.html">
-                  <i class="material-icons">view_module</i>
-                  <span>Forms &amp; Components</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link " href="tables.html">
-                  <i class="material-icons">table_chart</i>
-                  <span>Tables</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link " href="errors.html">
-                  <i class="material-icons">error</i>
-                  <span>Errors</span>
-                </a>
-              </li> --}}
             </ul>
           </div>
         </aside>

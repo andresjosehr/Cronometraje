@@ -15,5 +15,8 @@ $(document).ready(function() {
 	if (urlPath=="participantes") {
 		$(".sidebar_participantes").addClass("active");
 	}
+	if (urlPath=="formularios") {
+		$(".sidebar_formularios").addClass("active");
+	}
 	$(".pp-intro-bar").remove();
 	});

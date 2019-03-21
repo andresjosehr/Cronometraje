@@ -24,6 +24,7 @@
 	require('./../../resources/js/custom/resetear_contrasena.js');
 	require('./../../resources/js/custom/registrar_admin.js');
 	require('./../../resources/js/custom/participantes.js');
+	require('./../../resources/js/custom/formularios.js');
 
 // window.Vue = require('vue');
 
