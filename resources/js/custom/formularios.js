@@ -46,7 +46,7 @@ $(document).ready(function() {
 
 			if (creado==false) {
 				$("#btn_create_form").click();
-				$("#btn_create_create_form").text("Editar valores");
+				$("#btn_create_create_form").text("Editar");
 				// div_base
 
 				$("#div_base").append('<div class="form-group col" id="store_form" style="display:none">'+
@@ -122,6 +122,9 @@ $(document).ready(function() {
 			}
 			if ($("#hidden_tipe_field").val()=="multiselect") {
 				createFieldMultiSelect();
+			}
+			if ($("#hidden_tipe_field").val()=="pago") {
+				createFieldPago();
 			}
 
 		}
@@ -291,6 +294,30 @@ $(document).ready(function() {
 		window.num++;
 	}
 
+	window.createFieldPago=function(){
+
+		var tipo=$("#hidden_tipe_field").val();
+
+		window.Data[window.num]= new Array();
+		window.Data[window.num]["tipo"]=$("#hidden_tipe_field").val();
+		window.Data[window.num]["html"]=$("#nombre_field").val();
+		window.Data[window.num]["javascript"]=$("#descripcion_field").val();
+		window.Data[window.num]["codigo_div"]=makeCode(8)
+		swal.close();
+
+		
+
+		$("#div_base").append('<div align="center" style="width:100%; display:none" class="col-md-12" id="'+window.Data[window.num]["codigo_div"]+'">'+
+								  '<a mp-mode="dftl" href="javascript:void(0)" name="MP-payButton" class="MP-blue-common-CDl MP-ar-l-rn-Dl" target="">Pagar</a>'+
+								'</div>');
+
+		$('#'+window.Data[window.num]["codigo_div"]).appendTo('#fields').show('slow');
+
+	
+
+
+	};
+
 
 
 
@@ -424,6 +451,26 @@ window.validation=function(tipito){
 				'<div class="form-group col-md-12">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+tipito+'">'+
 					'<button onclick="prueba()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>'+
+				'</div>'+
+			'</div>';
+		}
+
+		if (tipito=="pago") {
+			var validation = '<div class="form-row">'+
+				'<div class="form-group col-md-12">'+
+					'<input type="text" class="form-control" id="nombre_field" placeholder="Introduce el codigo HTML del boton" required="">'+
+				'</div>'+
+				'<div class="form-group col-md-12">'+
+					'<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Introduce el codigo Javascript del boton" required=""></textarea>'+
+				'</div>'+
+				'<div class="form-group col-md-12">'+
+					'<div class="custom-control custom-toggle custom-toggle-sm mb-1">'+
+						'<input type="checkbox" id="customToggle2" name="customToggle2" class="custom-control-input" checked="checked">'+
+					'</div>'+
+				'</div>'+
+				'<div class="form-group col-md-12">'+
+					'<input type="hidden" id="hidden_tipe_field" value="'+tipito+'">'+
+					'<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>'+
 				'</div>'+
 			'</div>';
 		}
