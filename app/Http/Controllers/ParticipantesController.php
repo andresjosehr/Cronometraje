@@ -75,15 +75,16 @@ class ParticipantesController extends Controller
 
     public function store(Request $Request)
     {
-        if ($Request->nombre_participante) {
+
+        if ($Request->act_status=="false") {
 
             if (session()->get("email")!=$Request->email) {
                     $v = \Validator::make($Request->all(), [
                     'id'       => 'required',
                     'nombre_participante'   => 'required',
                     'apellido'              => 'required',
-                    'email_participante'    => 'required|unique:participantes,id,'.$Request->id,
-                    'dni'                   => 'required|unique:participantes,id,'.$Request->id,
+                    'email_participante'    => 'required|unique:participantes,email_participante,'.$Request->id,
+                    'dni'                   => 'required|numeric|unique:participantes,dni,'.$Request->id,
                     'nacimiento'            => 'required|date|date_format:Y-m-d',
                     'sexo'                  => 'required|numeric',
                     'id_categoria'          => 'required|numeric',
@@ -97,10 +98,13 @@ class ParticipantesController extends Controller
                     ?><script>
                         $('#edit_path [name="<?php echo $campo; ?>"]').addClass("is-invalid");
                         $('#edit_path [name="<?php echo $campo; ?>"]').after('<small id="invalid-feedback" style="color:red;"><?php echo $error[0] ?></small>');
+                        $( ".upd_participante_loading" ).fadeOut(250, function () {
+                          $( ".upd_participante_btn" ).fadeIn(250);
+                        });
                     </script><?php
                 }   
             } else{
-             Participantes::where("id", $Request->id)->update($Request->except('id'));
+             Participantes::where("id", $Request->id)->update($Request->except(['id', "act_status"]));
              $ParticipanteActualizado = Participantes::select('participantes.id as id_participante', 'participantes.*', 'categorias.id as id_categoria_cat', 'categorias.*', 'estado_inscripcion.id as id_estado_inscripcion_ins', 'estado_inscripcion.nombre_estado_inscripcion')
                                         ->Join("categorias", "participantes.id_categoria", "=", "categorias.id")
                                         ->Join("eventos", "categorias.id_evento", "=", "eventos.id")
@@ -115,8 +119,8 @@ class ParticipantesController extends Controller
             }
         }
 
-        if ($Request->id_estado_inscripcion) {
-            Participantes::where("id", $Request->id)->update($Request->except("id"));
+        if ($Request->act_status=="true") {
+            Participantes::where("id", $Request->id)->update($Request->only("id_estado_inscripcion"));
         }
     }
 

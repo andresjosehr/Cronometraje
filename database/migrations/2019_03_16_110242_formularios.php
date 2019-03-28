@@ -16,6 +16,8 @@ class Formularios extends Migration
         Schema::create('formularios', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre_formulario');
+            $table->string('img')->nullable();
+            $table->string('codigo');
             $table->integer('id_evento')->unsigned();
             $table->foreign('id_evento')->references('id')->on('eventos');
         });

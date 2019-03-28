@@ -19,8 +19,11 @@ window.onload=function(){
       $(".dataTables_info").empty();
       $(".dataTables_info").remove();
 
+
+
+
+
       $('#edit_path #nacimiento, .crear_usr #nacimiento').datepicker({
-          dateFormat: 'yyy-mm-dd'
       });
     }
 }
@@ -125,7 +128,8 @@ window.actualizarParticipanteUPD=function(nacimiento_, edad_) {
       edad: edad_,
       sexo: $("#edit_path #sexo option:selected").val(),
       id_categoria:$("#edit_path #id_categoria option:selected").val(),
-      id_estado_inscripcion:$("#edit_path #id_estado_inscripcion option:selected").val()
+      id_estado_inscripcion:$("#edit_path #id_estado_inscripcion option:selected").val(),
+      act_status: false
 
   });
 }
@@ -139,8 +143,8 @@ window.exitoUpdatePart=function(participanteActualizado) {
   $("#"+participanteActualizado["id_participante"]).html('<td>'+participanteActualizado["id_participante"]+'</td>'+
                                                             '<td class="inscrito_'+participanteActualizado["id_estado_inscripcion_ins"]+'">'+participanteActualizado["nombre_estado_inscripcion"]+'</td>'+
                                                            '<td>'+participanteActualizado["nombre_participante"]+' '+participanteActualizado["apellido"]+'</td>'+
-                                                           '<td>'+participanteActualizado["email_participante"]+'</td>'+
-                                                           '<td>'+participanteActualizado["nombre_categoria"]+'</td>'+
+                                                           '<td>'+participanteActualizado["apellido"]+'</td>'+
+                                                           '<td>'+participanteActualizado["dni"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")+'</td>'+
                                                            '<td class="participantes_lista_acciones">'+
                                                              "<button id='btn_"+participanteActualizado["id_participante"]+"' style='padding: .25rem .5rem;' type='button' class='mb-2 btn btn-primary mr-2'><i style='font-size: 25px' class='material-icons'>border_color</i></button>"+
                                                              '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2"><i style="font-size: 25px" class="material-icons">folder_shared</i></button>'+
@@ -191,7 +195,8 @@ window.chan=function(id_participante, status, tipo){
               $('#id_id_'+id_participante).addClass('inscrito_'+status);
               $("#contenedor_status_participante").load(url+"/participantes",{
                 id: id_participante,
-                id_estado_inscripcion: status
+                id_estado_inscripcion: status,
+                act_status: true
               });
             }
         });
@@ -222,7 +227,8 @@ window.chan=function(id_participante, status, tipo){
               }
               $("#contenedor_status_participante").load(url+"/participantes",{
                 id: id_participante,
-                id_estado_inscripcion: status
+                id_estado_inscripcion: status,
+                act_status: true
               });
             }
         });

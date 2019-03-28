@@ -56,4 +56,5 @@ Route::get('CerrarSesion', "LoginController@cerrarSesion");
 Route::post('participantes/createPost', 'ParticipantesController@createPost');
 Route::resource('participantes', 'ParticipantesController');
 
+Route::post('formularios/createPost', "FormulariosController@createPost");
 Route::resource('formularios', 'FormulariosController');

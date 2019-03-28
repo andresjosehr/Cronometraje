@@ -6,9 +6,9 @@
             <tr>c
               <th>#</th>
               <th>Estado</th>
-              <th>Nombres</th>
-              <th>Email</th>
-              <th>Categoria</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>DNI</th>
               <th>Acciones</th>
             </tr>
         </thead>
@@ -16,9 +16,9 @@
             <tr>c
               <th>#</th>
               <th>Estado</th>
-              <th>Nombres</th>
-              <th>Email</th>
-              <th>Categoria</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>DNI</th>
               <th>Acciones</th>
              </tr>
         </tfoot>
@@ -27,9 +27,9 @@
                <tr id="{{$Participante->id_participante}}">
                  <td >{{$Participante->id_participante}}</td>
                  <td class="inscrito_{{$Participante->id_estado_inscripcion_ins}}" id="id_id_{{$Participante->id_participante}}">{{$Participante->nombre_estado_inscripcion}}</td>
-                 <td>{{$Participante->nombre_participante}} {{$Participante->apellido}}</td>
-                 <td>{{$Participante->email_participante}}</td>
-                 <td>{{$Participante->nombre_categoria}}</td>
+                 <td>{{$Participante->nombre_participante}}</td>
+                 <td>{{$Participante->apellido}}</td>
+                 <td>{{number_format((int)$Participante->dni, 0, ',', '.' )}}</td>
                  <td class="participantes_lista_acciones">
                    <button onclick="editarParticipante('{{$Participante}}', '1')" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-primary mr-2"><i style="font-size: 25px" class="material-icons">border_color</i></button>
                    <button onclick="chan('{{$Participante->id_participante}}', '2', 'inscrito')" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2 btn_inscrito_{{$Participante->id_participante}} @if ($Participante->id_estado_inscripcion_ins>=2 && $Participante->id_estado_inscripcion_ins!=4) pul @endif"><i style="font-size: 25px" class="material-icons">folder_shared</i></button>

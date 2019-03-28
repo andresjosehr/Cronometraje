@@ -18,7 +18,10 @@ mix.setResourceRoot ('../public/')
 	    jQuery: 'jquery',
 	    $: 'jquery',
 	    jquery: 'jquery'
-	});
+	}).browserSync({
+   	  proxy: "localhost",
+    files: ['resources/views/**/*.php', 'resources/views/*.php', 'public/js/*.js', 'public/css/*.css']
+   });
 
 
  //   mix.setResourceRoot ('../public/')

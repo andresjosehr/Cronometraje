@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Formularios;
+use App\Campos;
+use App\SubCampos;
+use App\Eventos;
+
 class FormulariosController extends Controller
 {
     /**
@@ -13,7 +18,16 @@ class FormulariosController extends Controller
      */
     public function index()
     {
-        return view("formularios.formularios");
+
+
+
+        $Formularios = Formularios::whereHas('eventos', function ($query) {
+                    $query->where('id_usuario', session()->get("id"));
+                })->with("campos.subcampos")->get();
+        
+        $Eventos = Eventos::select("eventos.id", "eventos.nombre_evento")->join("usuarios",  "eventos.id_usuario", "usuarios.id")->where("usuarios.id", session()->get("id"))->get();
+
+        return view("formularios.formularios", ["Eventos" => $Eventos, "Formularios" => $Formularios]);
     }
 
     /**
@@ -24,6 +38,91 @@ class FormulariosController extends Controller
     public function create()
     {
         //
+    }
+
+
+    public function createPost(Request $Request)
+    {
+
+       $ImgForm=null;
+       if ($Request->file('file')) {
+         $file = $Request->file('file');
+         $nombre = str_random(30).".".$file->getClientOriginalExtension();
+         $Request->file('file')->move(public_path("/img/crono/"), $nombre);
+         $ImgForm=$nombre;
+       }
+
+
+       $Datos = json_decode($Request->Datos, true);
+
+       Formularios::insert([
+        "nombre_formulario" => $Datos["nombre_formulario"],
+        "img" => $ImgForm,
+        "codigo" => str_random(30),
+        "id_evento" => $Datos["evento_asociado"]
+       ]);
+
+       $id_form = Formularios::select("id")->orderBy('id', 'desc')->first();
+
+       unset($Datos["nombre_formulario"]);
+       unset($Datos["nombre_formulario"]);
+       unset($Datos["evento_asociado"]);
+
+
+       foreach ($Datos as $key => $value) {
+
+            if ($value["tipo"]=="text" || $value["tipo"]=="email" || $value["tipo"]=="date") {
+              Campos::insert([
+                "tipo" => $value["tipo"],
+                "descripcion" => $value["descripcion"],
+                "obligatorio" => $value["Obligatorio"],
+                "id_formulario" => $id_form->id
+               ]);
+            }
+
+            if ($value["tipo"]=="select" || $value["tipo"]=="multiselect") {
+
+              Campos::insert([
+                "tipo" => $value["tipo"],
+                "descripcion" => $value["descripcion"],
+                "obligatorio" => $value["Obligatorio"],
+                "id_formulario" => $id_form->id
+               ]);
+
+              $id_campo = Campos::select("id")->orderBy('id', 'desc')->first();
+
+              foreach ($value["Opciones"] as $key2 => $value2) {
+                  SubCampos::insert([
+                    "descripcion" => $value2,
+                    "id_campo" => $id_campo->id
+                  ]);
+              }
+        
+            }
+
+            if ($value["tipo"]=="file") {
+              Campos::insert([
+                "tipo" => $value["tipo"],
+                "descripcion" => $value["descripcion"],
+                "obligatorio" => $value["Obligatorio"],
+                "img" => $value["img"],
+                "pdf" => $value["pdf"],
+                "id_formulario" => $id_form->id
+               ]);
+            }
+
+            if ($value["tipo"]=="pago" ) {
+              Campos::insert([
+                "tipo" => $value["tipo"],
+                "codigo_pago" => $value["codigo"],
+                "id_formulario" => $id_form->id
+               ]);
+            }
+       }
+
+       return "Exito";
+
+
     }
 
     /**

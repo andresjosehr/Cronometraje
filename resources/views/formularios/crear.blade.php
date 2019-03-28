@@ -3,10 +3,15 @@
 
 	<div class="form-row">
       <div class="form-group col-md-4">
-        <input type="text" class="form-control" id="nombre" placeholder="Nombre" required="">
+        <input type="text" class="form-control" id="nombre" placeholder="Nombre" value="Formulario 1" required="">
       </div>
       <div class="form-group col-md-4">
-        <input type="text" class="form-control" id="evento" placeholder="Evento asignado" required="">
+        <select class="form-control" id="evento">
+        	<option value="0">Evento asociado</option>
+        	@foreach ($Eventos as $Evento)
+        		<option value="{{$Evento->id}}">{{$Evento->nombre_evento}}</option>
+        	@endforeach
+        </select>
       </div>
       <div class="col-md-4">
       	<div class="row form_create_options">
@@ -18,6 +23,16 @@
 	      	</div>
 	      </div>
       </div>
+      <div class="col-12">
+            <div class="form-group" style="display: flex;">
+                <input type="text" class="form-control" id="des_img" placeholder="Sube una imagen que sera vista en la seccion principal del formulario" readonly>
+                <label class="input-group-btn" style="margin-bottom: 0px">
+                    <span class="btn btn-primary">
+                        Subir&nbsp;Imagen <input type="file" id="img_form" style="display: none;" multiple>
+                    </span>
+                </label>
+            </div>
+        </div>
     </div>
 	<div class="collapse" id="collapseExample">
 	  <div class="card card-body crear_form_card-body">
@@ -28,7 +43,6 @@
           </div>
         </div>
         <div class="form-row" id="fields">
-
         </div>
         <div id="div_base"></div> 
         </div>

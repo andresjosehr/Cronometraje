@@ -16,8 +16,11 @@ class CamposTable extends Migration
         Schema::create('campos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('tipo');
-            $table->integer('nombre_formulario');
-            $table->integer('descripcion');
+            $table->string('descripcion')->nullable();
+            $table->string('obligatorio')->nullable();
+            $table->string('img')->nullable();
+            $table->string('pdf')->nullable();
+            $table->text('codigo_pago')->nullable();
             $table->integer('id_formulario')->unsigned();
             $table->foreign('id_formulario')->references('id')->on('formularios');
         });

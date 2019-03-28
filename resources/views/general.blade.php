@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js h-100" lang="en">
+<html class="no-js h-100" lang="es">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -16,6 +16,12 @@
     <!-- Include the plugin's CSS and JS: -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
+
+    <script>
+    
+</script>
+
+
     <script>
       var url = '{{Request::root()}}';
       $.ajaxSetup({
@@ -23,9 +29,7 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-      if(typeof chrome.app.isInstalled!=='undefined'){
-         chrome.runtime.sendMessage()
-      }
+
     </script>
   </head>
   <body class="h-100">
