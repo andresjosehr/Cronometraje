@@ -11,7 +11,12 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
     public function run()
-    {               DB::table('participantes')->delete();
+    {               
+
+                    DB::table('sub_campos')->delete();
+                    DB::table('campos')->delete();
+                    DB::table('formularios')->delete();
+                    DB::table('participantes')->delete();
                     DB::table('categorias')->delete();
                     DB::table('eventos')->delete();
                     DB::table('usuarios')->delete();
@@ -124,6 +129,91 @@ class DatabaseSeeder extends Seeder
                         ]);
                         $i++;
                     }
+
+
+
+
+                    $i=1;
+                    foreach (range(1, 50) as $index) {
+                        DB::table("formularios")->insert([
+                            'id' => $i,
+                            'nombre_formulario' => $faker->word,
+                            'codigo' => $faker->shuffle('aeìojgsdbfvpujb54egryh8nt66sr'),
+                            'id_evento' => $faker->numberBetween(1,20)
+
+                        ]);
+                        $i++;
+                    }
+
+
+                    $i=1;
+                    foreach (range(1, 200) as $index) {
+                        DB::table("campos")->insert([
+                            'id' => $i,
+                            'nombre' => $faker->word,
+                            'tipo' => $faker->randomElement($array = array ('text','email','date')),
+                            'descripcion' => $faker->sentence($nbWords = 6, $variableNbWords = true),
+                            'obligatorio' => $faker->numberBetween(0, 1),
+                            'id_formulario' => $faker->numberBetween(1,50)
+                        ]);
+                        $i++;
+                    }
+
+                    $i=220;
+                    foreach (range(1, 100) as $index) {
+                        DB::table("campos")->insert([
+                            'id' => $i,
+                            'nombre' => $faker->word,
+                            'tipo' => $faker->randomElement($array = array ('select','multiselect')),
+                            'descripcion' => $faker->sentence($nbWords = 6, $variableNbWords = true),
+                            'obligatorio' => $faker->numberBetween(0, 1),
+                            'id_formulario' => $faker->numberBetween(1,50)
+                        ]);
+                        $i++;
+
+                    }
+
+
+                     $i=1;
+                    foreach (range(1, 400) as $index) {
+                        DB::table("sub_campos")->insert([
+                            'id' => $i,
+                            'descripcion' => $faker->sentence($nbWords = 6, $variableNbWords = true),
+                            'id_campo' => $faker->numberBetween(220,231)
+                        ]);
+                        $i++;
+
+                    }
+
+
+                    foreach (range(1, 100) as $index) {
+                        DB::table("campos")->insert([
+                            'nombre' => $faker->word,
+                            'tipo' => "file",
+                            'descripcion' => $faker->sentence($nbWords = 6, $variableNbWords = true),
+                            'obligatorio' => $faker->numberBetween(0, 1),
+                            'img' => $faker->numberBetween(0, 1),
+                            'pdf' => $faker->numberBetween(0, 1),
+                            'id_formulario' => $faker->numberBetween(1,50)
+                        ]);
+                        $i++;
+
+                    }
+
+
+                    foreach (range(1, 100) as $index) {
+                        DB::table("campos")->insert([
+                            'nombre' => $faker->word,
+                            'tipo' => "pago",
+                            'codigo_pago' => "Pago",
+                            'id_formulario' => $faker->numberBetween(1,50)
+                        ]);
+                        $i++;
+
+                    }
+
+
+
 
     }
 }

@@ -9,3 +9,6 @@ class SubCampos extends Model
     public $timestamps = false;
     protected $table = 'sub_campos';
 }
+
+
+

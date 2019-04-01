@@ -20,4 +20,7 @@ class Formularios extends Model
     	return $this->hasMany(Campos::class, "id_formulario");
     }
 
+
+
+
 }

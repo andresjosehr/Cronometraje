@@ -17,7 +17,7 @@ class SubCamposTable extends Migration
             $table->increments('id');
             $table->string('descripcion');
             $table->integer('id_campo')->unsigned();
-            $table->foreign('id_campo')->references('id')->on('campos');
+            $table->foreign('id_campo')->references('id')->on('campos')->onDelete('cascade');
         });
     }
 

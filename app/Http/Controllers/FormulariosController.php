@@ -73,6 +73,7 @@ class FormulariosController extends Controller
 
             if ($value["tipo"]=="text" || $value["tipo"]=="email" || $value["tipo"]=="date") {
               Campos::insert([
+                "nombre" => $value["nombre"],
                 "tipo" => $value["tipo"],
                 "descripcion" => $value["descripcion"],
                 "obligatorio" => $value["Obligatorio"],
@@ -83,6 +84,7 @@ class FormulariosController extends Controller
             if ($value["tipo"]=="select" || $value["tipo"]=="multiselect") {
 
               Campos::insert([
+                "nombre" => $value["nombre"],
                 "tipo" => $value["tipo"],
                 "descripcion" => $value["descripcion"],
                 "obligatorio" => $value["Obligatorio"],
@@ -102,6 +104,7 @@ class FormulariosController extends Controller
 
             if ($value["tipo"]=="file") {
               Campos::insert([
+                "nombre" => $value["nombre"],
                 "tipo" => $value["tipo"],
                 "descripcion" => $value["descripcion"],
                 "obligatorio" => $value["Obligatorio"],
@@ -165,9 +168,30 @@ class FormulariosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $Request, $id)
     {
-        //
+        if ($Request->tipo=="text" || $Request->tipo=="email" || $Request->tipo=="date" || $Request->tipo=="file" || $Request->tipo=="pago") {
+            Campos::where("id", $Request->id)->update($Request->all());
+            return Campos::where("id", $Request->id)->first();
+        }
+
+        if ($Request->tipo=="select" || $Request->tipo=="multiselect") {
+
+            Campos::where("id", $Request->id)->update($Request->except("subcampos"));
+            SubCampos::where("id_campo", $Request->id)->delete();
+
+            for ($i=0; $i <count($Request->subcampos)+999 ; $i++) {
+                    if (isset($Request->subcampos[$i])) {
+                        SubCampos::insert([
+                        "descripcion" => $Request->subcampos[$i],
+                        "id_campo" => $Request->id
+                   ]);
+                }
+            }
+
+            return Campos::where("id", $Request->id)->with("subcampos")->first();
+        }
+
     }
 
     /**
@@ -176,8 +200,14 @@ class FormulariosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $Request, $id)
     {
-        //
+        if ($Request->nombre_formulario) {
+            Formularios::where("id", $id)->delete();
+            return "Exito";
+        }else{
+            SubCampos::where("id_campo", $id)->delete();
+            Campos::where("id", $id)->delete();
+            return "Exito";         }
     }
 }

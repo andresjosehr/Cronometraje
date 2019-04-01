@@ -450,7 +450,7 @@ $(document).ready(function() {
 
 		window.Data[window.num]= {};
 		window.Data[window.num]["tipo"]=$("#hidden_tipe_field").val();
-		window.Data[window.num]["codigo"]=$("#descripcion_field").val();
+		window.Data[window.num]["codigo"]=$("#descripcion_field").val().replace(/"/gi, "'");
 		window.Data[window.num]["codigo_div"]=makeCode(8)
 		swal.close();
 
@@ -458,7 +458,7 @@ $(document).ready(function() {
 
 		$("#div_base").append('<div class="row" id="'+window.Data[window.num]["codigo_div"]+'" style="width:100%;display:none" >'+
 									'<div align="center" style="width:100%;" class="col-md-8" id="'+window.Data[window.num]["codigo_div"]+'">'+
-									  '<button title="El boton mostrado es un ejemplo no funcional del boton, el codigo del boton insertado sera renderizado luego de guardar el formulario" mp-mode="dftl" href="javascript:void(0)" name="MP-payButton" class="MP-blue-common-CDl MP-ar-l-rn-Dl" target="">Pagar</button>'+
+									  '<button style="margin-top: 0px;" title="El boton mostrado es un ejemplo no funcional del boton, el codigo del boton insertado sera renderizado luego de guardar el formulario" mp-mode="dftl" href="javascript:void(0)" name="MP-payButton" class="MP-blue-common-CDl MP-ar-l-rn-Dl" target="">Pagar</button>'+
 									'</div>'+
 									'<div class="form-group col-md-2 nopadding" id="0">'+
 										'<button onclick="editField('+"'"+window.num+"'"+')" class="btn btn-success btn-block" type="button">'+

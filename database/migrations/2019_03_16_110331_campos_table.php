@@ -15,6 +15,7 @@ class CamposTable extends Migration
     {
         Schema::create('campos', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('nombre')->nullable();
             $table->string('tipo');
             $table->string('descripcion')->nullable();
             $table->string('obligatorio')->nullable();
@@ -22,7 +23,7 @@ class CamposTable extends Migration
             $table->string('pdf')->nullable();
             $table->text('codigo_pago')->nullable();
             $table->integer('id_formulario')->unsigned();
-            $table->foreign('id_formulario')->references('id')->on('formularios');
+            $table->foreign('id_formulario')->references('id')->on('formularios')->onDelete('cascade');
         });
     }
 
