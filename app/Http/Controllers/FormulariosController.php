@@ -208,6 +208,7 @@ class FormulariosController extends Controller
         }else{
             SubCampos::where("id_campo", $id)->delete();
             Campos::where("id", $id)->delete();
-            return "Exito";         }
+            return "Exito";        
+        }
     }
 }
