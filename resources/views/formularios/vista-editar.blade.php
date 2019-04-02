@@ -136,7 +136,8 @@
   <div id="ConverCode" style="display: none"></div>
 </div>
 
-@if ($Formulario=="")
+
+@if (!isset($Formulario))
   <div class="error" style="height: calc(32vh - 3.75rem);">
      <div class="error__content">
        <h3>No tienes ningun formulario creado!</h3>
