@@ -420,13 +420,15 @@ window.EC_verificarEdit=function(info_camp, subcampos){
         })
         .then((willDelete) => {
           if (willDelete) {
-          	// $("#card_"+window.info_form.id).hide('slow');
+          	 $("#card_"+window.info_form.id).hide('slow',function(){
+          	 	swal("Listo!", "Hemos Eliminado el formulario exitosamente", "success");
+          	 });
           	  $.ajax({
 			        type: 'DELETE',
 			        url: url+"/formularios/"+window.info_form.id,
 			        data: window.info_form,
 			        success: function(result){
-			        	console.log(result)
+			        	
 			        }
 			    });
 

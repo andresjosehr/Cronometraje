@@ -1859,14 +1859,14 @@ window.EC_deleteForm = function (info_form) {
     dangerMode: true
   }).then(function (willDelete) {
     if (willDelete) {
-      // $("#card_"+window.info_form.id).hide('slow');
+      $("#card_" + window.info_form.id).hide('slow', function () {
+        swal("Listo!", "Hemos Eliminado el formulario exitosamente", "success");
+      });
       $.ajax({
         type: 'DELETE',
         url: url + "/formularios/" + window.info_form.id,
         data: window.info_form,
-        success: function success(result) {
-          console.log(result);
-        }
+        success: function success(result) {}
       });
     }
   });
