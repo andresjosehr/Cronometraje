@@ -1860,7 +1860,12 @@ window.EC_deleteForm = function (info_form) {
   }).then(function (willDelete) {
     if (willDelete) {
       $("#card_" + window.info_form.id).hide('slow', function () {
+        $("#card_" + window.info_form.id).remove();
         swal("Listo!", "Hemos Eliminado el formulario exitosamente", "success");
+
+        if ($("#accordion .card").html() == undefined) {
+          $(".no_form").show("slow");
+        }
       });
       $.ajax({
         type: 'DELETE',
@@ -1891,52 +1896,62 @@ window.prevStore = function () {
   StoreForm(window.Data);
 };
 
-window.StoreForm = function (Datos) {
-  if (window.num != 0) {
-    swal({
-      title: "Espera!",
-      text: "¿Estas seguro de querer guardar el formulario?",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true
-    }).then(function (willDelete) {
-      if (willDelete) {
-        $("#btn_edit_create_form").fadeOut(250, function () {
-          $(".upd_participante_loading").fadeIn(250);
-        });
-        var file_data = $("#img_form").prop("files")[0];
-        var form_data = new FormData();
-        form_data.append("file", file_data);
-        form_data.append("user_id", 123);
-        form_data.append("Datos", JSON.stringify(window.Data));
-        $.ajax({
-          type: 'post',
-          url: url + "/formularios/createPost",
-          dataType: 'script',
-          cache: false,
-          contentType: false,
-          processData: false,
-          data: form_data,
-          success: function success(msg) {
-            if (msg == "Exito") {
-              $(".upd_participante_loading").fadeOut(250, function () {
-                $("#btn_edit_create_form").fadeIn(250);
-              });
-              swal({
-                title: "Listo!",
-                text: "Tu formulario ha sido almacenado exitosamente",
-                icon: "success"
-              }).then(function () {
-                location.reload(true);
-              });
-            }
-          }
-        });
-      }
-    });
-  } else {
-    swal("Espera", "El formulario debe tener al menos un campo para poder ser almacenado", "warning");
+window.EC_VerifyStoreForm = function (id_form) {
+  $("#nombre_" + id_form + ", #evento_" + id_form).removeClass("is-invalid");
+  $("small").remove();
+  var ver = 0;
+
+  if ($("#nombre_" + id_form).val() == "") {
+    $("#nombre_" + id_form).addClass("is-invalid");
+    $("#nombre_" + id_form).after('<small id="us_error err_part" style="color:red;">Debes introducir un nombre</small>');
+    ver++;
   }
+
+  if ($("#evento_" + id_form).val() == "0") {
+    ver++;
+    $("#evento_" + id_form).addClass("is-invalid");
+    $("#evento_" + id_form).after('<small id="us_error err_part" style="color:red;">Debes asociar el formulario a un evento</small>');
+  }
+
+  if (ver == 0) {
+    EC_StoreForm(id_form);
+  }
+};
+
+window.EC_StoreForm = function (id_form) {
+  swal({
+    title: "Espera!",
+    text: "¿Estas seguro de querer actualizar el formulario?",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true
+  }).then(function (willDelete) {
+    if (willDelete) {
+      $("#btn_edit_create_form").fadeOut(250, function () {
+        $(".upd_participante_loading").fadeIn(250);
+      });
+      var formData = new FormData();
+      formData.append("file", $("#file_" + id_form).prop("files")[0]);
+      formData.append("nombre_formulario", $("#nombre_" + id_form).val());
+      formData.append("id_evento", $("#evento_" + id_form).val());
+      formData.append("_method", "PUT");
+      $.ajax({
+        type: 'POST',
+        url: url + "/formularios/" + id_form,
+        contentType: false,
+        processData: false,
+        data: formData,
+        success: function success(msg) {
+          if (msg == "Exito") {
+            swal("Listo", "Los datos del formulario han sido actualizados exitosamente", "success");
+            setTimeout(location.reload(), 2000);
+          } else {
+            swal("Error", msg, "error");
+          }
+        }
+      });
+    }
+  });
 };
 
 window.DateVist = function (id) {
@@ -2051,6 +2066,25 @@ window.RecopDat = function (tipo) {
   }
 
   return Datos;
+};
+
+window.EC_editForm = function (id) {
+  $(".vist_form_" + id).hide("slow", function () {
+    $(".edit_form_" + id).show("slow");
+  });
+};
+
+window.EC_initFile = function (id_input, id_div) {
+  $('#' + id_input).on('fileselect', function (event, numFiles, label) {
+    var input = $(this).parents("#" + id_div + ' .input-group').find(':text'),
+        log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+    if (input.length) {
+      input.val(log);
+    } else {
+      if (log) $("#" + id_div + " .form-control").val(log);
+    }
+  });
 };
 
 /***/ }),

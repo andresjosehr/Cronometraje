@@ -46,6 +46,18 @@ class FormulariosController extends Controller
 
        $ImgForm=null;
        if ($Request->file('file')) {
+
+        $v = \Validator::make($Request->only('file'), array(
+          'file' => 'mimes:jpeg,jpg,png,gif|max:10000' // max 10000kb
+        ));
+
+        if ($v->fails()){
+            return $v->messages()->first();
+            die();
+        }
+
+
+
          $file = $Request->file('file');
          $nombre = str_random(30).".".$file->getClientOriginalExtension();
          $Request->file('file')->move(public_path("/img/crono/"), $nombre);
@@ -136,7 +148,7 @@ class FormulariosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       //
     }
 
     /**
@@ -170,6 +182,32 @@ class FormulariosController extends Controller
      */
     public function update(Request $Request, $id)
     {
+        if ($Request->_method) {
+           if ($Request->file('file')) {
+
+                $v = \Validator::make($Request->only('file'), array(
+                    'file' => 'mimes:jpeg,jpg,png,gif|max:10000' // max 10000kb
+                ));
+
+                if ($v->fails()){
+                    return $v->messages()->first();
+                    die();
+                }
+
+                $file = $Request->file('file');
+                $nombre = str_random(30).".".$file->getClientOriginalExtension();
+                $Request->file('file')->move(public_path("/img/crono/"), $nombre);
+                $ImgForm=$nombre;
+                $Request->merge(['img' => $ImgForm]);
+                Formularios::where("id", $id)->update($Request->except('_method', "file"));
+           } else{
+                Formularios::where("id", $id)->update($Request->except('_method', "file"));
+           }
+
+           return "Exito";
+        }
+
+
         if ($Request->tipo=="text" || $Request->tipo=="email" || $Request->tipo=="date" || $Request->tipo=="file" || $Request->tipo=="pago") {
             Campos::where("id", $Request->id)->update($Request->all());
             return Campos::where("id", $Request->id)->first();

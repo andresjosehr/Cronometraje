@@ -3,7 +3,43 @@
     <div class="card" id="card_{{$Formulario->id}}">
     <div class="card-header" id="headingTwo">
       <div class="row">
-        <div class="col-md-8">
+          <div class="col-md-8 edit_form_{{$Formulario->id}}" style="margin-top: 5px; display: none">
+            <div class="row">
+              <div class="form-group col-md-6" style="margin-bottom: 7px;">
+                <input type="text" class="form-control" id="nombre_{{$Formulario->id}}" placeholder="Nombre" value="{{$Formulario->nombre_formulario}}" style="max-height: 33.5px;" required="">
+              </div>
+              <div class="form-group col-md-6" style="margin-bottom: 7px;">
+                <select class="form-control" id="evento_{{$Formulario->id}}" style="max-height: 33.5px;">
+                  <option value="0">Evento asociado</option>
+                  @foreach ($Eventos as $Evento)
+                    <option value="{{$Evento->id}}" @if ($Evento->id==$Formulario->id_evento) selected=""  @endif>{{$Evento->nombre_evento}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12" id="editDivForm_{{$Formulario->id}}">
+                <div class="form-group" style="display: flex;">
+                    <input type="text" class="form-control" placeholder="@if ($Formulario->img) {{$Formulario->img}} @else Sube una imagen que sera vista en la seccion principal del formulario @endif" readonly>
+                    <label class="input-group-btn" style="margin-bottom: 0px">
+                        <span class="btn btn-primary">
+                            Subir&nbsp;Imagen <input type="file" id="file_{{$Formulario->id}}" style="display: none;" multiple>
+                        </span>
+                    </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        <div class="col-md-2 vist_form_{{$Formulario->id}}" align="center">
+          @if (isset($Formulario->img))
+            <img src="{{ asset('public/img/crono/')."/".$Formulario->img }}" width="100" height="100" alt="">
+          @else
+          <p style="padding-top: 35px;">Sin imagen</p>
+          @endif
+        </div>
+        <div class="col-md-6 vist_form_{{$Formulario->id}}">
           <h5 class="mb-0">
             <a class="nav-link btn-link aloc btn-link collapsed vist_tit_form" data-toggle="collapse" data-target="#Formulario_{{$Formulario->id}}" aria-expanded="false" aria-controls="Formulario_{{$Formulario->id}}">
               {{$Formulario->nombre_formulario}} <br>
@@ -16,9 +52,12 @@
           </h5>
         </div>
       <div class="form-group col-md-4 btn_edit_form">
-        <button onclick="editField('0')" class="btn btn-success btn-block" type="button">Editar</button><br>
-        <button onclick="EC_deleteForm('{{$Formulario}}')" class="btn btn-danger btn-block" type="button">Borrar</button>
+        <button onclick="EC_editForm('{{$Formulario->id}}')" class="btn btn-success btn-block vist_form_{{$Formulario->id}}" type="button">Editar</button>
+        <button onclick="EC_VerifyStoreForm('{{$Formulario->id}}')" class="btn btn-primary btn-block edit_form_{{$Formulario->id}}" type="button" style="display: none;">Guardar Cambios</button><br>
+        <button onclick="EC_deleteForm('{{$Formulario}}')" class="btn btn-danger btn-block" type="button">Borrar</button><br>
+        <a target="_blank" href="{{Request::root()."/inscripcion/".$Formulario->codigo}}"><button class="btn btn-secondary btn-block" type="button" style="margin-top: 7px;margin-bottom: -36px;">Ver plantilla del formulario</button></a>
       </div>
+
     </div>
     <hr>
     </div>
@@ -132,18 +171,20 @@
       </div>
     </div>
   </div>
+  <script>
+    $(document).ready(function () {
+      EC_initFile('file_{{$Formulario->id}}', "editDivForm_{{$Formulario->id}}")
+    });
+  </script>
   @endforeach
   <div id="ConverCode" style="display: none"></div>
 </div>
 
-
-@if (!isset($Formulario))
-  <div class="error" style="height: calc(32vh - 3.75rem);">
+  <div class="error no_form" style="height: calc(32vh - 3.75rem); @if ($Formularios->count()) display: none @endif">
      <div class="error__content">
        <h3>No tienes ningun formulario creado!</h3>
        <p>Para crear un formulario haz click en la pestaña "Crear formulario" que se encuentra arriba </p>
        <a href="panel-de-control" class="btn btn-accent btn-pill" style="margin-top: 10px;">← Regresar al panel de control</a>
      </div> <!-- / .error_content -->
    </div>
-@endif
 
