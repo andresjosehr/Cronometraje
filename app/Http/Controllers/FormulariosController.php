@@ -23,7 +23,7 @@ class FormulariosController extends Controller
 
         $Formularios = Formularios::whereHas('eventos', function ($query) {
                     $query->where('id_usuario', session()->get("id"));
-                })->with("campos.subcampos")->get();
+                })->with("campos.subcampos")->orderBy("id", "desc")->get();
         
         $Eventos = Eventos::select("eventos.id", "eventos.nombre_evento")->join("usuarios",  "eventos.id_usuario", "usuarios.id")->where("usuarios.id", session()->get("id"))->get();
 
@@ -133,7 +133,28 @@ class FormulariosController extends Controller
                 "id_formulario" => $id_form->id
                ]);
             }
-       }
+
+
+
+            if ($value["tipo"]=="texto_ayuda" ) {
+              Campos::insert([
+                "tipo" => $value["tipo"],
+                "texto_ayuda" => $value["texto_ayuda"],
+                "id_formulario" => $id_form->id
+               ]);
+            }
+
+
+            if ($value["tipo"]=="img_ayuda" ) {
+              Campos::insert([
+                "tipo" => $value["tipo"],
+                "img_ayuda" => $value["img_ayuda"],
+                "id_formulario" => $id_form->id
+               ]);
+            }
+
+
+        }
 
        return "Exito";
 
@@ -182,7 +203,7 @@ class FormulariosController extends Controller
      */
     public function update(Request $Request, $id)
     {
-        if ($Request->_method) {
+        if ($Request->_method && $Request->tipo!="img_ayuda") {
            if ($Request->file('file')) {
 
                 $v = \Validator::make($Request->only('file'), array(
@@ -230,6 +251,31 @@ class FormulariosController extends Controller
             return Campos::where("id", $Request->id)->with("subcampos")->first();
         }
 
+        if ($Request->tipo=="texto_ayuda") {
+            Campos::where("id", $Request->id)->update($Request->except("id"));
+            return Campos::where("id", $Request->id)->first();
+        }
+
+        if ($Request->tipo=="img_ayuda") {
+                $v = \Validator::make($Request->only('file'), array(
+                    'file' => 'mimes:jpeg,jpg,png,gif|max:10000' // max 10000kb
+                ));
+
+                if ($v->fails()){
+                    return $v->messages()->first();
+                    die();
+                }
+
+                $file = $Request->file('file');
+                $nombre = str_random(30).".".$file->getClientOriginalExtension();
+                $Request->file('file')->move(public_path("/img/crono/"), $nombre);
+                $ImgForm=$nombre;
+                $Request->merge(['img_ayuda' => $ImgForm]);
+                Campos::where("id", $id)->update($Request->except('_method', "file"));
+        }
+
+        return $Request;
+
     }
 
     /**
@@ -247,6 +293,29 @@ class FormulariosController extends Controller
             SubCampos::where("id_campo", $id)->delete();
             Campos::where("id", $id)->delete();
             return "Exito";        
+        }
+    }
+
+    public function uploadImgAyuda(Request $Request){
+        if ($Request->all()) {
+
+            $v = \Validator::make($Request->only('file'), array(
+              'file' => 'mimes:jpeg,jpg,png,gif|max:10000' // max 10000kb
+            ));
+
+            if ($v->fails()){
+                $Re[0]=false;
+                $Re[1]=$v->messages()->first();
+                return $Re;
+                die();
+            }
+
+             $file = $Request->file('file');
+             $nombre = str_random(30).".".$file->getClientOriginalExtension();
+             $Request->file('file')->move(public_path("/img/crono/"), $nombre);
+             $ImgForm=$nombre;
+
+             return $ImgForm;
         }
     }
 }

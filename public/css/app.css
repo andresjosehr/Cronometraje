@@ -459,10 +459,118 @@ div .page-item {
   }
 
 
+	.no_form{
+        height: calc(32vh - 3.75rem);
+     }
+     .no_form a{
+      margin-top: 10px;
+     }
+     #ConverCode{
+        display: none;
+     }
+
+     .multi_se{
+      margin-bottom: 0 !important;
+     }
+
+     .sin_img{
+      padding-top: 35px;
+     }
+     .evn_as{
+      max-height: 33.5px;
+     }
+     .form_name{
+      margin-bottom: 7px;
+     }
+     .col_select{
+      margin-bottom: 7px;
+     }
+     .edit_edit{
+      margin-top: 5px;
+      display: none
+     }
+     .input_nom_form{
+      max-height: 33.5px;
+     }
+     .ver_plantilla{
+      margin-top: 7px;
+      margin-bottom: -36px;
+     }
+
+
+     @media only screen and (max-width: 950px) {
+		.row_res {
+			display: block;
+		}
+
+		.row_res .col-md-2, .row_res .col-md-6, .row_res .col-md-4{
+			width: 100%;
+			text-align: center;
+			display: block;
+			max-width: 100%;
+		}
+
+		.row_res .col-md-4{
+			padding-left: 15px;
+		}
+		.row_res .col-md-8{
+		width: 100%;
+    	max-width: 100%;
+    	}
+
+    }
+
+@media only screen and (max-width: 760px) {
+    .card_res .form-group{
+    	padding-left: 15px;
+    }
+    .row_form_vit{
+    	    margin-bottom: 50px;
+    }
+
+    .dropdown-toggle{
+    	width: 100%;
+    	overflow-x: auto;
+    }
+}
+
 footer{
 	width: 100%;
     position: fixed;
-}/*
+}.body_ins .datepicker{
+        top: 816.209px !important;
+      }
+      .card {
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 10px; /* Added */
+        }
+
+        .stro_form{
+            text-align: left;
+            margin-left: 4px;
+        }
+        .card_ins{
+          width: 40rem;
+          margin-top: 12rem;
+          margin-bottom: 12rem;
+        }
+        .tit_ins{
+          color: white;
+          display: table-cell;
+          vertical-align: middle;
+        }
+        .img_ins{
+          margin-bottom: 30px
+        }
+
+      @media only screen and (max-width: 760px) {
+        .card_ins{
+          width: 90%;
+          margin-top: 6rem;
+          margin-bottom: 6rem;
+        }
+      }/*
 	@import "~../../node_modules/font-awesome/scss/font-awesome.scss";
 	@import "~../../node_modules/bootstrap/dist/css/bootstrap.css";
 	@import "~../../resources/css/template/shards-dashboards.1.1.0.css";

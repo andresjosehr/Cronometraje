@@ -65,12 +65,30 @@
             <input type="hidden" id="iden">
         </div>
         <div class="col-sm-12 col-md-6">
+          <div id="custom_form" style="display: none">
+
+          </div>
+
+        <div id="custom_form_default">
+          <strong class="text-muted d-block mb-2">Datos de Formulario personalizado</strong>
+          <div class="error" style="height: calc(42vh - 3.75rem);">
+            <div class="error__content">
+              <div class="loading upd_participante_loading" style="display: block;"></div>
+            </div> 
+          </div>
+        </div>
+        
+        <div id="no_nada">
           <strong class="text-muted d-block mb-2">Datos de Formulario personalizado</strong>
           <div class="error" style="height: calc(42vh - 3.75rem);">
             <div class="error__content">
               <h3>No hay nada que mostrar</h3>
             </div> 
           </div>
+        </div>
+
+
+
         </div>
       </div>
       <div class="btn_update_participantes">
@@ -82,3 +100,12 @@
     </div>
   </div>
 </div>
+
+<style>
+  #custom_form{
+    max-height: 338px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 14px;
+  }
+</style>

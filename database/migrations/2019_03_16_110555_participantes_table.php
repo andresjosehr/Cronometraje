@@ -22,7 +22,7 @@ class ParticipantesTable extends Migration
             $table->date('nacimiento');
             $table->integer('edad')->unsigned();
             $table->string('sexo')->nullable();
-            $table->integer('id_categoria')->unsigned();
+            $table->integer('id_categoria')->unsigned()->nullable();
             $table->foreign('id_categoria')->references('id')->on('categorias');
             $table->integer('id_estado_inscripcion')->default('1')->unsigned();
             $table->foreign('id_estado_inscripcion')->references('id')->on('estado_inscripcion');;

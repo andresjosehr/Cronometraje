@@ -124,7 +124,9 @@ __webpack_require__(/*! ./../../resources/js/custom/participantes.js */ "./resou
 
 __webpack_require__(/*! ./../../resources/js/custom/formularios.js */ "./resources/js/custom/formularios.js");
 
-__webpack_require__(/*! ./../../resources/js/custom/vista-editar_formularios.js */ "./resources/js/custom/vista-editar_formularios.js"); // window.Vue = require('vue');
+__webpack_require__(/*! ./../../resources/js/custom/vista-editar_formularios.js */ "./resources/js/custom/vista-editar_formularios.js");
+
+__webpack_require__(/*! ./../../resources/js/custom/inscripcion.js */ "./resources/js/custom/inscripcion.js"); // window.Vue = require('vue');
 
 /**
  * The following block of code may be used to automatically register your
@@ -253,20 +255,27 @@ window.createField = function (tipo) {
 };
 
 window.verificar_info_campo = function () {
-  $("#descripcion_field, #nombre_field").removeClass("is-invalid");
+  $("#descripcion_field, #nombre_field, #oljkgkbm45").removeClass("is-invalid");
   $("#descripcion_field").siblings().remove();
   $("#nombre_field").siblings().remove();
+  $("small").remove();
   var val = 0;
 
   if ($("#nombre_field").val() == "") {
     $("#nombre_field").addClass("is-invalid");
-    $("#nombre_field").after('<small id="us_error err_part" style="color:red;">Debes escribir un nombre para el campo</small>');
+    $("#nombre_field").after('<small id="us_error err_part" style="color:red">Debes escribir un nombre para el campo</small>');
     val++;
   }
 
   if ($("#descripcion_field").val() == "") {
     $("#descripcion_field").addClass("is-invalid");
     $("#descripcion_field").after('<small id="us_error err_part" style="color:red;">Debes Escribir una Descripcion para el campo</small>');
+    val++;
+  }
+
+  if ($("#oljkgkbm45").val() == "" && $("#hidden_tipe_field").val() == "img_ayuda") {
+    $("#oljkgkbm45").addClass("is-invalid");
+    $("#iuergn56").after('<small id="us_error err_part" style="color:red;;margin-bottom: 15px;margin-top: -14px;margin-left: 8px;">Debes seleccionar una imagen para subir</small>');
     val++;
   }
 
@@ -297,6 +306,14 @@ window.verificar_info_campo = function () {
 
     if ($("#hidden_tipe_field").val() == "pago") {
       createFieldPago();
+    }
+
+    if ($("#hidden_tipe_field").val() == "texto_ayuda") {
+      createFieldTextoAyuda();
+    }
+
+    if ($("#hidden_tipe_field").val() == "img_ayuda") {
+      createFieldImgAyuda();
     }
   }
 };
@@ -485,6 +502,59 @@ window.createFieldPago = function () {
   window.num++;
 };
 
+window.createFieldTextoAyuda = function () {
+  var tipo = $("#hidden_tipe_field").val();
+  window.Data[window.num] = {};
+  window.Data[window.num]["tipo"] = $("#hidden_tipe_field").val();
+  window.Data[window.num]["texto_ayuda"] = $("#descripcion_field").val();
+  window.Data[window.num]["codigo_div"] = makeCode(8);
+  window.Data[window.num]["codigo_code"] = makeCode(8);
+  $("#div_base").append('<div class="row" id="' + window.Data[window.num]["codigo_div"] + '" style="display:none; width:100%" >' + '<div class="form-group col-md-8" style="text-align: justify;color:black">' + '<code id="' + window.Data[window.num]["codigo_code"] + '">' + window.Data[window.num]["texto_ayuda"] + '</code>' + '</div>' + '<div class="form-group col-md-2 nopadding" id="' + window.Data[window.num]["codigo"] + '">' + '<button onclick="editField(' + "'" + window.num + "'" + ')" class="btn btn-success btn-block" type="button">' + 'Editar' + '</button>' + '</div>' + '<div class="form-group col-md-2 nopadding" id="' + window.Data[window.num]["codigo"] + '">' + '<button onclick="deleteField(' + "'" + window.num + "'" + ')" class="btn btn-danger btn-block" type="button">' + 'Borrar' + '</button>' + '</div>' + '</div>');
+  $('#' + window.Data[window.num]["codigo_div"]).appendTo('#fields').show('slow');
+  window.num++;
+  swal.close();
+};
+
+window.createFieldImgAyuda = function () {
+  $("#dfgkm566").fadeOut(250, function () {
+    $(".upd_participante_loading").fadeIn(250);
+  });
+  var file_data = $(".iuydsab564").prop("files")[0];
+  var form_data = new FormData();
+  form_data.append("file", file_data);
+  $.ajax({
+    type: 'post',
+    url: url + "/formularios/uploadImgAyuda",
+    dataType: 'script',
+    cache: false,
+    contentType: false,
+    processData: false,
+    data: form_data,
+    success: function success(res) {
+      $(".upd_participante_loading").fadeOut(250, function () {
+        $("#dfgkm566").fadeIn(250);
+      });
+
+      try {
+        var result = JSON.parse(res);
+        $("#oljkgkbm45").addClass("is-invalid");
+        $("#iuergn56").after('<small id="us_error err_part" style="color:red;;margin-bottom: 15px;margin-top: -14px;margin-left: 8px;">' + result[1] + '</small>');
+      } catch (err) {
+        window.Data[window.num] = {};
+        window.Data[window.num]["tipo"] = $("#hidden_tipe_field").val();
+        window.Data[window.num]["img_ayuda"] = res;
+        window.Data[window.num]["codigo_div"] = makeCode(8);
+        window.Data[window.num]["codigo_img"] = makeCode(8);
+        window.Data[window.num]["codigo_div_img"] = makeCode(8);
+        $("#div_base").append('<div class="row" id="' + window.Data[window.num]["codigo_div"] + '" style="display:none; width:100%" >' + '<div class="form-group col-md-8" style="text-align: center;color:black" id="' + window.Data[num]["codigo_div_img"] + '">' + '<img id="' + window.Data[window.num]["codigo_img"] + '" src="' + window.location + '/../public/img/crono/' + window.Data[window.num]["img_ayuda"] + '" style="width: 100%;height100%" />' + '</div>' + '<div class="form-group col-md-2 nopadding" id="' + window.Data[window.num]["codigo"] + '">' + '<button onclick="editField(' + "'" + window.num + "'" + ')" class="btn btn-success btn-block" type="button">' + 'Editar' + '</button>' + '</div>' + '<div class="form-group col-md-2 nopadding" id="' + window.Data[window.num]["codigo"] + '">' + '<button onclick="deleteField(' + "'" + window.num + "'" + ')" class="btn btn-danger btn-block" type="button">' + 'Borrar' + '</button>' + '</div>' + '</div>');
+        $('#' + window.Data[window.num]["codigo_div"]).appendTo('#fields').show('slow');
+        window.num++;
+        swal.close();
+      }
+    }
+  });
+};
+
 window.makeCode = function (length) {
   var text = "";
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -515,6 +585,27 @@ window.validation = function (tipito) {
 
   if (tipito == "pago") {
     var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Introduce el codigo del boton de pago" required=""></textarea>' + '</div>' + '<div class="form-group col-md-12">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '</div>';
+  }
+
+  if (tipito == "texto_ayuda") {
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Escribe el texto de ayuda" required=""></textarea>' + '</div>' + '<div class="form-group col-md-12">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '</div>';
+  }
+
+  if (tipito == "img_ayuda") {
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12 form_div_file" id="iuergn56">' + '<input type="text" id="oljkgkbm45" class="form-control input_form_file" placeholder="Ingresa tu imagen de ayuda" readonly>' + '<label class="input-group-btn label_from_file">' + '<span class="btn btn-primary btn-block">' + 'Subir <input id="asdfjklñasdf" class="iuydsab564" type="file" style="display: none;" multiple>' + '</span>' + '</label>' + '</div>' + '<div class="form-group col-md-12">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" id="dfgkm566" class="btn btn-primary btn-block" type="button">Añadir imagen al formulario</button>' + '<div class="upd_participante_loading loading" style="left: 48%;"></div>';
+    '</div>' + '</div>';
+    $(document).ready(function () {
+      $('#asdfjklñasdf').on('fileselect', function (event, numFiles, label) {
+        var input = $(this).parents("#iuergn56" + ' .input-group').find(':text'),
+            log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+        if (input.length) {
+          input.val(log);
+        } else {
+          if (log) $("#iuergn56 .input_form_file").val(log);
+        }
+      });
+    });
   }
 
   return validation;
@@ -579,7 +670,7 @@ window.swaleditField = function (num) {
   }
 
   if (window.Data[num]["tipo"] == "text" || window.Data[num]["tipo"] == "email" || window.Data[num]["tipo"] == "date") {
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="' + window.Data[num]["nombre"] + ' | Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="' + window.Data[num]["descripcion"] + ' | Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" class="custom-control-input" ' + obli + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Editar campo</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="' + window.Data[num]["nombre"] + ' | Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="' + window.Data[num]["descripcion"] + ' | Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" class="custom-control-input" ' + obli + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (window.Data[num]["tipo"] == "select" || window.Data[num]["tipo"] == "multiselect") {
@@ -590,7 +681,7 @@ window.swaleditField = function (num) {
       window.num_select++;
     }
 
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="' + window.Data[num]["nombre"] + '" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="' + window.Data[num]["descripcion"] + '" required="">' + '</div>' + '<div class="select_field_create">' + '<div class="swal-title">Opciones del campo</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_0" placeholder="' + window.Data[num]["Opciones"][0] + '" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_1" placeholder="' + window.Data[num]["Opciones"][1] + '" required="">' + '</div>' + opciones + '<div id="div_base_select"></div>' + '<div class="form-group col-md-12">' + '<button onclick="create_field_select()" class="btn btn-secondary btn-block" type="button">Añadir otra opcion</button>' + '</div>' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="editSelect(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Actualizar campo</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="' + window.Data[num]["nombre"] + '" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="' + window.Data[num]["descripcion"] + '" required="">' + '</div>' + '<div class="select_field_create">' + '<div class="swal-title">Opciones del campo</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_0" placeholder="' + window.Data[num]["Opciones"][0] + '" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_1" placeholder="' + window.Data[num]["Opciones"][1] + '" required="">' + '</div>' + opciones + '<div id="div_base_select"></div>' + '<div class="form-group col-md-12">' + '<button onclick="create_field_select()" class="btn btn-secondary btn-block" type="button">Añadir otra opcion</button>' + '</div>' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="editSelect(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (window.Data[num]["tipo"] == "file") {
@@ -610,11 +701,32 @@ window.swaleditField = function (num) {
       img = 'checked="checked"';
     }
 
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="' + window.Data[num]["nombre"] + ' | Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="' + window.Data[num]["descripcion"] + ' | Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" ' + obli + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="img" name="customToggle2" class="custom-control-input" ' + img + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="img">IMG</label>' + '</div>' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="pdf" class="custom-control-input" ' + pdf + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="pdf">PDF</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Editar campo</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="' + window.Data[num]["nombre"] + ' | Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="' + window.Data[num]["descripcion"] + ' | Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" ' + obli + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="img" name="customToggle2" class="custom-control-input" ' + img + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="img">IMG</label>' + '</div>' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="pdf" class="custom-control-input" ' + pdf + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="pdf">PDF</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (window.Data[num]["tipo"] == "pago") {
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="' + window.Data[num]["codigo"] + '" required=""></textarea>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="' + window.Data[num]["codigo"] + '" required=""></textarea>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
+  }
+
+  if (window.Data[num]["tipo"] == "texto_ayuda") {
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" value="' + window.Data[num]["texto_ayuda"] + '" required="">' + window.Data[num]["texto_ayuda"] + '</textarea>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
+  }
+
+  if (window.Data[num]["tipo"] == "img_ayuda") {
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12 form_div_file" id="iuergn56">' + '<input type="text" id="oljkgkbm45" class="form-control input_form_file" placeholder="Ingresa tu imagen de ayuda" readonly>' + '<label class="input-group-btn label_from_file">' + '<span class="btn btn-primary btn-block">' + 'Subir <input id="asdfjklñasdf" class="iuydsab564" type="file" style="display: none;" multiple>' + '</span>' + '</label>' + '</div>' + '<div class="form-group col-md-12">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" id="dfgkm566" class="btn btn-primary btn-block" type="button">Guardar cambios</button>' + '<div class="upd_participante_loading loading" style="left: 48%;"></div>';
+    '</div>' + '</div>';
+    $(document).ready(function () {
+      $('#asdfjklñasdf').on('fileselect', function (event, numFiles, label) {
+        var input = $(this).parents("#iuergn56" + ' .input-group').find(':text'),
+            log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+        if (input.length) {
+          input.val(log);
+        } else {
+          if (log) $("#iuergn56 .input_form_file").val(log);
+        }
+      });
+    });
   }
 
   return validation;
@@ -625,7 +737,8 @@ window.editField = function (num) {
   wrapper.innerHTML = swaleditField(num);
   swal({
     title: "Informacion del campo",
-    content: wrapper
+    content: wrapper,
+    closeOnClickOutside: false
   });
   $(".swal-footer").css("display", "none");
 };
@@ -645,6 +758,12 @@ window.verificarEdit = function (num) {
   if ($("#descripcion_field").val() == "") {
     $("#descripcion_field").addClass("is-invalid");
     $("#descripcion_field").after('<small id="us_error err_part" style="color:red;">Debes Escribir una Descripcion para el campo</small>');
+    val++;
+  }
+
+  if ($("#oljkgkbm45").val() == "" && $("#hidden_tipe_field").val() == "img_ayuda") {
+    $("#oljkgkbm45").addClass("is-invalid");
+    $("#iuergn56").after('<small id="us_error err_part" style="color:red;;margin-bottom: 15px;margin-top: -14px;margin-left: 8px;">Debes seleccionar una imagen para subir</small>');
     val++;
   }
 
@@ -675,6 +794,14 @@ window.verificarEdit = function (num) {
 
     if ($("#hidden_tipe_field").val() == "pago") {
       editFieldPago(num);
+    }
+
+    if ($("#hidden_tipe_field").val() == "texto_ayuda") {
+      editFieldTextoAyuda(num);
+    }
+
+    if ($("#hidden_tipe_field").val() == "img_ayuda") {
+      editFieldImgAyuda(num);
     }
   }
 };
@@ -833,6 +960,50 @@ window.editFieldPago = function (num) {
   window.Data[num]["codigo"] = $("#descripcion_field").val();
   swal.close();
   swal("Listo", "El campo ha sido actualizado exitosamente", "success");
+};
+
+window.editFieldTextoAyuda = function (num) {
+  window.Data[num]["texto_ayuda"] = $("#descripcion_field").val();
+  $("#" + window.Data[num]["codigo_code"]).text(window.Data[num]["texto_ayuda"]);
+  swal.close();
+  swal("Listo", "El campo ha sido actualizado exitosamente", "success");
+};
+
+window.editFieldImgAyuda = function (num) {
+  $("#dfgkm566").fadeOut(250, function () {
+    $(".upd_participante_loading").fadeIn(250);
+  });
+  var file_data = $(".iuydsab564").prop("files")[0];
+  var form_data = new FormData();
+  form_data.append("file", file_data);
+  $.ajax({
+    type: 'post',
+    url: url + "/formularios/uploadImgAyuda",
+    dataType: 'script',
+    cache: false,
+    contentType: false,
+    processData: false,
+    data: form_data,
+    success: function success(res) {
+      $(".upd_participante_loading").fadeOut(250, function () {
+        $("#dfgkm566").fadeIn(250);
+      });
+
+      try {
+        var result = JSON.parse(res);
+        $("#oljkgkbm45").addClass("is-invalid");
+        $("#iuergn56").after('<small id="us_error err_part" style="color:red;margin-bottom: 15px;margin-top: -14px;margin-left: 8px;">' + result[1] + '</small>');
+      } catch (err) {
+        window.Data[num]["img_ayuda"] = res;
+        $("#" + window.Data[num]["codigo_img"]).hide("slow", function () {
+          $("#" + window.Data[num]["codigo_img"]).remove();
+          $("#" + window.Data[num]["codigo_div_img"]).append('<img id="' + window.Data[num]["codigo_img"] + '" src="' + window.location + '/../public/img/crono/' + window.Data[num]["img_ayuda"] + '" style="width: 100%;height100%;display:none" />');
+          $('#' + window.Data[num]["codigo_img"]).show('slow');
+        });
+        swal.close();
+      }
+    }
+  });
 };
 
 window.deleteField = function (num) {
@@ -1004,6 +1175,52 @@ $(document).ready(function () {
 
 /***/ }),
 
+/***/ "./resources/js/custom/inscripcion.js":
+/*!********************************************!*\
+  !*** ./resources/js/custom/inscripcion.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+$(document).ready(function () {
+  $('#nacimiento').datepicker({
+    dateFormat: 'yyy-mm-dd'
+  });
+});
+
+window.calculateAge = function () {
+  var date = $("#nacimiento").val();
+  var nacimiento = date.split("/").reverse().join("-");
+  var nacimiento = date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
+  var hoy = new Date();
+  var cumpleanos = new Date(date);
+  var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+  var m = hoy.getMonth() - cumpleanos.getMonth();
+
+  if (m < 0 || m === 0 && hoy.getDate() < cumpleanos.getDate()) {
+    edad--;
+  }
+
+  $("#edad").val(edad);
+  $("#nacimiento").val(nacimiento);
+  $("#submitButton").click();
+};
+
+window.InscripFile = function (id_input, id_div) {
+  $('#' + id_input).on('fileselect', function (event, numFiles, label) {
+    var input = $(this).parents('#' + id_div + ' .input-group').find(':text'),
+        log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+    if (input.length) {
+      input.val(log);
+    } else {
+      if (log) $("#" + id_div + " .input_form_file").val(log);
+    }
+  });
+};
+
+/***/ }),
+
 /***/ "./resources/js/custom/login.js":
 /*!**************************************!*\
   !*** ./resources/js/custom/login.js ***!
@@ -1076,6 +1293,7 @@ window.editarParticipante = function (participante, convert) {
     participante = JSON.parse(participante);
   }
 
+  DatosParticipanteFormulario(participante["email_participante"]);
   $("#edit_path #nombre").val(participante["nombre_participante"]);
   $("#edit_path #email").val(participante["email_participante"]);
   $("#edit_path #apellido").val(participante["apellido"]);
@@ -1368,6 +1586,41 @@ window.crearPart = function () {
   }
 };
 
+window.DatosParticipanteFormulario = function (email_participante) {
+  $("#custom_form").empty();
+  $("#custom_form_default").show();
+  $("#custom_form").hide();
+  $("#no_nada").hide();
+  $.ajax({
+    type: 'POST',
+    url: url + "/inscripcion",
+    data: {
+      email_participante: email_participante
+    },
+    success: function success(dat) {
+      if (dat.length == 0) {
+        $("#custom_form_default").hide("slow", function () {
+          $("#no_nada").show("slow");
+        });
+      } else {
+        console.log(dat);
+        $("#custom_form").append('<strong class="text-muted d-block mb-2 form_name">' + dat[0].campos.formularios.nombre + '</strong>');
+        dat.map(function (datos) {
+          if (datos.campos.tipo != "file") {
+            $("#custom_form").append('<div class="form-row">' + '<div class="form-group col-md-12">' + ' <strong class="text-muted d-block mb-2">' + datos.campos.nombre + '</strong>' + '<input type="email" class="form-control" id="email" name="email_participante" placeholder="First name" value="' + datos.valor + '" required="">' + '</div>' + '</div>');
+          } else {
+            $("#custom_form").append('<div class="form-row">' + '<div class="form-group col-md-12">' + ' <strong class="text-muted d-block mb-2">' + datos.campos.nombre + '</strong>' + '<a href="' + window.location.href + '/../public/img/crono/' + datos.valor + '" class="btn btn-block btn-success" style="color:white">Ver archivo</a>' + '</div>' + '</div>');
+          }
+
+          $("#custom_form_default").hide("slow", function () {
+            $("#custom_form").show("slow");
+          });
+        });
+      }
+    }
+  });
+};
+
 /***/ }),
 
 /***/ "./resources/js/custom/registrar_admin.js":
@@ -1571,8 +1824,7 @@ window.CambiarContraseña = function () {
 /***/ (function(module, exports) {
 
 window.EC_swaleditField = function (info_camp) {
-  window.info_camp = info_camp; // console.log(window.info_camp);
-  // console.log("--------------------------------")
+  window.info_camp = info_camp;
 
   if (info_camp.obligatorio == 1) {
     var obli = 'checked="checked"';
@@ -1624,6 +1876,27 @@ window.EC_swaleditField = function (info_camp) {
     var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Ingresa el codigo del boton" required="">' + info_camp.codigo_pago + '</textarea>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + info_camp.tipo + '">' + '<button onclick="EC_verificarEdit()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + info_camp.tipo + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
+  if (info_camp.tipo == "texto_ayuda") {
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Escribe el texto de ayuda" required="" value="' + info_camp.texto_ayuda + '">' + info_camp.texto_ayuda + '</textarea>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + info_camp.tipo + '">' + '<button onclick="EC_verificarEdit()" class="btn btn-primary btn-block" type="button">Guardar cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
+  }
+
+  if (info_camp.tipo == "img_ayuda") {
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12 form_div_file" id="iuergn56">' + '<input type="text" id="oljkgkbm45" class="form-control input_form_file" placeholder="Ingresa tu imagen de ayuda" readonly>' + '<label class="input-group-btn label_from_file">' + '<span class="btn btn-primary btn-block">' + 'Subir <input id="asdfjklñasdf" class="iuydsab564" type="file" style="display: none;" multiple>' + '</span>' + '</label>' + '</div>' + '<div class="form-group col-md-12">' + '<input type="hidden" id="hidden_tipe_field" value="' + info_camp.tipo + '">' + '<button onclick="EC_verificarEdit()" id="dfgkm566" class="btn btn-primary btn-block" type="button">Añadir imagen al formulario</button>' + '<div class="upd_participante_loading loading" style="left: 48%;"></div>';
+    '</div>' + '</div>';
+    $(document).ready(function () {
+      $('#asdfjklñasdf').on('fileselect', function (event, numFiles, label) {
+        var input = $(this).parents("#iuergn56" + ' .input-group').find(':text'),
+            log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+        if (input.length) {
+          input.val(log);
+        } else {
+          if (log) $("#iuergn56 .input_form_file").val(log);
+        }
+      });
+    });
+  }
+
   return validation;
 };
 
@@ -1649,9 +1922,10 @@ window.EC_editField = function (info_camp) {
 };
 
 window.EC_verificarEdit = function (info_camp, subcampos) {
-  $("#descripcion_field, #nombre_field").removeClass("is-invalid");
+  $("#descripcion_field, #nombre_field, #oljkgkbm45").removeClass("is-invalid");
   $("#descripcion_field").siblings().remove();
   $("#nombre_field").siblings().remove();
+  $("small").remove();
   var val = 0;
 
   if ($("#nombre_field").val() == "") {
@@ -1663,6 +1937,12 @@ window.EC_verificarEdit = function (info_camp, subcampos) {
   if ($("#descripcion_field").val() == "") {
     $("#descripcion_field").addClass("is-invalid");
     $("#descripcion_field").after('<small id="us_error err_part" style="color:red;">Debes Escribir una Descripcion para el campo</small>');
+    val++;
+  }
+
+  if ($("#oljkgkbm45").val() == "" && $("#hidden_tipe_field").val() == "img_ayuda") {
+    $("#oljkgkbm45").addClass("is-invalid");
+    $("#iuergn56").after('<small id="us_error err_part" style="color:red;;margin-bottom: 15px;margin-top: -14px;margin-left: 8px;">Debes seleccionar una imagen para subir</small>');
     val++;
   }
 
@@ -1689,6 +1969,14 @@ window.EC_verificarEdit = function (info_camp, subcampos) {
 
     if ($("#hidden_tipe_field").val() == "pago") {
       EC_editFieldPago(info_camp);
+    }
+
+    if ($("#hidden_tipe_field").val() == "texto_ayuda") {
+      EC_editFieldTextoAyuda(info_camp);
+    }
+
+    if ($("#hidden_tipe_field").val() == "img_ayuda") {
+      EC_editFieldImgAyuda(info_camp);
     }
   }
 };
@@ -1812,6 +2100,15 @@ window.EC_editFieldPago = function (num) {
   EC_editFin(4);
 };
 
+window.EC_editFieldTextoAyuda = function (num) {
+  window.info_camp.texto_ayuda = $("textarea").val();
+  EC_editFin(5);
+};
+
+window.EC_editFieldImgAyuda = function (num) {
+  EC_editFin(6);
+};
+
 window.EC_deleteField = function (info_camp) {
   try {
     $("#ConverCode").html(info_camp);
@@ -1823,7 +2120,6 @@ window.EC_deleteField = function (info_camp) {
     window.info_camp = JSON.parse(info_camp);
   }
 
-  console.log(window.info_camp);
   swal({
     title: "Espera!",
     text: "¿Estas seguro de eliminar este campo? Esta accion no se puede revertir",
@@ -1986,14 +2282,30 @@ window.EC_editFin = function (tipo) {
   $("#edit_at_edit").fadeOut(250, function () {
     $(".upd_participante_loading").fadeIn(250);
   });
-  $.ajax({
-    type: 'PUT',
-    url: url + "/formularios/" + window.info_camp.id,
-    data: RecopDat(tipo),
-    success: function success(result) {
-      EC_editFrontFin(result);
-    }
-  });
+
+  if (tipo != 6) {
+    $.ajax({
+      type: 'PUT',
+      url: url + "/formularios/" + window.info_camp.id,
+      data: RecopDat(tipo),
+      success: function success(result) {
+        EC_editFrontFin(result);
+      }
+    });
+  } else {
+    $.ajax({
+      type: 'post',
+      url: url + "/formularios/" + window.info_camp.id,
+      dataType: 'script',
+      cache: false,
+      contentType: false,
+      processData: false,
+      data: RecopDat(tipo),
+      success: function success(res) {
+        EC_editFrontFin(res);
+      }
+    });
+  }
 };
 
 window.EC_editFrontFin = function (campo) {
@@ -2032,7 +2344,16 @@ window.EC_editFrontFin = function (campo) {
     $("#place_" + campo.id_formulario + "_Campo_" + campo.id).attr("placeholder", campo.descripcion);
   }
 
-  if (campo.tipo == "pago") {
+  if (campo.tipo == "texto_ayuda") {
+    console.log(campo);
+    $("#Formulario_" + campo.id_formulario + "_code_" + campo.id).text(campo.texto_ayuda);
+    $("#btn_Formulario_" + campo.id_formulario + "_Campo_" + campo.id).attr("onclick", "EC_editField(" + "'" + JSON.stringify(campo) + "'" + ")");
+  }
+
+  if (campo.tipo == "img_ayuda") {
+    console.log("Formulario_" + campo.id_formulario + "_img_" + campo.id);
+    console.log(window.location + "../public/img/crono/" + campo.img_ayuda);
+    $("#Formulario_" + campo.id_formulario + "_img_" + campo.id).attr("src", window.location + "../public/img/crono/" + campo.img_ayuda);
     $("#btn_Formulario_" + campo.id_formulario + "_Campo_" + campo.id).attr("onclick", "EC_editField(" + "'" + JSON.stringify(campo) + "'" + ")");
   }
 };
@@ -2063,6 +2384,23 @@ window.RecopDat = function (tipo) {
       tipo: window.info_camp.tipo,
       codigo_pago: window.info_camp.codigo_pago
     };
+  }
+
+  if (tipo == 5) {
+    var Datos = {
+      id: window.info_camp.id,
+      tipo: window.info_camp.tipo,
+      texto_ayuda: window.info_camp.texto_ayuda
+    };
+  }
+
+  if (tipo == 6) {
+    var file_data = $(".iuydsab564").prop("files")[0];
+    var Datos = new FormData();
+    Datos.append("id", window.info_camp.id);
+    Datos.append("tipo", window.info_camp.tipo);
+    Datos.append("file", file_data);
+    Datos.append("_method", "put");
   }
 
   return Datos;

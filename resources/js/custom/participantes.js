@@ -28,9 +28,12 @@ window.onload=function(){
     }
 }
 window.editarParticipante=function(participante, convert) {
+
   if (convert==1) {
     participante=JSON.parse(participante);
   }
+
+   DatosParticipanteFormulario(participante["email_participante"]);
 
 
   $("#edit_path #nombre").val(participante["nombre_participante"])
@@ -355,4 +358,48 @@ window.limp=function(){
     });
 
     }
+  }
+
+  window.DatosParticipanteFormulario=function(email_participante){
+    $("#custom_form").empty();
+    $("#custom_form_default").show();
+    $("#custom_form").hide();
+    $("#no_nada").hide();
+    $.ajax({
+        type: 'POST',
+        url: url+"/inscripcion",
+        data: { 
+          email_participante: email_participante,
+        },
+        success: function(dat){ 
+          if (dat.length==0) {
+            $("#custom_form_default").hide("slow", function(){
+              $("#no_nada").show("slow");
+            });
+          } else{
+                console.log(dat)
+                $("#custom_form").append('<strong class="text-muted d-block mb-2 form_name">'+dat[0].campos.formularios.nombre+'</strong>');
+                  dat.map(function(datos){
+                    if (datos.campos.tipo!="file") {
+                    $("#custom_form").append('<div class="form-row">'+
+                                                '<div class="form-group col-md-12">'+
+                                                 ' <strong class="text-muted d-block mb-2">'+datos.campos.nombre+'</strong>'+
+                                                  '<input type="email" class="form-control" id="email" name="email_participante" placeholder="First name" value="'+datos.valor+'" required="">'+
+                                                '</div>'+
+                                              '</div>');
+                  } else{
+                    $("#custom_form").append('<div class="form-row">'+
+                                                '<div class="form-group col-md-12">'+
+                                                 ' <strong class="text-muted d-block mb-2">'+datos.campos.nombre+'</strong>'+
+                                                  '<a href="'+window.location.href +'/../public/img/crono/'+datos.valor+'" class="btn btn-block btn-success" style="color:white">Ver archivo</a>'+
+                                                '</div>'+
+                                              '</div>');
+                  }
+                  $("#custom_form_default").hide("slow", function(){
+                    $("#custom_form").show("slow");
+                  });
+                });
+            }
+        }
+    });
   }

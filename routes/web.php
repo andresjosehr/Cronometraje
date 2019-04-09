@@ -54,9 +54,12 @@ Route::group(['middleware' => ['VerificarSesion']], function () {
 Route::get('CerrarSesion', "LoginController@cerrarSesion");
 
 Route::get('inscripcion/{codigo_form}', "inscripcionController@showForm");
+Route::post('inscripcion/{codigo_form}', "inscripcionController@storeData");
+Route::post('inscripcion', "inscripcionController@showDatosParticipantes");
 
 Route::post('participantes/createPost', 'ParticipantesController@createPost');
 Route::resource('participantes', 'ParticipantesController');
 
 Route::post('formularios/createPost', "FormulariosController@createPost");
+Route::post('formularios/uploadImgAyuda', "FormulariosController@uploadImgAyuda");
 Route::resource('formularios', 'FormulariosController');

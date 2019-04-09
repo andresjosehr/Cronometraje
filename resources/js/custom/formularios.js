@@ -122,20 +122,27 @@ $(document).ready(function() {
 
 	window.verificar_info_campo=function(){
 
-		$("#descripcion_field, #nombre_field").removeClass("is-invalid");
+		$("#descripcion_field, #nombre_field, #oljkgkbm45").removeClass("is-invalid");
 		$("#descripcion_field").siblings().remove();
 		$("#nombre_field").siblings().remove();
+		$("small").remove();
 		var val=0;
 
 		if ($("#nombre_field").val()=="") {
 			$("#nombre_field").addClass("is-invalid");
-			$("#nombre_field").after('<small id="us_error err_part" style="color:red;">Debes escribir un nombre para el campo</small>');
+			$("#nombre_field").after('<small id="us_error err_part" style="color:red">Debes escribir un nombre para el campo</small>');
 			val++;
 		}
 
 		if ($("#descripcion_field").val()=="") {
 			$("#descripcion_field").addClass("is-invalid");
     		$("#descripcion_field").after('<small id="us_error err_part" style="color:red;">Debes Escribir una Descripcion para el campo</small>');
+    		val++;
+		}
+
+		if ($("#oljkgkbm45").val()=="" && $("#hidden_tipe_field").val()=="img_ayuda") {
+			$("#oljkgkbm45").addClass("is-invalid");
+    		$("#iuergn56").after('<small id="us_error err_part" style="color:red;;margin-bottom: 15px;margin-top: -14px;margin-left: 8px;">Debes seleccionar una imagen para subir</small>');
     		val++;
 		}
 		if (val==0) {
@@ -163,6 +170,14 @@ $(document).ready(function() {
 			}
 			if ($("#hidden_tipe_field").val()=="pago") {
 				createFieldPago();
+			}
+
+			if ($("#hidden_tipe_field").val()=="texto_ayuda") {
+				createFieldTextoAyuda();
+			}
+
+			if ($("#hidden_tipe_field").val()=="img_ayuda") {
+				createFieldImgAyuda();
 			}
 
 		}
@@ -476,6 +491,99 @@ $(document).ready(function() {
 		window.num++;
 	};
 
+	window.createFieldTextoAyuda=function(){
+		var tipo=$("#hidden_tipe_field").val();
+
+		window.Data[window.num]= {};
+		window.Data[window.num]["tipo"]=$("#hidden_tipe_field").val();
+		window.Data[window.num]["texto_ayuda"]=$("#descripcion_field").val();
+		window.Data[window.num]["codigo_div"]=makeCode(8)
+		window.Data[window.num]["codigo_code"]=makeCode(8)
+
+
+		$("#div_base").append('<div class="row" id="'+window.Data[window.num]["codigo_div"]+'" style="display:none; width:100%" >'+
+									'<div class="form-group col-md-8" style="text-align: justify;color:black">'+
+									  '<code id="'+window.Data[window.num]["codigo_code"]+'">'+window.Data[window.num]["texto_ayuda"]+'</code>'+
+									'</div>'+
+									'<div class="form-group col-md-2 nopadding" id="'+window.Data[window.num]["codigo"]+'">'+
+											  '<button onclick="editField('+"'"+window.num+"'"+')" class="btn btn-success btn-block" type="button">'+
+				        					   	'Editar'+
+				        					   '</button>'+
+									'</div>'+
+									'<div class="form-group col-md-2 nopadding" id="'+window.Data[window.num]["codigo"]+'">'+
+											  '<button onclick="deleteField('+"'"+window.num+"'"+')" class="btn btn-danger btn-block" type="button">'+
+				        					   	'Borrar'+
+				        					   '</button>'+
+									'</div>'+
+								'</div>');
+		$('#'+window.Data[window.num]["codigo_div"]).appendTo('#fields').show('slow');
+		window.num++;
+
+		swal.close();
+	}
+
+
+	window.createFieldImgAyuda=function(){
+
+		$( "#dfgkm566" ).fadeOut(250, function () {
+			$( ".upd_participante_loading" ).fadeIn(250);
+		});
+
+		var file_data = $(".iuydsab564").prop("files")[0];
+		var form_data = new FormData();                  
+		form_data.append("file", file_data)
+
+		$.ajax({
+				    type: 'post',
+				    url: url+"/formularios/uploadImgAyuda",
+				    dataType: 'script',
+					cache: false,
+	         	 	contentType: false,
+	          		processData: false,				    
+				    data: form_data,
+				    success: function(res){
+				    	$( ".upd_participante_loading" ).fadeOut(250, function () {
+							$("#dfgkm566").fadeIn(250);
+						});
+				    	try{
+				    		var result= JSON.parse(res);
+				    		$("#oljkgkbm45").addClass("is-invalid");
+    						$("#iuergn56").after('<small id="us_error err_part" style="color:red;;margin-bottom: 15px;margin-top: -14px;margin-left: 8px;">'+result[1]+'</small>');
+				    	} catch(err){
+
+				    		window.Data[window.num]= {};
+							window.Data[window.num]["tipo"]=$("#hidden_tipe_field").val();
+							window.Data[window.num]["img_ayuda"]=res;
+							window.Data[window.num]["codigo_div"]=makeCode(8)
+							window.Data[window.num]["codigo_img"]=makeCode(8)
+							window.Data[window.num]["codigo_div_img"]=makeCode(8)
+
+							$("#div_base").append('<div class="row" id="'+window.Data[window.num]["codigo_div"]+'" style="display:none; width:100%" >'+
+								'<div class="form-group col-md-8" style="text-align: center;color:black" id="'+window.Data[num]["codigo_div_img"]+'">'+
+									  '<img id="'+window.Data[window.num]["codigo_img"]+'" src="'+window.location+'/../public/img/crono/'+window.Data[window.num]["img_ayuda"]+'" style="width: 100%;height100%" />'+
+									'</div>'+
+									'<div class="form-group col-md-2 nopadding" id="'+window.Data[window.num]["codigo"]+'">'+
+											  '<button onclick="editField('+"'"+window.num+"'"+')" class="btn btn-success btn-block" type="button">'+
+				        					   	'Editar'+
+				        					   '</button>'+
+									'</div>'+
+									'<div class="form-group col-md-2 nopadding" id="'+window.Data[window.num]["codigo"]+'">'+
+											  '<button onclick="deleteField('+"'"+window.num+"'"+')" class="btn btn-danger btn-block" type="button">'+
+				        					   	'Borrar'+
+				        					   '</button>'+
+									'</div>'+
+								'</div>');
+
+							$('#'+window.Data[window.num]["codigo_div"]).appendTo('#fields').show('slow');
+							
+							window.num++;
+
+							swal.close();
+				    	}
+					}
+				});
+	}
+
 window.makeCode=function(length) {
   var text = "";
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -621,6 +729,51 @@ window.validation=function(tipito){
 			'</div>';
 		}
 
+		if (tipito=="texto_ayuda") {
+			var validation = '<div class="form-row">'+
+				'<div class="form-group col-md-12">'+
+					'<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Escribe el texto de ayuda" required=""></textarea>'+
+				'</div>'+
+				'<div class="form-group col-md-12">'+
+					'<input type="hidden" id="hidden_tipe_field" value="'+tipito+'">'+
+					'<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>'+
+				'</div>'+
+			'</div>';
+		}
+
+		if (tipito=="img_ayuda") {
+			var validation = '<div class="form-row">'+
+				'<div class="form-group col-md-12 form_div_file" id="iuergn56">'+
+					    '<input type="text" id="oljkgkbm45" class="form-control input_form_file" placeholder="Ingresa tu imagen de ayuda" readonly>'+
+					      '<label class="input-group-btn label_from_file">'+
+					                 '<span class="btn btn-primary btn-block">'+
+					                     'Subir <input id="asdfjklñasdf" class="iuydsab564" type="file" style="display: none;" multiple>'+
+					                 '</span>'+
+					        '</label>'+
+				'</div>'+
+				'<div class="form-group col-md-12">'+
+					'<input type="hidden" id="hidden_tipe_field" value="'+tipito+'">'+
+					'<button onclick="verificar_info_campo()" id="dfgkm566" class="btn btn-primary btn-block" type="button">Añadir imagen al formulario</button>'+
+					'<div class="upd_participante_loading loading" style="left: 48%;"></div>'
+				'</div>'+
+			'</div>';
+
+			$(document).ready( function() {
+		      $('#asdfjklñasdf').on('fileselect', function(event, numFiles, label) {
+
+		          var input = $(this).parents("#iuergn56"+' .input-group').find(':text'),
+		              log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+		          if( input.length ) {
+		              input.val(log);
+		          } else {
+		              if( log ) $("#iuergn56 .input_form_file").val(log);
+		          }
+
+		      });
+		  });
+		}
+
 		return validation;
 }
 
@@ -703,7 +856,7 @@ window.swaleditField=function(num){
 				'</div>'+
 				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+window.Data[num]["tipo"]+'">'+
-					'<button onclick="verificarEdit('+"'"+num+"'"+')" class="btn btn-primary btn-block" type="button">Editar campo</button>'+
+					'<button onclick="verificarEdit('+"'"+num+"'"+')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>'+
 				'</div>'+
 				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+window.Data[num]["tipo"]+'">'+
@@ -752,7 +905,7 @@ window.swaleditField=function(num){
 				'</div>'+
 				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+window.Data[num]["tipo"]+'">'+
-					'<button onclick="editSelect('+"'"+num+"'"+')" class="btn btn-primary btn-block" type="button">Actualizar campo</button>'+
+					'<button onclick="editSelect('+"'"+num+"'"+')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>'+
 				'</div>'+
 				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+window.Data[num]["tipo"]+'">'+
@@ -801,7 +954,7 @@ window.swaleditField=function(num){
 				'</div>'+
 				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+window.Data[num]["tipo"]+'">'+
-					'<button onclick="verificarEdit('+"'"+num+"'"+')" class="btn btn-primary btn-block" type="button">Editar campo</button>'+
+					'<button onclick="verificarEdit('+"'"+num+"'"+')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>'+
 				'</div>'+
 				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+window.Data[num]["tipo"]+'">'+
@@ -817,13 +970,63 @@ window.swaleditField=function(num){
 				'</div>'+
 				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+window.Data[num]["tipo"]+'">'+
-					'<button onclick="verificarEdit('+"'"+num+"'"+')" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>'+
+					'<button onclick="verificarEdit('+"'"+num+"'"+')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>'+
 				'</div>'+
 				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+window.Data[num]["tipo"]+'">'+
 					'<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>'+
 				'</div>'+
 			'</div>';
+		}
+
+
+		if (window.Data[num]["tipo"]=="texto_ayuda") {
+			var validation = '<div class="form-row">'+
+				'<div class="form-group col-md-12">'+
+					'<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" value="'+window.Data[num]["texto_ayuda"]+'" required="">'+window.Data[num]["texto_ayuda"]+'</textarea>'+
+				'</div>'+
+				'<div class="form-group col-md-6">'+
+					'<input type="hidden" id="hidden_tipe_field" value="'+window.Data[num]["tipo"]+'">'+
+					'<button onclick="verificarEdit('+"'"+num+"'"+')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>'+
+				'</div>'+
+				'<div class="form-group col-md-6">'+
+					'<input type="hidden" id="hidden_tipe_field" value="'+window.Data[num]["tipo"]+'">'+
+					'<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>'+
+				'</div>'+
+			'</div>';
+		}
+
+		if (window.Data[num]["tipo"]=="img_ayuda") {
+			var validation = '<div class="form-row">'+
+				'<div class="form-group col-md-12 form_div_file" id="iuergn56">'+
+					    '<input type="text" id="oljkgkbm45" class="form-control input_form_file" placeholder="Ingresa tu imagen de ayuda" readonly>'+
+					      '<label class="input-group-btn label_from_file">'+
+					                 '<span class="btn btn-primary btn-block">'+
+					                     'Subir <input id="asdfjklñasdf" class="iuydsab564" type="file" style="display: none;" multiple>'+
+					                 '</span>'+
+					        '</label>'+
+				'</div>'+
+				'<div class="form-group col-md-12">'+
+					'<input type="hidden" id="hidden_tipe_field" value="'+window.Data[num]["tipo"]+'">'+
+					'<button onclick="verificarEdit('+"'"+num+"'"+')" id="dfgkm566" class="btn btn-primary btn-block" type="button">Guardar cambios</button>'+
+					'<div class="upd_participante_loading loading" style="left: 48%;"></div>'
+				'</div>'+
+			'</div>';
+
+			$(document).ready( function() {
+		      $('#asdfjklñasdf').on('fileselect', function(event, numFiles, label) {
+
+		          var input = $(this).parents("#iuergn56"+' .input-group').find(':text'),
+		              log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+		          if( input.length ) {
+		              input.val(log);
+		          } else {
+		              if( log ) $("#iuergn56 .input_form_file").val(log);
+		          }
+
+		      });
+		  });
 		}
 
 		return validation
@@ -838,7 +1041,8 @@ window.editField=function(num) {
 
 		swal({
 		  title: "Informacion del campo", 
-		  content: wrapper,		
+		  content: wrapper,
+		  closeOnClickOutside: false	
 		});
 		$(".swal-footer").css("display", "none");
 	}
@@ -863,6 +1067,14 @@ window.verificarEdit=function(num){
     		$("#descripcion_field").after('<small id="us_error err_part" style="color:red;">Debes Escribir una Descripcion para el campo</small>');
     		val++;
 		}
+
+		if ($("#oljkgkbm45").val()=="" && $("#hidden_tipe_field").val()=="img_ayuda") {
+			$("#oljkgkbm45").addClass("is-invalid");
+    		$("#iuergn56").after('<small id="us_error err_part" style="color:red;;margin-bottom: 15px;margin-top: -14px;margin-left: 8px;">Debes seleccionar una imagen para subir</small>');
+    		val++;
+		}
+
+
 		if (val==0) {
 
 
@@ -888,6 +1100,14 @@ window.verificarEdit=function(num){
 			}
 			if ($("#hidden_tipe_field").val()=="pago") {
 				editFieldPago(num)
+			}
+
+			if ($("#hidden_tipe_field").val()=="texto_ayuda") {
+				editFieldTextoAyuda(num)
+			}
+
+			if ($("#hidden_tipe_field").val()=="img_ayuda") {
+				editFieldImgAyuda(num)
 			}
 
 		}
@@ -1052,6 +1272,59 @@ window.verificarEdit=function(num){
 		swal("Listo", "El campo ha sido actualizado exitosamente", "success");
 	}
 
+
+	window.editFieldTextoAyuda=function(num){
+
+		window.Data[num]["texto_ayuda"]=$("#descripcion_field").val();
+		$("#"+window.Data[num]["codigo_code"]).text(window.Data[num]["texto_ayuda"])
+		swal.close();
+		swal("Listo", "El campo ha sido actualizado exitosamente", "success");
+	}
+
+	window.editFieldImgAyuda=function(num){
+
+		$( "#dfgkm566" ).fadeOut(250, function () {
+			$( ".upd_participante_loading" ).fadeIn(250);
+		});
+
+		var file_data = $(".iuydsab564").prop("files")[0];
+		var form_data = new FormData();                  
+		form_data.append("file", file_data)
+
+		$.ajax({
+				    type: 'post',
+				    url: url+"/formularios/uploadImgAyuda",
+				    dataType: 'script',
+					cache: false,
+	         	 	contentType: false,
+	          		processData: false,				    
+				    data: form_data,
+				    success: function(res){
+				    	$( ".upd_participante_loading" ).fadeOut(250, function () {
+							$("#dfgkm566").fadeIn(250);
+						});
+				    	try{
+				    		var result= JSON.parse(res);
+				    		$("#oljkgkbm45").addClass("is-invalid");
+    						$("#iuergn56").after('<small id="us_error err_part" style="color:red;margin-bottom: 15px;margin-top: -14px;margin-left: 8px;">'+result[1]+'</small>');
+				    	} catch(err){
+
+							window.Data[num]["img_ayuda"]=res;
+
+							$("#"+window.Data[num]["codigo_img"]).hide("slow", function(){
+								$("#"+window.Data[num]["codigo_img"]).remove();
+								$("#"+window.Data[num]["codigo_div_img"]).append('<img id="'+window.Data[num]["codigo_img"]+'" src="'+window.location+'/../public/img/crono/'+window.Data[num]["img_ayuda"]+'" style="width: 100%;height100%;display:none" />');
+								$('#'+window.Data[num]["codigo_img"]).show('slow');								
+							});
+
+							swal.close();
+				    	}
+					}
+				});
+
+
+	}
+
 	window.deleteField=function(num){
 
 		swal({
@@ -1133,8 +1406,8 @@ window.StoreForm=function(Datos){
         .then((willDelete) => {
           if (willDelete) {
           	$( "#btn_edit_create_form" ).fadeOut(250, function () {
-				    	$( ".upd_participante_loading" ).fadeIn(250);
-				    });
+				$( ".upd_participante_loading" ).fadeIn(250);
+			});
 
           		var file_data = $("#img_form").prop("files")[0];
 				var form_data = new FormData();                  
@@ -1146,9 +1419,9 @@ window.StoreForm=function(Datos){
 				    type: 'post',
 				    url: url+"/formularios/createPost",
 				    dataType: 'script',
-						cache: false,
-	          contentType: false,
-	          processData: false,				    
+					cache: false,
+	         	 	contentType: false,
+	          		processData: false,				    
 				    data: form_data,
 				    success: function(msg){
 				    	 if (msg=="Exito") {

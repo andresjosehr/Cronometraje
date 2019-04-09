@@ -21,6 +21,8 @@ class CamposTable extends Migration
             $table->string('obligatorio')->nullable();
             $table->string('img')->nullable();
             $table->string('pdf')->nullable();
+            $table->text('texto_ayuda')->nullable();
+            $table->string('img_ayuda')->nullable();
             $table->text('codigo_pago')->nullable();
             $table->integer('id_formulario')->unsigned();
             $table->foreign('id_formulario')->references('id')->on('formularios')->onDelete('cascade');

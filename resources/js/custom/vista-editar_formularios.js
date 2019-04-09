@@ -5,8 +5,6 @@
 window.EC_swaleditField=function(info_camp){
 
 		window.info_camp=info_camp;
-		// console.log(window.info_camp);
-		// console.log("--------------------------------")
 		if (info_camp.obligatorio==1) {
 			var obli='checked="checked"';
 		} else{
@@ -166,6 +164,55 @@ window.EC_swaleditField=function(info_camp){
 			'</div>';
 		}
 
+
+		if (info_camp.tipo=="texto_ayuda") {
+			var validation = '<div class="form-row">'+
+				'<div class="form-group col-md-12">'+
+					'<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Escribe el texto de ayuda" required="" value="'+info_camp.texto_ayuda+'">'+info_camp.texto_ayuda+'</textarea>'+
+				'</div>'+
+				'<div class="form-group col-md-6">'+
+					'<input type="hidden" id="hidden_tipe_field" value="'+info_camp.tipo+'">'+
+					'<button onclick="EC_verificarEdit()" class="btn btn-primary btn-block" type="button">Guardar cambios</button>'+
+				'</div>'+
+				'<div class="form-group col-md-6">'+
+					'<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>'+
+				'</div>'+
+			'</div>';
+		}
+
+		if (info_camp.tipo=="img_ayuda") {
+			var validation = '<div class="form-row">'+
+				'<div class="form-group col-md-12 form_div_file" id="iuergn56">'+
+					    '<input type="text" id="oljkgkbm45" class="form-control input_form_file" placeholder="Ingresa tu imagen de ayuda" readonly>'+
+					      '<label class="input-group-btn label_from_file">'+
+					                 '<span class="btn btn-primary btn-block">'+
+					                     'Subir <input id="asdfjklñasdf" class="iuydsab564" type="file" style="display: none;" multiple>'+
+					                 '</span>'+
+					        '</label>'+
+				'</div>'+
+				'<div class="form-group col-md-12">'+
+					'<input type="hidden" id="hidden_tipe_field" value="'+info_camp.tipo+'">'+
+					'<button onclick="EC_verificarEdit()" id="dfgkm566" class="btn btn-primary btn-block" type="button">Añadir imagen al formulario</button>'+
+					'<div class="upd_participante_loading loading" style="left: 48%;"></div>'
+				'</div>'+
+			'</div>';
+
+			$(document).ready( function() {
+		      $('#asdfjklñasdf').on('fileselect', function(event, numFiles, label) {
+
+		          var input = $(this).parents("#iuergn56"+' .input-group').find(':text'),
+		              log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+		          if( input.length ) {
+		              input.val(log);
+		          } else {
+		              if( log ) $("#iuergn56 .input_form_file").val(log);
+		          }
+
+		      });
+		  });
+		}
+
 		return validation
 }
 
@@ -191,7 +238,7 @@ window.EC_editField=function(info_camp) {
 		swal({
 		  title: "Informacion del campo", 
 		  content: wrapper,
-		  closeOnClickOutside: false		
+		  closeOnClickOutside: false
 		});
 		$(".swal-footer").css("display", "none");
 	}
@@ -200,9 +247,10 @@ window.EC_editField=function(info_camp) {
 
 window.EC_verificarEdit=function(info_camp, subcampos){
 
-		$("#descripcion_field, #nombre_field").removeClass("is-invalid");
+		$("#descripcion_field, #nombre_field, #oljkgkbm45").removeClass("is-invalid");
 		$("#descripcion_field").siblings().remove();
 		$("#nombre_field").siblings().remove();
+		$("small").remove();
 		var val=0;
 
 		if ($("#nombre_field").val()=="") {
@@ -216,6 +264,15 @@ window.EC_verificarEdit=function(info_camp, subcampos){
     		$("#descripcion_field").after('<small id="us_error err_part" style="color:red;">Debes Escribir una Descripcion para el campo</small>');
     		val++;
 		}
+
+		if ($("#oljkgkbm45").val()=="" && $("#hidden_tipe_field").val()=="img_ayuda") {
+			$("#oljkgkbm45").addClass("is-invalid");
+    		$("#iuergn56").after('<small id="us_error err_part" style="color:red;;margin-bottom: 15px;margin-top: -14px;margin-left: 8px;">Debes seleccionar una imagen para subir</small>');
+    		val++;
+		}
+
+
+
 		if (val==0) {
 
 
@@ -238,6 +295,14 @@ window.EC_verificarEdit=function(info_camp, subcampos){
 			}
 			if ($("#hidden_tipe_field").val()=="pago") {
 				EC_editFieldPago(info_camp)
+			}
+
+			if ($("#hidden_tipe_field").val()=="texto_ayuda") {
+				EC_editFieldTextoAyuda(info_camp)
+			}
+
+			if ($("#hidden_tipe_field").val()=="img_ayuda") {
+				EC_editFieldImgAyuda(info_camp)
 			}
 
 		}
@@ -362,6 +427,15 @@ window.EC_verificarEdit=function(info_camp, subcampos){
 
 	}
 
+	window.EC_editFieldTextoAyuda=function(num){
+		window.info_camp.texto_ayuda=$("textarea").val();
+		EC_editFin(5);
+	}
+
+	window.EC_editFieldImgAyuda=function(num){
+		EC_editFin(6);
+	}
+
 	window.EC_deleteField=function(info_camp){
 
 		try{
@@ -375,8 +449,6 @@ window.EC_verificarEdit=function(info_camp, subcampos){
 		catch(error){
 			window.info_camp=JSON.parse(info_camp);
 		}
-
-		console.log(window.info_camp);
 
 		swal({
           title: "Espera!",
@@ -575,19 +647,37 @@ window.FileVist=function(id_div, id_input){
 
 window.EC_editFin=function(tipo){
 
+
 	$("#delete_at_edit").fadeOut(250);
 	$("#edit_at_edit").fadeOut(250, function () {
 	  $(".upd_participante_loading").fadeIn(250);
 	});
 
-	$.ajax({
-        type: 'PUT',
-        url: url+"/formularios/"+window.info_camp.id,
-        data: RecopDat(tipo),
-        success: function(result){
-        	 EC_editFrontFin(result)
-        }
-    });
+	if (tipo!=6) {
+		$.ajax({
+	        type: 'PUT',
+	        url: url+"/formularios/"+window.info_camp.id,
+	        data: RecopDat(tipo),
+	        success: function(result){
+	        	EC_editFrontFin(result)
+	        }
+	    });
+	} else{
+
+
+		$.ajax({
+		    type: 'post',
+		    url: url+"/formularios/"+window.info_camp.id,
+		    dataType: 'script',
+			cache: false,
+	     	contentType: false,
+	    	processData: false,				    
+		    data: RecopDat(tipo),
+		    success: function(res){
+		    	EC_editFrontFin(res)
+			}
+		});
+	}
 
 }
 
@@ -641,7 +731,16 @@ window.EC_editFrontFin=function(campo){
 		$("#place_"+campo.id_formulario+"_Campo_"+campo.id).attr("placeholder", campo.descripcion);
 	}
 
-	if (campo.tipo=="pago") {
+	if (campo.tipo=="texto_ayuda") {
+		console.log(campo)
+		$("#Formulario_"+campo.id_formulario+"_code_"+campo.id).text(campo.texto_ayuda);
+		$("#btn_Formulario_"+campo.id_formulario+"_Campo_"+campo.id).attr("onclick", "EC_editField("+"'"+JSON.stringify(campo)+"'"+")");
+	}
+
+	if (campo.tipo=="img_ayuda") {
+		console.log("Formulario_"+campo.id_formulario+"_img_"+campo.id)
+		console.log(window.location+"../public/img/crono/"+campo.img_ayuda)
+		$("#Formulario_"+campo.id_formulario+"_img_"+campo.id).attr("src", window.location+"../public/img/crono/"+campo.img_ayuda);
 		$("#btn_Formulario_"+campo.id_formulario+"_Campo_"+campo.id).attr("onclick", "EC_editField("+"'"+JSON.stringify(campo)+"'"+")");
 	}
 }
@@ -672,6 +771,24 @@ window.RecopDat=function(tipo){
 		   		tipo: window.info_camp.tipo,
 		   		codigo_pago: window.info_camp.codigo_pago
 		   	};
+	   }
+
+
+	   if (tipo==5) {
+		   	var Datos={
+		   		id: window.info_camp.id,
+		   		tipo: window.info_camp.tipo,
+		   		texto_ayuda: window.info_camp.texto_ayuda
+		   	};
+	   }
+
+	   if (tipo==6) {
+		   	var file_data = $(".iuydsab564").prop("files")[0];
+			var Datos = new FormData();    
+			Datos.append("id", window.info_camp.id)              
+			Datos.append("tipo", window.info_camp.tipo)
+			Datos.append("file", file_data)
+			Datos.append("_method", "put")
 	   }
 	return Datos;
 }

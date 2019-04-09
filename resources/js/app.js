@@ -26,6 +26,7 @@
 	require('./../../resources/js/custom/participantes.js');
 	require('./../../resources/js/custom/formularios.js');
 	require('./../../resources/js/custom/vista-editar_formularios.js');
+	require('./../../resources/js/custom/inscripcion.js');
 
 // window.Vue = require('vue');
 

@@ -94,6 +94,20 @@
 					<p class="form_option">Pago<p>
 		  		</div>
 		  	</div>
+		  	<div class="row row_options">
+		  		<div onclick="createField('texto_ayuda')" class="col">
+		  			<i class=" material_create material-icons">
+						comment
+					</i>
+					<p class="form_option">Insertar texto de ayuda<p>
+		  		</div>
+		  		<div onclick="createField('img_ayuda')" class="col">
+		  			<i class=" material_create material-icons">
+						add_photo_alternate
+					</i>
+					<p class="form_option">Insertar imagen de ayuda<p>
+		  		</div>
+		  	</div>
 		  </div>
 		</div>
 	</div>

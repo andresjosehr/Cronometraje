@@ -1,0 +1,34 @@
+.body_ins .datepicker{
+        top: 816.209px !important;
+      }
+      .card {
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 10px; /* Added */
+        }
+
+        .stro_form{
+            text-align: left;
+            margin-left: 4px;
+        }
+        .card_ins{
+          width: 40rem;
+          margin-top: 12rem;
+          margin-bottom: 12rem;
+        }
+        .tit_ins{
+          color: white;
+          display: table-cell;
+          vertical-align: middle;
+        }
+        .img_ins{
+          margin-bottom: 30px
+        }
+
+      @media only screen and (max-width: 760px) {
+        .card_ins{
+          width: 90%;
+          margin-top: 6rem;
+          margin-bottom: 6rem;
+        }
+      }
