@@ -1180,6 +1180,10 @@ $(document).ready(function () {
     $(".sidebar_formularios").addClass("active");
   }
 
+  if (urlPath == "eventos") {
+    $(".sidebar_eventos").addClass("active");
+  }
+
   $(".pp-intro-bar").remove();
 });
 

@@ -87,6 +87,12 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a class="nav-link sidebar_eventos" href="eventos">
+                  <i class="material-icons">event</i>
+                  <span>Eventos</span>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link sidebar_formularios" href="formularios">
                   <i class="material-icons">format_list_numbered</i>
                   <span>Formularios</span>

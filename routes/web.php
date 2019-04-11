@@ -63,3 +63,5 @@ Route::resource('participantes', 'ParticipantesController');
 Route::post('formularios/createPost', "FormulariosController@createPost");
 Route::post('formularios/uploadImgAyuda', "FormulariosController@uploadImgAyuda");
 Route::resource('formularios', 'FormulariosController');
+
+Route::resource('eventos', 'EventosController');
