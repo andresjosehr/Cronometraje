@@ -569,7 +569,12 @@ window.EC_VerifyStoreForm=function(id_form){
 
 window.EC_StoreForm=function(id_form){
 
-
+	var por_de;
+	if ($("#CamposDefecto_"+id_form).is(":checked")) {
+		por_de=1;
+	} else{
+		por_de=0;
+	}
 
 	swal({
           title: "Espera!",
@@ -587,6 +592,7 @@ window.EC_StoreForm=function(id_form){
           		var formData = new FormData();
 				formData.append("file", $("#file_"+id_form).prop("files")[0]);
 				formData.append("nombre_formulario", $("#nombre_"+id_form).val());
+				formData.append("campos_por_defecto", por_de);
 				formData.append("id_evento", $("#evento_"+id_form).val());
 				formData.append("_method", "PUT");
           		$.ajax({

@@ -18,6 +18,7 @@ class Formularios extends Migration
             $table->string('nombre_formulario');
             $table->string('img')->nullable();
             $table->string('codigo');
+            $table->integer('campos_por_defecto');
             $table->integer('id_evento')->unsigned();
             $table->foreign('id_evento')->references('id')->on('eventos');
         });

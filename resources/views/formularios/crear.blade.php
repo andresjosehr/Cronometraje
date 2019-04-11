@@ -23,7 +23,13 @@
 	      	</div>
 	      </div>
       </div>
-      <div class="col-12">
+      <div class="col-4">	
+        	<div class="custom-control custom-toggle custom-toggle-sm mb-1" style="margin-top: 5px;">
+        	  <input id="CamposDefecto" type="checkbox" name="customToggle2" class="custom-control-input" checked="checked">
+        	  <label class="custom-control-label" for="CamposDefecto">Agregar campos por defecto</label>
+        	</div>
+      </div>
+      <div class="col-8">
             <div class="form-group" style="display: flex;">
                 <input type="text" class="form-control" id="des_img" placeholder="Sube una imagen que sera vista en la seccion principal del formulario" readonly>
                 <label class="input-group-btn" style="margin-bottom: 0px">

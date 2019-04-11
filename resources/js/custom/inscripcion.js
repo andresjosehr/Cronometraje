@@ -7,6 +7,8 @@ $(document).ready(function() {
 
       window.calculateAge=function(){
 
+        if ($("#nacimiento").html()) {
+
          var date = $("#nacimiento").val();
          var nacimiento = date.split("/").reverse().join("-");
 
@@ -22,9 +24,42 @@ $(document).ready(function() {
               edad--;
           }
 
+          var Categoria = JSON.parse($("#info_categorias").text());
+
           $("#edad").val(edad)
           $("#nacimiento").val(nacimiento);
+
+          var val = 0;
+
+          $('input').filter('[required]:visible').map(function(input, objeto){
+            if ($("input[name='"+objeto.name+"']").val()==undefined) {
+              console.log(objeto)
+              val++;
+            }
+          })
+
+          $('select').filter('[required]:visible').map(function(input, objeto){
+              if ($("select[name='"+objeto.name+"'] option:selected").attr("class")=="pri") {
+                val++;
+              }
+          })
+
+
+          if (val==0) {
+            if (Categoria.edad_minima<=edad && Categoria.edad_maxima>=edad && Categoria.sexo==$("#sexito").val()) {
+              $("#id_categoria").val(Categoria.id);
+              $("#submitButton").click();
+            } else{
+              swal("Error", "Los datos ingresados no aplican para este evento. Ponte en contacto con el administrador del evento para mas información", "error")
+            }
+          } else{
+            
+             $("#submitButton").click();
+          }
+
+        } else {
           $("#submitButton").click();
+        }
       }
 
 

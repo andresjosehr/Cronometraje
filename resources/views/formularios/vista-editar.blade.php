@@ -18,7 +18,13 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12" id="editDivForm_{{$Formulario->id}}">
+              <div class="col-6"> 
+                  <div class="custom-control custom-toggle custom-toggle-sm mb-1" style="margin-top: 5px;">
+                    <input id="CamposDefecto_{{$Formulario->id}}" type="checkbox" name="customToggle2" class="custom-control-input" @if ($Formulario->campos_por_defecto==1) checked="checked" @endif>
+                    <label class="custom-control-label" for="CamposDefecto_{{$Formulario->id}}">Agregar campos por defecto</label>
+                  </div>
+              </div>
+              <div class="col-md-6" id="editDivForm_{{$Formulario->id}}">
                 <div class="form-group" style="display: flex;">
                     <input type="text" class="form-control" placeholder="@if ($Formulario->img) {{$Formulario->img}} @else Sube una imagen que sera vista en la seccion principal del formulario @endif" readonly>
                     <label class="input-group-btn" style="margin-bottom: 0px">

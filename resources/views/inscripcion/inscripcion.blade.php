@@ -59,54 +59,67 @@
           @endif
           <form action="inscripcion" method="POST" enctype="multipart/form-data" id="inscripcionForm">
             @csrf
-            <div class="row">
-                <div class="form-group col-md-6">
-                  <strong class="text-muted d-block mb-2 stro_form">Nombres</strong>
-                  <input type="text" class="form-control" id="nombres" name="nombre_participante" placeholder="Ingresa tus nombres" value="{!! old('nombre_participante') !!}" required="">
-                </div>
-                <div class="form-group col-md-6">
-                  <strong class="text-muted d-block mb-2 stro_form">Apellidos</strong>
-                  <input type="text" class="form-control" id="apellidos" name="apellido" placeholder="Ingresa tus apellidos" value="{!! old('apellido') !!}" required="">
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6">
-                  <strong class="text-muted d-block mb-2 stro_form">Email</strong>
-                  <input type="email" class="form-control" id="email" name="email_participante" value="{!! old('email_participante') !!}" placeholder="Ingresa tu email" required="">
-                  @if ($errors->has('email_participante'))
-                      <small style="color: red">{{ $errors->first('email_participante') }}</small>
-                  @endif
-                </div>
-                <div class="form-group col-md-6">
-                  <strong class="text-muted d-block mb-2 stro_form">DNI</strong>
-                  <input type="text" class="form-control" id="dni" name="dni" value="{!! old('dni') !!}" placeholder="Ingresa tu DNI" required="">
-                   @if ($errors->has('dni'))
-                      <small style="color: red">{{ $errors->first('dni') }}</small>
-                  @endif
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6">
-                  <strong class="text-muted d-block mb-2 stro_form">Nacimiento</strong>
-                  <input type="text" class="form-control" id="nacimiento" name="nacimiento" placeholder="Ingresa tu nacimiento" value="{!! old('nacimiento') !!}" required="">
-                  @if ($errors->has('nacimiento'))
-                      <small style="color: red">{{ $errors->first('nacimiento') }}</small>
-                  @endif
-                  <input type="hidden" name="edad" id="edad">
-                  <input type="hidden" name="id_estado_inscripcion" id="id_estado_inscripcion" value="1">
-                </div>
-                <div class="form-group col-md-6">
-                  <strong class="text-muted d-block mb-2 stro_form">Sexo</strong>
-                  <select class="form-control" name="sexo" value="{!! old('sexo') !!}">
-                    <option selected="" value="null">Escoge tu sexo</option>
-                    <option value="0">Masculino</option>
-                    <option value="1">Femenino</option>
-                  </select>
-                  @if ($errors->has('sexo'))
-                      <small style="color: red">Debes indicar tu sexo</small>
-                  @endif
-                </div>
-            </div>
+
+            @if ($Formulario[0]->campos_por_defecto==1)
+              <div class="row">
+                  <div class="form-group col-md-6">
+                    <strong class="text-muted d-block mb-2 stro_form">Nombres</strong>
+                    <input type="text" class="form-control" id="nombres" name="nombre_participante" placeholder="Ingresa tus nombres" value="{!! old('nombre_participante') !!}" required="">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <strong class="text-muted d-block mb-2 stro_form">Apellidos</strong>
+                    <input type="text" class="form-control" id="apellidos" name="apellido" placeholder="Ingresa tus apellidos" value="{!! old('apellido') !!}" required="">
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="form-group col-md-6">
+                    <strong class="text-muted d-block mb-2 stro_form">Email</strong>
+                    <input type="email" class="form-control" id="email" name="email_participante" value="{!! old('email_participante') !!}" placeholder="Ingresa tu email" required="">
+                    @if ($errors->has('email_participante'))
+                        <small style="color: red">{{ $errors->first('email_participante') }}</small>
+                    @endif
+                  </div>
+                  <div class="form-group col-md-6">
+                    <strong class="text-muted d-block mb-2 stro_form">DNI</strong>
+                    <input type="text" class="form-control" id="dni" name="dni" value="{!! old('dni') !!}" placeholder="Ingresa tu DNI" required="">
+                     @if ($errors->has('dni'))
+                        <small style="color: red">{{ $errors->first('dni') }}</small>
+                    @endif
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="form-group col-md-6">
+                    <strong class="text-muted d-block mb-2 stro_form">Nacimiento</strong>
+                    <input type="text" class="form-control" id="nacimiento" name="nacimiento" placeholder="Ingresa tu nacimiento" value="{!! old('nacimiento') !!}" required="">
+                    @if ($errors->has('nacimiento'))
+                        <small style="color: red">{{ $errors->first('nacimiento') }}</small>
+                    @endif
+                    <input type="hidden" name="edad" id="edad">
+                    <input type="hidden" name="id_estado_inscripcion" id="id_estado_inscripcion" value="1">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <strong class="text-muted d-block mb-2 stro_form">Sexo</strong>
+                    <select class="form-control" name="sexo" id="sexito" value="{!! old('sexo') !!}">
+                      <option selected="" value="null">Escoge tu sexo</option>
+                      <option value="0">Masculino</option>
+                      <option value="1">Femenino</option>
+                    </select>
+                    @if ($errors->has('sexo'))
+                        <small style="color: red">Debes indicar tu sexo</small>
+                    @endif
+                  </div>
+              </div>
+              @else
+              <div class="row">
+                  <div class="form-group col-md-12">
+                    <strong class="text-muted d-block mb-2 stro_form">Email</strong>
+                    <input type="email" class="form-control" id="email" name="email_participante" value="{!! old('email_participante') !!}" placeholder="Ingresa tu email" required="">
+                    @if ($errors->has('email_participante'))
+                        <small style="color: red">{{ $errors->first('email_participante') }}</small>
+                    @endif
+                  </div>
+              </div>
+            @endif
             @foreach ($Formulario[0]->campos as $Campo)
             <div class="row">
                 <div class="form-group col-md-12">
@@ -128,7 +141,7 @@
                   @if ($Campo->tipo=="select")
                     <strong class="text-muted d-block mb-2 stro_form">{{$Campo->nombre}}</strong>
                     <select class="form-control" name="nombre_campo_{{$Campo->id}}" @if ($Campo->obligatorio==1) required="" @endif value="{!! old('nombre_campo_'.$Campo->id) !!}">
-                        <option selected="" value="{{$Campo->descripcion}}">{{$Campo->descripcion}}</option>
+                        <option selected="selected" class="pri" value="{{$Campo->descripcion}}">{{$Campo->descripcion}}</option>
                         @foreach ($Campo->subcampos as $SubCampo)
                             <option value="{{$SubCampo->descripcion}}">{{$SubCampo->descripcion}}</option>
                         @endforeach
@@ -138,7 +151,7 @@
                   @if ($Campo->tipo=="multiselect")
                     <strong class="text-muted d-block mb-2 stro_form">{{$Campo->nombre}}</strong>
                     <select name="nombre_campo_{{$Campo->id}}" id="id_campo_{{$Campo->id}}" multiple="multiple" class="form-control" @if ($Campo->obligatorio==1) required="" @endif value="{!! old('nombre_campo_'.$Campo->id) !!}">
-                      <option value="{{$Campo->descripcion}}">{{$Campo->descripcion}}</option>
+                      <option selected="selected" class="pri" value="{{$Campo->descripcion}}">{{$Campo->descripcion}}</option>
                       @foreach ($Campo->subcampos as $SubCampo)
                         <option value="{{$SubCampo->descripcion}}">{{$SubCampo->descripcion}}</option>
                       @endforeach
@@ -193,21 +206,28 @@
                     <button type="button" onclick="calculateAge()" class="btn btn-primary btn-block">Registrarme</button>
                     <input type="submit" id="submitButton" style="display: none">
                 </div>
-{{--                 @if ($errors->any())
+{{--             @if ($errors->any())
                         {{ implode('', $errors->all('<div>:message</div>')) }}
                 @endif --}}
            </div>
+           <input type="hidden" name="id_categoria" value="{{$Formulario[0]->eventos->categorias->id}}">
          </form>
         </div>
       </div>
     </section>
+
+    <div id="info_categorias" style="display: none">{{$Formulario[0]->eventos->categorias}}</div>
 
     @if(session()->has('mensaje'))
         <script>
           swal("Listo!", "Hemos Registrado tus datos exitosamente, muchas gracias.", "success");
         </script>
     @endif
-
+    @if(session()->has('error_participante_existente'))
+        <script>
+          swal("Error", "El usuario registrado al email que ingresaste ya ha llenado este formulario anteriormente", "error");
+        </script>
+    @endif
         <script src="{{ asset('/js/default.min.js') }}"></script>
         <script src="{{ asset('/js/app.js') }}"></script>
     </body>

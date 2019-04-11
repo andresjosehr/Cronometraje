@@ -1,7 +1,7 @@
 <!-- Large modal -->
-<button style="display: none" type="button" class="btn btn-primary editar_modal" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+<button style="display: none;" type="button" class="btn btn-primary editar_modal" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
 
-<div class="modal fade bd-example-modal-lg edt_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg edt_modal" style="z-index: 9999;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="row vdivide edit_sub">

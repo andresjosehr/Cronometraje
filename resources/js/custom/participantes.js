@@ -116,25 +116,38 @@ window.actualizarParticipante=function() {
 
 window.actualizarParticipanteUPD=function(nacimiento_, edad_) {
 
+  var CustomForm=$("#custom_form :not(button) :input");
+  var DataForm={};
+  DataForm.DefaultDataForm={};
+  DataForm.CustomDataForm={};
+  CustomForm.map(function(num, Data){
+    DataForm.CustomDataForm[Data.name]=Data.value;
+  })
+
+  DataForm.DefaultDataForm.id = $("#edit_path #id_part").val();
+  DataForm.DefaultDataForm.nombre_participante = $("#edit_path #nombre").val();
+  DataForm.DefaultDataForm.apellido = $("#edit_path #apellido").val();
+  DataForm.DefaultDataForm.email_participante = $("#edit_path #email").val();
+  DataForm.DefaultDataForm.dni = $("#edit_path #dni").val();
+  DataForm.DefaultDataForm.nacimiento =  nacimiento_;
+  DataForm.DefaultDataForm.edad =  edad_;
+  DataForm.DefaultDataForm.sexo =  $("#edit_path #sexo option:selected").val();
+  DataForm.DefaultDataForm.id_categoria = $("#edit_path #id_categoria option:selected").val();
+  DataForm.DefaultDataForm.id_estado_inscripcion = $("#edit_path #id_estado_inscripcion option:selected").val();
+  DataForm.DefaultDataForm.act_status =  false;
 
   $( ".upd_participante_btn" ).fadeOut(250, function () {
       $( ".upd_participante_loading" ).fadeIn(250);
     });
 
-  $("#contenedor_editar_participante").load(url+"/participantes",{
-      id:$("#edit_path #id_part").val(),
-      nombre_participante:$("#edit_path #nombre").val(),
-      apellido:$("#edit_path #apellido").val(),
-      email_participante:$("#edit_path #email").val(),
-      dni:$("#edit_path #dni").val(),
-      nacimiento: nacimiento_,
-      edad: edad_,
-      sexo: $("#edit_path #sexo option:selected").val(),
-      id_categoria:$("#edit_path #id_categoria option:selected").val(),
-      id_estado_inscripcion:$("#edit_path #id_estado_inscripcion option:selected").val(),
-      act_status: false
-
-  });
+   $.ajax({
+        type: 'POST',
+        url: url+"/participantes",
+        data: DataForm,
+        success: function(msg){
+          exitoUpdatePart(msg);
+        }
+    });
 }
 
 
@@ -171,7 +184,6 @@ window.chan=function(id_participante, status, tipo){
 
     var ins_class =($(".btn_"+tipo+"_"+id_participante).attr("class"));
     ins_class=ins_class.split(" ");
-    console.log(ins_class);
     for (var i = 0; i < ins_class.length; i++) {
       if (ins_class[i]=="pul") {
         act=true;
@@ -377,21 +389,23 @@ window.limp=function(){
               $("#no_nada").show("slow");
             });
           } else{
-                console.log(dat)
+
                 $("#custom_form").append('<strong class="text-muted d-block mb-2 form_name">'+dat[0].campos.formularios.nombre+'</strong>');
                   dat.map(function(datos){
                     if (datos.campos.tipo!="file") {
                     $("#custom_form").append('<div class="form-row">'+
                                                 '<div class="form-group col-md-12">'+
                                                  ' <strong class="text-muted d-block mb-2">'+datos.campos.nombre+'</strong>'+
-                                                  '<input type="email" class="form-control" id="email" name="email_participante" placeholder="First name" value="'+datos.valor+'" required="">'+
+                                                  '<input type="email" class="form-control" name="campo_'+datos.id+'" placeholder="First name" value="'+datos.valor+'" required="">'+
                                                 '</div>'+
                                               '</div>');
                   } else{
-                    $("#custom_form").append('<div class="form-row">'+
+
+                    $("#custom_form").append('<input type="hidden">'+
+                                              '<div class="form-row">'+
                                                 '<div class="form-group col-md-12">'+
                                                  ' <strong class="text-muted d-block mb-2">'+datos.campos.nombre+'</strong>'+
-                                                  '<a href="'+window.location.href +'/../public/img/crono/'+datos.valor+'" class="btn btn-block btn-success" style="color:white">Ver archivo</a>'+
+                                                  '<a target="_blank" href="'+window.location.href +'/../public/img/crono/'+datos.valor+'" class="btn btn-block btn-success" style="color:white">Ver archivo</a>'+
                                                 '</div>'+
                                               '</div>');
                   }
@@ -399,7 +413,33 @@ window.limp=function(){
                     $("#custom_form").show("slow");
                   });
                 });
+                $("#custom_form").append('<button type="button" onclick="deleteCustomFormData('+"'"+email_participante+"'"+')" class="btn btn-block btn-danger">Borrar datos del formulario personalizado</button>');
             }
         }
     });
+  }
+
+  window.deleteCustomFormData=function(email_participante){
+    swal({
+          title: "Advertencia",
+          text: "Los datos no podran recuperarse, ¿estas seguro de proceder con eliminarlos?",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: url+"/participantes/"+email_participante,
+                    success: function(msg){
+                        if (msg=="Exito") {
+                          $("#custom_form").hide("slow", function(){
+                            $("#no_nada").show("slow")
+                          })
+                        }
+                    }
+                });
+          }
+        });
   }

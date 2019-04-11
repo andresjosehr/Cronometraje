@@ -13,4 +13,9 @@ class Eventos extends Model
     {
     	return $this->hasMany(Formularios::class, "id_evento");
     }
+
+    public function categorias()
+    {
+    	return $this->hasOne(Categorias::class, "id_evento");
+    }
 }

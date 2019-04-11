@@ -448,10 +448,12 @@ window.createFieldSelect = function () {
   swal.close();
   var options = "<option>" + window.Data[window.num]["descripcion"] + "</option>";
 
-  for (var i = 0; i < window.Data[window.num]["Opciones"].length; i++) {
+  for (var i in window.Data[window.num]["Opciones"]) {
     options = options + "<option>" + window.Data[window.num]["Opciones"][i] + "</option>";
   }
 
+  console.log(window.Data[window.num]["Opciones"].length);
+  console.log(window.Data[window.num]["Opciones"]);
   $("#div_base").append('<div class="row" id="' + window.Data[window.num]["codigo_div"] + '" style="display:none; width:100%" >' + '<div class="form-group col-md-8">' + '<select class="form-control" id="' + window.Data[window.num]["codigo_input"] + '">' + options + '</select>' + '</div>' + '<div class="form-group col-md-2 nopadding" id="' + window.Data[window.num]["codigo"] + '">' + '<button onclick="editField(' + "'" + window.num + "'" + ')" class="btn btn-success btn-block" type="button">' + 'Editar' + '</button>' + '</div>' + '<div class="form-group col-md-2 nopadding" id="' + window.Data[window.num]["codigo"] + '">' + '<button onclick="deleteField(' + "'" + window.num + "'" + ')" class="btn btn-danger btn-block" type="button">' + 'Borrar' + '</button>' + '</div>' + '</div>');
   $('#' + window.Data[window.num]["codigo_div"]).appendTo('#fields').show('slow');
   window.num++;
@@ -475,7 +477,7 @@ window.createFieldMultiSelect = function () {
   swal.close();
   var options = "";
 
-  for (var i = 0; i < window.Data[window.num]["Opciones"].length; i++) {
+  for (var i in window.Data[window.num]["Opciones"]) {
     options = options + "<option>" + window.Data[window.num]["Opciones"][i] + "</option>";
   }
 
@@ -568,32 +570,32 @@ window.makeCode = function (length) {
 
 window.validation = function (tipito) {
   if (tipito == "text" || tipito == "email" || tipito == "date") {
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-12">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '<div class="form-group col-md-6">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (tipito == "file") {
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="img" name="customToggle2" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="img">IMG</label>' + '</div>' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="pdf" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="pdf">PDF</label>' + '</div>' + '</div>' + '<div class="form-group col-md-12">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="img" name="customToggle2" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="img">IMG</label>' + '</div>' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="pdf" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="pdf">PDF</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '<div class="form-group col-md-6">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (tipito == "select") {
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="Descripcion del campo" required="">' + '</div>' + '<div class="select_field_create">' + '<div class="swal-title">Opciones del campo</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_0" placeholder="Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_1" placeholder="Descripcion del campo" required="">' + '</div>' + '<div id="div_base_select"></div>' + '<div class="form-group col-md-12">' + '<button onclick="create_field_select()" class="btn btn-secondary btn-block" type="button">Añadir otra opcion</button>' + '</div>' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-12">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="prueba()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="Descripcion del campo" required="">' + '</div>' + '<div class="select_field_create">' + '<div class="swal-title">Opciones del campo</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_0" placeholder="Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_1" placeholder="Descripcion del campo" required="">' + '</div>' + '<div id="div_base_select"></div>' + '<div class="form-group col-md-12">' + '<button onclick="create_field_select()" class="btn btn-secondary btn-block" type="button">Añadir otra opcion</button>' + '</div>' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="prueba()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '<div class="form-group col-md-6">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (tipito == "multiselect") {
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="Descripcion del campo" required="">' + '</div>' + '<div class="select_field_create">' + '<div class="swal-title">Opciones del campo</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_0" placeholder="Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_1" placeholder="Descripcion del campo" required="">' + '</div>' + '<div id="div_base_select"></div>' + '<div class="form-group col-md-12">' + '<button onclick="create_field_select()" class="btn btn-secondary btn-block" type="button">Añadir otra opcion</button>' + '</div>' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-12">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="prueba()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="Descripcion del campo" required="">' + '</div>' + '<div class="select_field_create">' + '<div class="swal-title">Opciones del campo</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_0" placeholder="Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_1" placeholder="Descripcion del campo" required="">' + '</div>' + '<div id="div_base_select"></div>' + '<div class="form-group col-md-12">' + '<button onclick="create_field_select()" class="btn btn-secondary btn-block" type="button">Añadir otra opcion</button>' + '</div>' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="prueba()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '<div class="form-group col-md-6">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (tipito == "pago") {
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Introduce el codigo del boton de pago" required=""></textarea>' + '</div>' + '<div class="form-group col-md-12">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Introduce el codigo del boton de pago" required=""></textarea>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '<div class="form-group col-md-6">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (tipito == "texto_ayuda") {
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Escribe el texto de ayuda" required=""></textarea>' + '</div>' + '<div class="form-group col-md-12">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Escribe el texto de ayuda" required=""></textarea>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>' + '</div>' + '<div class="form-group col-md-6">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (tipito == "img_ayuda") {
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12 form_div_file" id="iuergn56">' + '<input type="text" id="oljkgkbm45" class="form-control input_form_file" placeholder="Ingresa tu imagen de ayuda" readonly>' + '<label class="input-group-btn label_from_file">' + '<span class="btn btn-primary btn-block">' + 'Subir <input id="asdfjklñasdf" class="iuydsab564" type="file" style="display: none;" multiple>' + '</span>' + '</label>' + '</div>' + '<div class="form-group col-md-12">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" id="dfgkm566" class="btn btn-primary btn-block" type="button">Añadir imagen al formulario</button>' + '<div class="upd_participante_loading loading" style="left: 48%;"></div>';
-    '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12 form_div_file" id="iuergn56">' + '<input type="text" id="oljkgkbm45" class="form-control input_form_file" placeholder="Ingresa tu imagen de ayuda" readonly>' + '<label class="input-group-btn label_from_file">' + '<span class="btn btn-primary btn-block">' + 'Subir <input id="asdfjklñasdf" class="iuydsab564" type="file" style="display: none;" multiple>' + '</span>' + '</label>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + tipito + '">' + '<button onclick="verificar_info_campo()" id="dfgkm566" class="btn btn-primary btn-block" type="button">Añadir imagen al formulario</button>' + '<div class="upd_participante_loading loading" style="left: 48%;"></div>';
+    '</div>' + '<div class="form-group col-md-6">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
     $(document).ready(function () {
       $('#asdfjklñasdf').on('fileselect', function (event, numFiles, label) {
         var input = $(this).parents("#iuergn56" + ' .input-group').find(':text'),
@@ -670,18 +672,18 @@ window.swaleditField = function (num) {
   }
 
   if (window.Data[num]["tipo"] == "text" || window.Data[num]["tipo"] == "email" || window.Data[num]["tipo"] == "date") {
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="' + window.Data[num]["nombre"] + ' | Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="' + window.Data[num]["descripcion"] + ' | Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" class="custom-control-input" ' + obli + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="Nombre del campo" value="' + window.Data[num]["nombre"] + '" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="Descripcion del campo" value="' + window.Data[num]["descripcion"] + '" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" class="custom-control-input" ' + obli + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (window.Data[num]["tipo"] == "select" || window.Data[num]["tipo"] == "multiselect") {
     var opciones = '';
 
-    for (var i = 2; i < window.Data[num]["Opciones"].length; i++) {
-      opciones = opciones + '<div class="form-group col-md-12" id="sub_field_select_content' + window.num_select + '">' + '<div style="display: flex">' + '<input type="text" class="form-control" id="sub_field_select_' + window.num_select + '" placeholder="' + window.Data[num]["Opciones"][i] + '" required="">' + '<button onclick="remove_field_select(sub_field_select_content' + window.num_select + ',' + window.num_select + ')" type="button" class="btn btn-sm btn-danger mr-1">Eliminar</button>' + '</div>' + '</div>';
+    for (var i in window.Data[num]["Opciones"]) {
+      opciones = opciones + '<div class="form-group col-md-12" id="sub_field_select_content' + window.num_select + '">' + '<div style="display: flex">' + '<input type="text" class="form-control" id="sub_field_select_' + window.num_select + '" value="' + window.Data[num]["Opciones"][i] + '" placeholder="Ingresa un valor" required="">' + '<button onclick="remove_field_select(sub_field_select_content' + window.num_select + ',' + window.num_select + ')" type="button" class="btn btn-sm btn-danger mr-1">Eliminar</button>' + '</div>' + '</div>';
       window.num_select++;
     }
 
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="' + window.Data[num]["nombre"] + '" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="' + window.Data[num]["descripcion"] + '" required="">' + '</div>' + '<div class="select_field_create">' + '<div class="swal-title">Opciones del campo</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_0" placeholder="' + window.Data[num]["Opciones"][0] + '" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_1" placeholder="' + window.Data[num]["Opciones"][1] + '" required="">' + '</div>' + opciones + '<div id="div_base_select"></div>' + '<div class="form-group col-md-12">' + '<button onclick="create_field_select()" class="btn btn-secondary btn-block" type="button">Añadir otra opcion</button>' + '</div>' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="editSelect(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="Escribe el nombre del campo" value="' + window.Data[num]["nombre"] + '" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="Escribe un valor" value="' + window.Data[num]["descripcion"] + '" required="">' + '</div>' + '<div class="select_field_create">' + '<div class="swal-title">Opciones del campo</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_0" placeholder="Escribe un valor" value="' + window.Data[num]["Opciones"][0] + '" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="sub_field_select_1" placeholder="Escribe un valor" value="' + window.Data[num]["Opciones"][1] + '" required="">' + '</div>' + opciones + '<div id="div_base_select"></div>' + '<div class="form-group col-md-12">' + '<button onclick="create_field_select()" class="btn btn-secondary btn-block" type="button">Añadir otra opcion</button>' + '</div>' + '</div>' + '<div class="form-group col-md-12">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" checked="checked">' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="editSelect(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (window.Data[num]["tipo"] == "file") {
@@ -701,11 +703,11 @@ window.swaleditField = function (num) {
       img = 'checked="checked"';
     }
 
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="' + window.Data[num]["nombre"] + ' | Nombre del campo" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="' + window.Data[num]["descripcion"] + ' | Descripcion del campo" required="">' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" ' + obli + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="img" name="customToggle2" class="custom-control-input" ' + img + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="img">IMG</label>' + '</div>' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="pdf" class="custom-control-input" ' + pdf + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="pdf">PDF</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="nombre_field" placeholder="Nombre del campo" value="' + window.Data[num]["nombre"] + '" required="">' + '</div>' + '<div class="form-group col-md-12">' + '<input type="text" class="form-control" id="descripcion_field" placeholder="Descripcion del campo" value="' + window.Data[num]["descripcion"] + '" required="">' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="obli" name="customToggle2" class="custom-control-input" ' + obli + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>' + '</div>' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="img" name="customToggle2" class="custom-control-input" ' + img + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="img">IMG</label>' + '</div>' + '</div>' + '<div class="form-group col-md-4">' + '<div class="custom-control custom-toggle custom-toggle-sm mb-1">' + '<input type="checkbox" id="pdf" class="custom-control-input" ' + pdf + '>' + '<label class="custom-control-label crear_form_custom_control-label" for="pdf">PDF</label>' + '</div>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (window.Data[num]["tipo"] == "pago") {
-    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="' + window.Data[num]["codigo"] + '" required=""></textarea>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
+    var validation = '<div class="form-row">' + '<div class="form-group col-md-12">' + '<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Pega el codigo del boton aqui" value="' + window.Data[num]["codigo"] + '" required="">' + window.Data[num]["codigo"] + '</textarea>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="verificarEdit(' + "'" + num + "'" + ')" class="btn btn-primary btn-block" type="button">Guardar Cambios</button>' + '</div>' + '<div class="form-group col-md-6">' + '<input type="hidden" id="hidden_tipe_field" value="' + window.Data[num]["tipo"] + '">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>' + '</div>';
   }
 
   if (window.Data[num]["tipo"] == "texto_ayuda") {
@@ -1063,6 +1065,14 @@ window.prevStore = function () {
 };
 
 window.StoreForm = function (Datos) {
+  if ($('#CamposDefecto').is(":checked") == true) {
+    window.Data["campos_por_defecto"] = 1;
+  } else {
+    window.Data["campos_por_defecto"] = 0;
+  }
+
+  console.log($("#CamposDefecto").attr("checked"));
+
   if (window.num != 0) {
     swal({
       title: "Espera!",
@@ -1189,21 +1199,48 @@ $(document).ready(function () {
 });
 
 window.calculateAge = function () {
-  var date = $("#nacimiento").val();
-  var nacimiento = date.split("/").reverse().join("-");
-  var nacimiento = date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
-  var hoy = new Date();
-  var cumpleanos = new Date(date);
-  var edad = hoy.getFullYear() - cumpleanos.getFullYear();
-  var m = hoy.getMonth() - cumpleanos.getMonth();
+  if ($("#nacimiento").html()) {
+    var date = $("#nacimiento").val();
+    var nacimiento = date.split("/").reverse().join("-");
+    var nacimiento = date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
+    var hoy = new Date();
+    var cumpleanos = new Date(date);
+    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+    var m = hoy.getMonth() - cumpleanos.getMonth();
 
-  if (m < 0 || m === 0 && hoy.getDate() < cumpleanos.getDate()) {
-    edad--;
+    if (m < 0 || m === 0 && hoy.getDate() < cumpleanos.getDate()) {
+      edad--;
+    }
+
+    var Categoria = JSON.parse($("#info_categorias").text());
+    $("#edad").val(edad);
+    $("#nacimiento").val(nacimiento);
+    var val = 0;
+    $('input').filter('[required]:visible').map(function (input, objeto) {
+      if ($("input[name='" + objeto.name + "']").val() == undefined) {
+        console.log(objeto);
+        val++;
+      }
+    });
+    $('select').filter('[required]:visible').map(function (input, objeto) {
+      if ($("select[name='" + objeto.name + "'] option:selected").attr("class") == "pri") {
+        val++;
+      }
+    });
+
+    if (val == 0) {
+      if (Categoria.edad_minima <= edad && Categoria.edad_maxima >= edad && Categoria.sexo == $("#sexito").val()) {
+        $("#id_categoria").val(Categoria.id);
+        $("#submitButton").click();
+      } else {
+        swal("Error", "Los datos ingresados no aplican para este evento. Ponte en contacto con el administrador del evento para mas información", "error");
+      }
+    } else {
+      $("#submitButton").click();
+    }
+  } else {
+    $("#submitButton").click();
   }
-
-  $("#edad").val(edad);
-  $("#nacimiento").val(nacimiento);
-  $("#submitButton").click();
 };
 
 window.InscripFile = function (id_input, id_div) {
@@ -1369,21 +1406,34 @@ window.actualizarParticipante = function () {
 };
 
 window.actualizarParticipanteUPD = function (nacimiento_, edad_) {
+  var CustomForm = $("#custom_form :not(button) :input");
+  var DataForm = {};
+  DataForm.DefaultDataForm = {};
+  DataForm.CustomDataForm = {};
+  CustomForm.map(function (num, Data) {
+    DataForm.CustomDataForm[Data.name] = Data.value;
+  });
+  DataForm.DefaultDataForm.id = $("#edit_path #id_part").val();
+  DataForm.DefaultDataForm.nombre_participante = $("#edit_path #nombre").val();
+  DataForm.DefaultDataForm.apellido = $("#edit_path #apellido").val();
+  DataForm.DefaultDataForm.email_participante = $("#edit_path #email").val();
+  DataForm.DefaultDataForm.dni = $("#edit_path #dni").val();
+  DataForm.DefaultDataForm.nacimiento = nacimiento_;
+  DataForm.DefaultDataForm.edad = edad_;
+  DataForm.DefaultDataForm.sexo = $("#edit_path #sexo option:selected").val();
+  DataForm.DefaultDataForm.id_categoria = $("#edit_path #id_categoria option:selected").val();
+  DataForm.DefaultDataForm.id_estado_inscripcion = $("#edit_path #id_estado_inscripcion option:selected").val();
+  DataForm.DefaultDataForm.act_status = false;
   $(".upd_participante_btn").fadeOut(250, function () {
     $(".upd_participante_loading").fadeIn(250);
   });
-  $("#contenedor_editar_participante").load(url + "/participantes", {
-    id: $("#edit_path #id_part").val(),
-    nombre_participante: $("#edit_path #nombre").val(),
-    apellido: $("#edit_path #apellido").val(),
-    email_participante: $("#edit_path #email").val(),
-    dni: $("#edit_path #dni").val(),
-    nacimiento: nacimiento_,
-    edad: edad_,
-    sexo: $("#edit_path #sexo option:selected").val(),
-    id_categoria: $("#edit_path #id_categoria option:selected").val(),
-    id_estado_inscripcion: $("#edit_path #id_estado_inscripcion option:selected").val(),
-    act_status: false
+  $.ajax({
+    type: 'POST',
+    url: url + "/participantes",
+    data: DataForm,
+    success: function success(msg) {
+      exitoUpdatePart(msg);
+    }
   });
 };
 
@@ -1404,7 +1454,6 @@ window.chan = function (id_participante, status, tipo) {
   var act = false;
   var ins_class = $(".btn_" + tipo + "_" + id_participante).attr("class");
   ins_class = ins_class.split(" ");
-  console.log(ins_class);
 
   for (var i = 0; i < ins_class.length; i++) {
     if (ins_class[i] == "pul") {
@@ -1603,20 +1652,44 @@ window.DatosParticipanteFormulario = function (email_participante) {
           $("#no_nada").show("slow");
         });
       } else {
-        console.log(dat);
         $("#custom_form").append('<strong class="text-muted d-block mb-2 form_name">' + dat[0].campos.formularios.nombre + '</strong>');
         dat.map(function (datos) {
           if (datos.campos.tipo != "file") {
-            $("#custom_form").append('<div class="form-row">' + '<div class="form-group col-md-12">' + ' <strong class="text-muted d-block mb-2">' + datos.campos.nombre + '</strong>' + '<input type="email" class="form-control" id="email" name="email_participante" placeholder="First name" value="' + datos.valor + '" required="">' + '</div>' + '</div>');
+            $("#custom_form").append('<div class="form-row">' + '<div class="form-group col-md-12">' + ' <strong class="text-muted d-block mb-2">' + datos.campos.nombre + '</strong>' + '<input type="email" class="form-control" name="campo_' + datos.id + '" placeholder="First name" value="' + datos.valor + '" required="">' + '</div>' + '</div>');
           } else {
-            $("#custom_form").append('<div class="form-row">' + '<div class="form-group col-md-12">' + ' <strong class="text-muted d-block mb-2">' + datos.campos.nombre + '</strong>' + '<a href="' + window.location.href + '/../public/img/crono/' + datos.valor + '" class="btn btn-block btn-success" style="color:white">Ver archivo</a>' + '</div>' + '</div>');
+            $("#custom_form").append('<input type="hidden">' + '<div class="form-row">' + '<div class="form-group col-md-12">' + ' <strong class="text-muted d-block mb-2">' + datos.campos.nombre + '</strong>' + '<a target="_blank" href="' + window.location.href + '/../public/img/crono/' + datos.valor + '" class="btn btn-block btn-success" style="color:white">Ver archivo</a>' + '</div>' + '</div>');
           }
 
           $("#custom_form_default").hide("slow", function () {
             $("#custom_form").show("slow");
           });
         });
+        $("#custom_form").append('<button type="button" onclick="deleteCustomFormData(' + "'" + email_participante + "'" + ')" class="btn btn-block btn-danger">Borrar datos del formulario personalizado</button>');
       }
+    }
+  });
+};
+
+window.deleteCustomFormData = function (email_participante) {
+  swal({
+    title: "Advertencia",
+    text: "Los datos no podran recuperarse, ¿estas seguro de proceder con eliminarlos?",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true
+  }).then(function (willDelete) {
+    if (willDelete) {
+      $.ajax({
+        type: 'DELETE',
+        url: url + "/participantes/" + email_participante,
+        success: function success(msg) {
+          if (msg == "Exito") {
+            $("#custom_form").hide("slow", function () {
+              $("#no_nada").show("slow");
+            });
+          }
+        }
+      });
     }
   });
 };
@@ -2215,6 +2288,14 @@ window.EC_VerifyStoreForm = function (id_form) {
 };
 
 window.EC_StoreForm = function (id_form) {
+  var por_de;
+
+  if ($("#CamposDefecto_" + id_form).is(":checked")) {
+    por_de = 1;
+  } else {
+    por_de = 0;
+  }
+
   swal({
     title: "Espera!",
     text: "¿Estas seguro de querer actualizar el formulario?",
@@ -2229,6 +2310,7 @@ window.EC_StoreForm = function (id_form) {
       var formData = new FormData();
       formData.append("file", $("#file_" + id_form).prop("files")[0]);
       formData.append("nombre_formulario", $("#nombre_" + id_form).val());
+      formData.append("campos_por_defecto", por_de);
       formData.append("id_evento", $("#evento_" + id_form).val());
       formData.append("_method", "PUT");
       $.ajax({

@@ -71,6 +71,7 @@ class FormulariosController extends Controller
         "nombre_formulario" => $Datos["nombre_formulario"],
         "img" => $ImgForm,
         "codigo" => str_random(30),
+        "campos_por_defecto" => $Datos["campos_por_defecto"],
         "id_evento" => $Datos["evento_asociado"]
        ]);
 

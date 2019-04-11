@@ -13,15 +13,15 @@ class InscripcionController extends Controller
     public function showForm($codigo){
     	$Formulario=Formularios::whereHas('eventos', function ($query) {
                     $query->where('id_usuario', session()->get("id"));
-                })->with("campos.subcampos")->where("codigo", $codigo)->get();
+                })->with("campos.subcampos")->with("eventos.categorias")->where("codigo", $codigo)->get();
 
     	return view("inscripcion.inscripcion", ["Formulario" => $Formulario]);
     }
 
     public function storeData(Request $Request)
     {
-
-  		$v = \Validator::make($Request->only("nombre_participante", "apellido", "email_participante", "dni", "nacimiento", "sexo", "id_estado_inscripcion"), [
+      if ($Request->nombre_participante) {
+        $v = \Validator::make($Request->only("nombre_participante", "apellido", "email_participante", "dni", "nacimiento", "sexo", "id_estado_inscripcion"), [
               'nombre_participante'   => 'required',
               'apellido'              => 'required',
               'email_participante'    => 'required|unique:participantes',
@@ -29,16 +29,33 @@ class InscripcionController extends Controller
               'nacimiento'            => 'required|date|date_format:Y-m-d',
               'sexo'                  => 'required|numeric',
               'id_estado_inscripcion' => 'required|numeric',
-          ]);
+          ]); 
          if ($v->fails()){
               return Redirect::back()->withErrors($v)->withInput();
-         } else{
+              die();
+         } 
+            $DatEx=$Request->except('_token', "nombre_participante", "apellido", "email_participante", "dni", "nacimiento", "sexo", "id_estado_inscripcion", "edad", "id_categoria");
+         		Participantes::insert($Request->only("nombre_participante", "apellido", "email_participante", "dni", "nacimiento", "sexo", "edad", "id_estado_inscripcion", "id_categoria"));
+           	$Part = Participantes::where("email_participante", $Request->email_participante)->select("id")->first();
+      } else{
+          $v = \Validator::make($Request->only("email_participante"), [
+              'email_participante'    => 'required|exists:participantes',
+          ]);
 
-         		Participantes::insert($Request->only("nombre_participante", "apellido", "email_participante", "dni", "nacimiento", "sexo", "edad", "id_estado_inscripcion"));
+          if ($v->fails()){
+              return Redirect::back()->withErrors($v)->withInput();
+              die();
+         }
 
-           	$Part =	Participantes::where("email_participante", $Request->email_participante)->select("id")->first();
+         $DatEx = $Request->except('_token', "email_participante", "id_categoria");
+         $Part =  Participantes::where("email_participante", $Request->email_participante)->select("id")->first();
+      }
 
-            foreach ($Request->except('_token', "nombre_participante", "apellido", "email_participante", "dni", "nacimiento", "sexo", "id_estado_inscripcion", "edad") as $key => $part) {
+        if (DatosParticipante::where("id_participante", $Part->id)->first()) {
+          return redirect()->back()->with('error_participante_existente', 'El usuario registrado al email que ingresaste ya ha llenado este formulario anteriormente')->withInput();
+          die();
+        } else{
+            foreach ($DatEx as $key => $part) {
               if (explode("_", $key)[0]=="file") {
 
                   $file = $Request->file($key);
@@ -61,8 +78,20 @@ class InscripcionController extends Controller
 
               }
             }
+        }
             return redirect()->back()->with('mensaje', 'Listo! Tus datos han sido almacenados exitosamente, muchas gracias por tu registro');
-         }
+
+
+
+
+
+
+
+
+
+
+
+
      }
 
       public function showDatosParticipantes(Request $Request){

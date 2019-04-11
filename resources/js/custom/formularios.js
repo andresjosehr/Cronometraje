@@ -385,9 +385,12 @@ $(document).ready(function() {
 		swal.close();
 
 		var options="<option>"+window.Data[window.num]["descripcion"]+"</option>";
-		for (var i = 0; i < window.Data[window.num]["Opciones"].length; i++) {
+		for (var i in window.Data[window.num]["Opciones"]){
 			options=options+"<option>"+window.Data[window.num]["Opciones"][i]+"</option>";
 		}
+
+		console.log(window.Data[window.num]["Opciones"].length)
+		console.log(window.Data[window.num]["Opciones"])
 
 		$("#div_base").append('<div class="row" id="'+window.Data[window.num]["codigo_div"]+'" style="display:none; width:100%" >'+
 								'<div class="form-group col-md-8">'+
@@ -428,7 +431,7 @@ $(document).ready(function() {
 
 
 		var options="";
-		for (var i = 0; i < window.Data[window.num]["Opciones"].length; i++) {
+		for (var i in window.Data[window.num]["Opciones"]){
 			options=options+"<option>"+window.Data[window.num]["Opciones"][i]+"</option>";
 		}
 		  $("#div_base").append('<div class="row" id="'+window.Data[window.num]["codigo_div"]+'" style="width:100%" >'+
@@ -609,9 +612,12 @@ window.validation=function(tipito){
 						'<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>'+
 					'</div>'+
 				'</div>'+
-				'<div class="form-group col-md-12">'+
+				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+tipito+'">'+
 					'<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>'+
+				'</div>'+
+				'<div class="form-group col-md-6">'+
+					'<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>'+
 				'</div>'+
 			'</div>';
 		}
@@ -642,9 +648,12 @@ window.validation=function(tipito){
 						'<label class="custom-control-label crear_form_custom_control-label" for="pdf">PDF</label>'+
 					'</div>'+
 				'</div>'+
-				'<div class="form-group col-md-12">'+
+				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+tipito+'">'+
 					'<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>'+
+				'</div>'+
+				'<div class="form-group col-md-6">'+
+					'<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>'+
 				'</div>'+
 			'</div>';
 		}
@@ -676,9 +685,12 @@ window.validation=function(tipito){
 						'<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>'+
 					'</div>'+
 				'</div>'+
-				'<div class="form-group col-md-12">'+
+				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+tipito+'">'+
 					'<button onclick="prueba()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>'+
+				'</div>'+
+				'<div class="form-group col-md-6">'+
+					'<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>'+
 				'</div>'+
 			'</div>';
 		}
@@ -710,9 +722,12 @@ window.validation=function(tipito){
 						'<label class="custom-control-label crear_form_custom_control-label" for="obli">Obligatorio</label>'+
 					'</div>'+
 				'</div>'+
-				'<div class="form-group col-md-12">'+
+				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+tipito+'">'+
 					'<button onclick="prueba()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>'+
+				'</div>'+
+				'<div class="form-group col-md-6">'+
+					'<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>'+
 				'</div>'+
 			'</div>';
 		}
@@ -722,9 +737,12 @@ window.validation=function(tipito){
 				'<div class="form-group col-md-12">'+
 					'<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Introduce el codigo del boton de pago" required=""></textarea>'+
 				'</div>'+
-				'<div class="form-group col-md-12">'+
+				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+tipito+'">'+
 					'<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>'+
+				'</div>'+
+				'<div class="form-group col-md-6">'+
+					'<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>'+
 				'</div>'+
 			'</div>';
 		}
@@ -734,9 +752,12 @@ window.validation=function(tipito){
 				'<div class="form-group col-md-12">'+
 					'<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Escribe el texto de ayuda" required=""></textarea>'+
 				'</div>'+
-				'<div class="form-group col-md-12">'+
+				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+tipito+'">'+
 					'<button onclick="verificar_info_campo()" class="btn btn-primary btn-block" type="button">Añadir campo al formulario</button>'+
+				'</div>'+
+				'<div class="form-group col-md-6">'+
+					'<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>'+
 				'</div>'+
 			'</div>';
 		}
@@ -751,10 +772,13 @@ window.validation=function(tipito){
 					                 '</span>'+
 					        '</label>'+
 				'</div>'+
-				'<div class="form-group col-md-12">'+
+				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+tipito+'">'+
 					'<button onclick="verificar_info_campo()" id="dfgkm566" class="btn btn-primary btn-block" type="button">Añadir imagen al formulario</button>'+
 					'<div class="upd_participante_loading loading" style="left: 48%;"></div>'
+				'</div>'+
+				'<div class="form-group col-md-6">'+
+					'<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>'+
 				'</div>'+
 			'</div>';
 
@@ -843,10 +867,10 @@ window.swaleditField=function(num){
 	if (window.Data[num]["tipo"]=="text" || window.Data[num]["tipo"]=="email" || window.Data[num]["tipo"]=="date") {
 			var validation = '<div class="form-row">'+
 				'<div class="form-group col-md-12">'+
-					'<input type="text" class="form-control" id="nombre_field" placeholder="'+window.Data[num]["nombre"]+' | Nombre del campo" required="">'+
+					'<input type="text" class="form-control" id="nombre_field" placeholder="Nombre del campo" value="'+window.Data[num]["nombre"]+'" required="">'+
 				'</div>'+
 				'<div class="form-group col-md-12">'+
-					'<input type="text" class="form-control" id="descripcion_field" placeholder="'+window.Data[num]["descripcion"]+' | Descripcion del campo" required="">'+
+					'<input type="text" class="form-control" id="descripcion_field" placeholder="Descripcion del campo" value="'+window.Data[num]["descripcion"]+'" required="">'+
 				'</div>'+
 				'<div class="form-group col-md-12">'+
 					'<div class="custom-control custom-toggle custom-toggle-sm mb-1">'+
@@ -867,10 +891,10 @@ window.swaleditField=function(num){
 
 		if (window.Data[num]["tipo"]=="select" || window.Data[num]["tipo"]=="multiselect") {
 			var opciones='';
-			for (var i = 2; i < window.Data[num]["Opciones"].length; i++) {
+			for (var i in window.Data[num]["Opciones"]){
 				opciones=opciones+'<div class="form-group col-md-12" id="sub_field_select_content'+window.num_select+'">'+
 									'<div style="display: flex">'+
-										'<input type="text" class="form-control" id="sub_field_select_'+window.num_select+'" placeholder="'+window.Data[num]["Opciones"][i]+'" required="">'+
+										'<input type="text" class="form-control" id="sub_field_select_'+window.num_select+'" value="'+window.Data[num]["Opciones"][i]+'" placeholder="Ingresa un valor" required="">'+
 										'<button onclick="remove_field_select(sub_field_select_content'+window.num_select+','+window.num_select+')" type="button" class="btn btn-sm btn-danger mr-1">Eliminar</button>'+
 									'</div>'+
 								 '</div>'
@@ -878,18 +902,18 @@ window.swaleditField=function(num){
 			}
 			var validation = '<div class="form-row">'+
 				'<div class="form-group col-md-12">'+
-					'<input type="text" class="form-control" id="nombre_field" placeholder="'+window.Data[num]["nombre"]+'" required="">'+
+					'<input type="text" class="form-control" id="nombre_field" placeholder="Escribe el nombre del campo" value="'+window.Data[num]["nombre"]+'" required="">'+
 				'</div>'+
 				'<div class="form-group col-md-12">'+
-					'<input type="text" class="form-control" id="descripcion_field" placeholder="'+window.Data[num]["descripcion"]+'" required="">'+
+					'<input type="text" class="form-control" id="descripcion_field" placeholder="Escribe un valor" value="'+window.Data[num]["descripcion"]+'" required="">'+
 				'</div>'+
 				'<div class="select_field_create">'+
 					'<div class="swal-title">Opciones del campo</div>'+
 					'<div class="form-group col-md-12">'+
-						'<input type="text" class="form-control" id="sub_field_select_0" placeholder="'+window.Data[num]["Opciones"][0]+'" required="">'+
+						'<input type="text" class="form-control" id="sub_field_select_0" placeholder="Escribe un valor" value="'+window.Data[num]["Opciones"][0]+'" required="">'+
 					'</div>'+
 					'<div class="form-group col-md-12">'+
-						'<input type="text" class="form-control" id="sub_field_select_1" placeholder="'+window.Data[num]["Opciones"][1]+'" required="">'+
+						'<input type="text" class="form-control" id="sub_field_select_1" placeholder="Escribe un valor" value="'+window.Data[num]["Opciones"][1]+'" required="">'+
 					'</div>'+
 					opciones+
 					'<div id="div_base_select"></div>'+
@@ -929,10 +953,10 @@ window.swaleditField=function(num){
 			}
 			var validation = '<div class="form-row">'+
 				'<div class="form-group col-md-12">'+
-					'<input type="text" class="form-control" id="nombre_field" placeholder="'+window.Data[num]["nombre"]+' | Nombre del campo" required="">'+
+					'<input type="text" class="form-control" id="nombre_field" placeholder="Nombre del campo" value="'+window.Data[num]["nombre"]+'" required="">'+
 				'</div>'+
 				'<div class="form-group col-md-12">'+
-					'<input type="text" class="form-control" id="descripcion_field" placeholder="'+window.Data[num]["descripcion"]+' | Descripcion del campo" required="">'+
+					'<input type="text" class="form-control" id="descripcion_field" placeholder="Descripcion del campo" value="'+window.Data[num]["descripcion"]+'" required="">'+
 				'</div>'+
 				'<div class="form-group col-md-4">'+
 					'<div class="custom-control custom-toggle custom-toggle-sm mb-1">'+
@@ -966,7 +990,7 @@ window.swaleditField=function(num){
 		if (window.Data[num]["tipo"]=="pago") {
 			var validation = '<div class="form-row">'+
 				'<div class="form-group col-md-12">'+
-					'<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="'+window.Data[num]["codigo"]+'" required=""></textarea>'+
+					'<textarea type="textarea" style="width: 100%;height: 150px;" class="form-control" id="descripcion_field" placeholder="Pega el codigo del boton aqui" value="'+window.Data[num]["codigo"]+'" required="">'+window.Data[num]["codigo"]+'</textarea>'+
 				'</div>'+
 				'<div class="form-group col-md-6">'+
 					'<input type="hidden" id="hidden_tipe_field" value="'+window.Data[num]["tipo"]+'">'+
@@ -1393,6 +1417,14 @@ window.prevStore=function(){
 }
 
 window.StoreForm=function(Datos){
+
+	if ($('#CamposDefecto').is(":checked")==true) {
+		window.Data["campos_por_defecto"]=1;
+	} else{
+		window.Data["campos_por_defecto"]=0;
+	}
+
+	console.log($("#CamposDefecto").attr("checked"));
 
 	if (window.num!=0) {
 
