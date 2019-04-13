@@ -27,11 +27,20 @@ window.onload=function(){
       });
     }
 }
+
+
 window.editarParticipante=function(participante, convert) {
 
   if (convert==1) {
     participante=JSON.parse(participante);
   }
+
+  var categorias=[]; var i=0;
+ for(var cate in participante.categorias){
+      categorias[i]= participante.categorias[cate].id;
+      i++;
+  }
+  console.log(categorias)
 
    DatosParticipanteFormulario(participante["email_participante"]);
 
@@ -43,7 +52,8 @@ window.editarParticipante=function(participante, convert) {
   $("#edit_path #iden").val(participante["dni"])
   $("#edit_path #nacimiento").val(participante["nacimiento"])
   $("#edit_path #sexo").val(participante["sexo"])
-  $("#edit_path #id_categoria").val(participante["id_categoria_cat"])
+  $("#edit_path #id_categoria").val(participante.categorias.id)
+  $('.id_catt ').multiselect('select', categorias);
   $("#edit_path #cate").val(participante["id_categoria_cat"])
   $("#edit_path #id_estado_inscripcion").val(participante["id_estado_inscripcion_ins"])
   $("#edit_path #id_part").val(participante["id_participante"])

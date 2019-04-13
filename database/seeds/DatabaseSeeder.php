@@ -16,9 +16,10 @@ class DatabaseSeeder extends Seeder
                     DB::table('sub_campos')->delete();
                     DB::table('campos')->delete();
                     DB::table('formularios')->delete();
+                    DB::table('participantes_categorias')->delete();
                     DB::table('participantes')->delete();
-                    DB::table('categorias')->delete();
                     DB::table('eventos')->delete();
+                    DB::table('categorias')->delete();
                     DB::table('usuarios')->delete();
                     DB::table('roles_de_usuario')->delete();
                     DB::table('estado_inscripcion')->delete();
@@ -80,7 +81,27 @@ class DatabaseSeeder extends Seeder
                     // }
 
 
-                    $i=1;
+
+                    $i=1; $EdadMinima=0; $EdadMaxima=9; $Sexo=0;
+                    foreach (range(1,20) as $index) {
+                        $EdadMinima=$EdadMinima+10;
+                        $EdadMaxima=$EdadMaxima+10;
+                        DB::table("categorias")->insert([
+                            'id' => $i,
+                            'nombre_categoria'     => "Categoria ".$i,
+                            'edad_minima' => $EdadMinima,
+                            'edad_maxima' => $EdadMaxima,
+                            'sexo' => $Sexo,
+                            'id_usuario' => "1",
+                        ]);
+                        if ($EdadMinima==90) {
+                            $EdadMinima=0; $EdadMaxima=9; $Sexo=1;
+                        }
+                        $i++;
+                    }
+
+
+                       $i=1;
                     foreach (range(1,20) as $index) {
                         DB::table("eventos")->insert([
                             'id' => $i,
@@ -95,28 +116,14 @@ class DatabaseSeeder extends Seeder
                             'auto_numeracion' => "1",
                             'inscripcion_habilitada' => "1",
                             'id_usuario' => "1",
+                            'mensaje_inscripcion' => $faker->text($maxNbChars = 500),
+                            'mensaje_aprobacion_pago' => $faker->text($maxNbChars = 500),
+                            'id_categoria' => $i,
                         ]);
                         $i++;
                     }
 
-                    $i=1; $EdadMinima=0; $EdadMaxima=9; $Sexo=0;
-                    foreach (range(1,18) as $index) {
-                        $EdadMinima=$EdadMinima+10;
-                        $EdadMaxima=$EdadMaxima+10;
-                        DB::table("categorias")->insert([
-                            'id' => $i,
-                            'nombre_categoria'     => "Categoria ".$i,
-                            'edad_minima' => $EdadMinima,
-                            'edad_maxima' => $EdadMaxima,
-                            'sexo' => $Sexo,
-                            'id_evento' => $i,
-                        ]);
-                        if ($EdadMinima==90) {
-                            $EdadMinima=0; $EdadMaxima=9; $Sexo=1;
-                        }
-                        $i++;
-                    }
-
+                    
                     $Categorias=App\Categorias::all();
 
                     $i=1;
@@ -131,16 +138,22 @@ class DatabaseSeeder extends Seeder
                             }
                         }
                         DB::table("participantes")->insert([
-                            'id' => $i,
-                            'nombre_participante'     => $faker->firstName,
-                            'apellido'     => $faker->lastname,
-                            'email_participante'     => $faker->email,
-                            'dni'     => $faker->numberBetween(1000000,9999999),
-                            'nacimiento' => $faker->date,
-                            'sexo' =>  $Usuario["Sexo"],
-                            'edad' => $Usuario["Edad"],
-                            'id_categoria' =>  $Cate,
+                            'id'                    => $i,
+                            'nombre_participante'   => $faker->firstName,
+                            'apellido'              => $faker->lastname,
+                            'email_participante'    => $faker->email,
+                            'dni'                   => $faker->numberBetween(1000000,9999999),
+                            'nacimiento'            => $faker->date,
+                            'sexo'                  =>  $Usuario["Sexo"],
+                            'edad'                  => $Usuario["Edad"],
                             'id_estado_inscripcion' => $faker->numberBetween(1,4),
+                            'id_usuario'            => "1",
+                        ]);
+
+
+                        DB::table("participantes_categorias")->insert([
+                            'id_participante'     => $i,
+                            'id_categoria'     => $Cate,
                         ]);
                         $i++;
                     }

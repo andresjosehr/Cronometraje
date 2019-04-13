@@ -17,13 +17,9 @@ class ParticipantesController extends Controller
      */
     public function index()
     {
-         $Participantes = Participantes::select('participantes.id as id_participante', 'participantes.*', 'categorias.id as id_categoria_cat', 'categorias.*', 'estado_inscripcion.id as id_estado_inscripcion_ins', 'estado_inscripcion.nombre_estado_inscripcion')
-                            ->Join("categorias", "participantes.id_categoria", "=", "categorias.id")
-                            ->Join("eventos", "categorias.id_evento", "=", "eventos.id")
-                            ->Join("estado_inscripcion", "participantes.id_estado_inscripcion", "=", "estado_inscripcion.id")
-                            ->where("eventos.id_usuario", session()->get("id"))->get(); 
-
-        $Categorias = Categorias::select('categorias.id', 'categorias.nombre_categoria')->join("eventos", "categorias.id_evento", "=", "eventos.id")->where("eventos.id_usuario", session()->get("id"))->get();
+        
+        $Participantes = Participantes::where("id_usuario", session()->get("id"))->with("estado_inscripcion")->with("categorias")->get();
+        $Categorias = Categorias::where("id_usuario", session()->get("id"))->get();
 
 
         return view("participantes.participantes", ["Participantes" => $Participantes, "Categorias" => $Categorias]);

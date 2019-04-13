@@ -126,7 +126,11 @@ __webpack_require__(/*! ./../../resources/js/custom/formularios.js */ "./resourc
 
 __webpack_require__(/*! ./../../resources/js/custom/vista-editar_formularios.js */ "./resources/js/custom/vista-editar_formularios.js");
 
-__webpack_require__(/*! ./../../resources/js/custom/inscripcion.js */ "./resources/js/custom/inscripcion.js"); // window.Vue = require('vue');
+__webpack_require__(/*! ./../../resources/js/custom/inscripcion.js */ "./resources/js/custom/inscripcion.js");
+
+__webpack_require__(/*! ./../../resources/js/custom/eventos.js */ "./resources/js/custom/eventos.js");
+
+__webpack_require__(/*! ./../../resources/js/custom/categorias.js */ "./resources/js/custom/categorias.js"); // window.Vue = require('vue');
 
 /**
  * The following block of code may be used to automatically register your
@@ -147,6 +151,379 @@ __webpack_require__(/*! ./../../resources/js/custom/inscripcion.js */ "./resourc
 // const app = new Vue({
 //     el: '#app'
 // });
+
+/***/ }),
+
+/***/ "./resources/js/custom/categorias.js":
+/*!*******************************************!*\
+  !*** ./resources/js/custom/categorias.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+window.editarCategoria = function (categoria) {
+  categoria = JSON.parse(categoria);
+
+  for (var propiedad in categoria) {
+    $(".edit_categoria #" + propiedad).val(categoria[propiedad]);
+    $(".edit_categoria #" + propiedad + ' option[value="' + categoria[propiedad] + '"]').attr('checked', true);
+  }
+
+  if (propiedad == "sexo") {
+    $(".edit_evento #sexo").val(evento.sexo);
+    $(".edit_evento #" + propiedad + ' option[value="' + evento.sexo + '"]').attr('checked', true);
+  }
+
+  $(".editar_modal").click();
+};
+
+window.crearCategoria = function () {
+  var DatCre = {};
+  $(".crear_categoria input, .crear_categoria select, .crear_categoria textarea").map(function (key, val) {
+    $(".crear_categoria #" + val.id).removeClass("is-invalid");
+    $("small").remove();
+    DatCre[val.id] = val.value;
+
+    if (val.id == "inscripcion_habilitada" || val.id == "auto_email" || val.id == "auto_numeracion") {
+      if ($('#' + val.id).prop('checked') == true) {
+        DatCre[val.id] = 1;
+      } else {
+        DatCre[val.id] = 0;
+      }
+    }
+  });
+  $(".crear_part_btn").hide("fast", function () {
+    $(".crear_eve_lo").show("fast");
+  });
+  console.log(DatCre);
+  $.ajax({
+    type: 'post',
+    url: url + "/categorias",
+    data: DatCre,
+    success: function success(result) {
+      console.log(result);
+      $(".crear_eve_lo").hide("fast", function () {
+        $(".crear_part_btn").show("fast");
+      });
+
+      if (result != "Exito") {
+        for (var key in result) {
+          $(".crear_categoria #" + key).addClass("is-invalid");
+          $(".crear_categoria #" + key).after('<small id="us_error err_part" style="color:red;">' + result[key] + '</small>');
+        }
+      } else {
+        $("#home").empty();
+        $("#home").append('<div id="vista_gategorias"></div>');
+        $("#vista_gategorias").load("categoriras_act");
+        $(".crear_categoria input, .crear_categoria select").map(function (key, val) {
+          $(".crear_categoria #" + val.id).val("");
+        });
+        swal("Listo!", "El evento ha sido registrado exitosamente", "success");
+      }
+    }
+  });
+};
+
+window.actualizarCategoria = function () {
+  $("small").remove();
+  var Data = {},
+      val = 0;
+  $(".edit_categoria input, .edit_categoria select, .edit_categoria textarea").map(function (key, value) {
+    $(".edit_categoria #" + value.id).removeClass("is-invalid");
+
+    if (value.value == "") {
+      $(".edit_categoria #" + value.id).addClass("is-invalid");
+      $(".edit_categoria #" + value.id).after('<small id="us_error err_part" style="color:red;">Este campo es obligatorio</small>');
+      val++;
+    }
+
+    Data[value.id] = value.value;
+  });
+
+  if (Number(Data.edad_minima) >= Number(Data.edad_maxima)) {
+    $(".edit_categoria #edad_maxima").addClass("is-invalid");
+    $(".edit_categoria #edad_maxima").after('<small id="us_error err_part" style="color:red;">La edad minima debe ser menor que la edad maxima</small>');
+    $(".edit_categoria #edad_minima").addClass("is-invalid");
+    $(".edit_categoria #edad_minima").after('<small id="us_error err_part" style="color:red;">La edad minima debe ser menor que la edad maxima</small>');
+    val++;
+  }
+
+  if (val == 0) {
+    updateCategoria(Data);
+  }
+};
+
+window.updateCategoria = function (Datos) {
+  $(".upd_participante_btn").hide("fast", function () {
+    $(".cate_lo").show("fast");
+  });
+  Datos._method = "post";
+  $.ajax({
+    type: 'PUT',
+    url: url + "/categorias/" + Datos.id,
+    data: Datos,
+    success: function success(result) {
+      $(".cate_lo").hide("fast", function () {
+        $(".upd_participante_btn").show("fast");
+      });
+
+      if (!result[0].id) {
+        for (var key in result) {
+          $(".edit_categoria #" + key).addClass("is-invalid");
+          $(".edit_categoria #" + key).after('<small id="us_error err_part" style="color:red;">' + result[key] + '</small>');
+        }
+      } else {
+        $("#info_cat_" + result[0].id).empty();
+
+        for (var key in result[0]) {
+          if (key != "id_usuario" && key != "sexo") {
+            $("#info_cat_" + result[0].id).append("<td>" + result[0][key] + "</td>");
+          }
+
+          if (key == "sexo") {
+            if (result[0][key] == 1) {
+              $("#info_cat_" + result[0].id).append("<td>Femenino</td>");
+            } else {
+              $("#info_cat_" + result[0].id).append("<td>Masculino</td>");
+            }
+          }
+        }
+
+        var info = JSON.stringify(result[0]);
+        info = info.replace(/"/g, "&quot;");
+        $("#info_cat_" + result[0].id).append('<td style="display: flex;" id="btn_eve">' + '<button onclick="editarevento(' + "'" + info + "'" + ')" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-primary mr-2"><i style="font-size: 25px" class="material-icons">border_color</i></button>' + '<button onclick="editarParticipante()" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-danger mr-2"><i style="font-size: 25px" class="material-icons">delete</i></button>' + '</td>');
+        swal("Listo!", "Categoria actualizada exitosamente", "success");
+      }
+    }
+  });
+};
+
+window.eliminarCategoria = function (id) {
+  swal({
+    title: "Espera!",
+    text: "¿Estas seguro de eliminar esta categoria? Los participantes asignados a este categoria quedaran sin categoria asignada, al igual que el evento asociado",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true
+  }).then(function (willDelete) {
+    if (willDelete) {
+      swal("Listo!", "Categoria eliminado exitosamente", "success");
+      $("#info_cat_" + id).hide("slow");
+      $("#info_cat_" + id).remove();
+      $.ajax({
+        type: 'DELETE',
+        url: url + "/categorias/" + id,
+        success: function success(result) {
+          console.log(result);
+        }
+      });
+    }
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/js/custom/eventos.js":
+/*!****************************************!*\
+  !*** ./resources/js/custom/eventos.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+window.onload = function () {
+  $('#fecha').datepicker({});
+  $('#crear_evento #fecha').datepicker({});
+};
+
+window.editarevento = function (evento) {
+  evento = JSON.parse(evento);
+
+  for (var propiedad in evento) {
+    $(".edit_evento #" + propiedad).val(evento[propiedad]);
+    $(".edit_evento #" + propiedad + ' option[value="' + evento[propiedad] + '"]').attr('checked', true);
+
+    if (propiedad == "id_categoria") {
+      $(".edit_evento #" + propiedad).val(evento.id_categoria);
+      $(".edit_evento #" + propiedad + ' option[value="' + evento.id_categoria + '"]').attr('checked', true);
+    }
+
+    if (propiedad == "fecha") {
+      $(".edit_evento #" + propiedad).val(FormatDate(evento[propiedad]));
+    }
+  }
+
+  $(".editar_modal").click();
+};
+
+window.actualizarEvento = function () {
+  $("small").remove();
+  var Data = {},
+      val = 0;
+  $(".edit_evento input, .edit_evento select, .edit_evento textarea").map(function (key, value) {
+    $(".edit_evento #" + value.id).removeClass("is-invalid");
+
+    if (value.value == "") {
+      $(".edit_evento #" + value.id).addClass("is-invalid");
+      $(".edit_evento #" + value.id).after('<small id="us_error err_part" style="color:red;">Este campo es obligatorio</small>');
+      val++;
+    }
+
+    emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+
+    if (value.id == "email" && !emailRegex.test(value.value)) {
+      $(".edit_evento #" + value.id).addClass("is-invalid");
+      $(".edit_evento #" + value.id).after('<small id="us_error err_part" style="color:red;">Debes introducir un email valido</small>');
+      val++;
+    }
+
+    if (value.id == "precio" && !/^\d+$/.test(value.value)) {
+      $(".edit_evento #" + value.id).addClass("is-invalid");
+      $(".edit_evento #" + value.id).after('<small id="us_error err_part" style="color:red;">Este campo debe ser numerico</small>');
+      val++;
+    }
+
+    Data[value.id] = value.value;
+  });
+  Data["fecha"] = Data["fecha"].split("/").reverse().join("-");
+
+  if (val == 0) {
+    updateEvento(Data);
+  }
+};
+
+window.updateEvento = function (Datos) {
+  Datos._method = "post";
+  $.ajax({
+    type: 'PUT',
+    url: url + "/eventos/" + Datos.id,
+    data: Datos,
+    success: function success(result) {
+      if (!result[0].id) {
+        for (var key in result) {
+          $(".edit_evento #" + key).addClass("is-invalid");
+          $(".edit_evento #" + key).after('<small id="us_error err_part" style="color:red;">' + result[key] + '</small>');
+        }
+      } else {
+        $("#info_event_" + result[0].id).empty();
+
+        for (var key in result[0]) {
+          if (key != "tipo" && key != "categorias" && key != "inscripcion_habilitada" && key != "auto_email" && key != "auto_numeracion" && key != "id_usuario" && key != 'id_categoria' && key != 'mensaje_inscripcion' && key != 'mensaje_aprobacion_pago') {
+            $("#info_event_" + result[0].id).append("<td>" + result[0][key] + "</td>");
+          }
+
+          if (key == "tipo") {
+            if (result[0][key] == 1) {
+              $("#info_event_" + result[0].id).append("<td>Basico</td>");
+            } else {
+              $("#info_event_" + result[0].id).append("<td>Premium</td>");
+            }
+          }
+
+          if (key == "categorias") {
+            $("#info_event_" + result[0].id).append("<td>" + result[0][key]["nombre_categoria"] + "</td>");
+          }
+
+          if (key == "inscripcion_habilitada") {
+            if (result[0][key] == 1) {
+              $("#info_event_" + result[0].id).append("<td>Abierta</td>");
+            } else {
+              $("#info_event_" + result[0].id).append("<td>Cerrada</td>");
+            }
+          }
+
+          if (key == "auto_email" || key == "auto_numeracion") {
+            if (result[0][key] == 1) {
+              $("#info_event_" + result[0].id).append("<td>Si</td>");
+            } else {
+              $("#info_event_" + result[0].id).append("<td>No</td>");
+            }
+          }
+        }
+
+        var info = JSON.stringify(result[0]);
+        info = info.replace(/"/g, "&quot;");
+        $("#info_event_" + result[0].id).append('<td style="display: flex;" id="btn_eve">' + '<button onclick="editarevento(' + "'" + info + "'" + ')" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-primary mr-2"><i style="font-size: 25px" class="material-icons">border_color</i></button>' + '<button onclick="editarParticipante()" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-danger mr-2"><i style="font-size: 25px" class="material-icons">delete</i></button>' + '</td>');
+        swal("Listo!", "Evento actualizado exitosamente", "success");
+      }
+    }
+  });
+};
+
+window.crearEvento = function () {
+  var DatCre = {};
+  $(".crear_evento input, .crear_evento select, .crear_evento textarea").map(function (key, val) {
+    $(".crear_evento #" + val.id).removeClass("is-invalid");
+    $("small").remove();
+    DatCre[val.id] = val.value;
+
+    if (val.id == "inscripcion_habilitada" || val.id == "auto_email" || val.id == "auto_numeracion") {
+      if ($('#' + val.id).prop('checked') == true) {
+        DatCre[val.id] = 1;
+      } else {
+        DatCre[val.id] = 0;
+      }
+    }
+  });
+  $(".crear_part_btn").hide("fast", function () {
+    $(".crear_eve_lo").show("fast");
+  });
+  console.log(DatCre);
+  $.ajax({
+    type: 'post',
+    url: url + "/eventos",
+    data: DatCre,
+    success: function success(result) {
+      $(".crear_eve_lo").hide("fast", function () {
+        $(".crear_part_btn").show("fast");
+      });
+
+      if (result != "Exito") {
+        for (var key in result) {
+          $(".crear_evento #" + key).addClass("is-invalid");
+          $(".crear_evento #" + key).after('<small id="us_error err_part" style="color:red;">' + result[key] + '</small>');
+        }
+      } else {
+        $("#home").empty();
+        $("#home").append('<div id="vista_eventos"></div>');
+        $("#vista_eventos").load("eventos_act");
+        $(".crear_evento input, .crear_evento select").map(function (key, val) {
+          $(".crear_evento #" + val.id).val("");
+        });
+        swal("Listo!", "El evento ha sido registrado exitosamente", "success");
+      }
+    }
+  });
+};
+
+window.eliminarEvento = function (id) {
+  swal({
+    title: "Espera!",
+    text: "¿Estas seguro de eliminar este evento? Los formularios asociados a este evento tambien seran eliminados",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true
+  }).then(function (willDelete) {
+    if (willDelete) {
+      swal("Listo!", "Formulario eliminado exitosamente", "success");
+      $("#info_event_" + id).hide("slow");
+      $("#info_event_" + id).remove();
+      $.ajax({
+        type: 'DELETE',
+        url: url + "/eventos/" + id,
+        success: function success(result) {}
+      });
+    }
+  });
+};
+
+window.FormatDate = function (inputDate) {
+  var date = new Date(inputDate);
+
+  if (!isNaN(date.getTime())) {
+    // Months use 0 index.
+    return date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
+  }
+};
 
 /***/ }),
 
@@ -1334,6 +1711,15 @@ window.editarParticipante = function (participante, convert) {
     participante = JSON.parse(participante);
   }
 
+  var categorias = [];
+  var i = 0;
+
+  for (var cate in participante.categorias) {
+    categorias[i] = participante.categorias[cate].id;
+    i++;
+  }
+
+  console.log(categorias);
   DatosParticipanteFormulario(participante["email_participante"]);
   $("#edit_path #nombre").val(participante["nombre_participante"]);
   $("#edit_path #email").val(participante["email_participante"]);
@@ -1342,7 +1728,8 @@ window.editarParticipante = function (participante, convert) {
   $("#edit_path #iden").val(participante["dni"]);
   $("#edit_path #nacimiento").val(participante["nacimiento"]);
   $("#edit_path #sexo").val(participante["sexo"]);
-  $("#edit_path #id_categoria").val(participante["id_categoria_cat"]);
+  $("#edit_path #id_categoria").val(participante.categorias.id);
+  $('.id_catt ').multiselect('select', categorias);
   $("#edit_path #cate").val(participante["id_categoria_cat"]);
   $("#edit_path #id_estado_inscripcion").val(participante["id_estado_inscripcion_ins"]);
   $("#edit_path #id_part").val(participante["id_participante"]);

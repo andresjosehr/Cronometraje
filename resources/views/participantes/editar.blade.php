@@ -44,7 +44,7 @@
             <div class="form-row">
               <div class="form-group col-md-6">
                 <strong class="text-muted d-block mb-2">Categoria</strong>
-                <select class="form-control" id="id_categoria" name="id_categoria">
+                <select id="id_categoria" class="id_catt" multiple="multiple" class="form-control">
                   @foreach ($Categorias as $Categoria)
                     <option value="{{$Categoria->id}}" >{{$Categoria->nombre_categoria}}</option>
                   @endforeach
@@ -100,6 +100,16 @@
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function(){
+  $('.id_catt').multiselect({
+         nonSelectedText: "Seleccionada una o varias categorias",
+         nSelectedText: "Seleccionados",
+         allSelectedText: false,
+       });
+  })
+</script>
 
 <style>
   #custom_form{

@@ -93,6 +93,12 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a class="nav-link sidebar_categorias" href="categorias">
+                  <i class="material-icons">category</i>
+                  <span>Categorias</span>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link sidebar_formularios" href="formularios">
                   <i class="material-icons">format_list_numbered</i>
                   <span>Formularios</span>

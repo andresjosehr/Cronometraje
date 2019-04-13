@@ -16,10 +16,10 @@
               <th>Tipo</th>
               <th>Estado pago</th>
               <th>Precio</th>
-              <th>Categoria</th>
               <th>Inscripcion</th>
               <th>Auto-email</th>
               <th>Auto-numeracion</th>
+              <th>Categoria</th>
               <th>Acciones</th>
             </tr>
         </thead>
@@ -33,16 +33,16 @@
               <th>Tipo</th>
               <th>Estado pago</th>
               <th>Precio</th>
-              <th>Categoria</th>
               <th>Inscripcion</th>
               <th>Auto-email</th>
               <th>Auto-numeracion</th>
+              <th>Categoria</th>
               <th>Acciones</th>
              </tr>
         </tfoot>
         <tbody id='ListaParticipantes'>
           @foreach ($Eventos as $Evento)
-            <tr>
+            <tr id="info_event_{{$Evento->id}}">
               <td>{{$Evento->id}}</td>
               <td>{{$Evento->nombre_evento}}</td>
               <td style="white-space: nowrap;">{{$Evento->fecha}}</td>
@@ -51,13 +51,13 @@
               <td>@if ($Evento->tipo==1) Basico @else Premium @endif</td>
               <td>{{$Evento->estado_pago}}</td>
               <td>{{$Evento->precio}} $</td>
-              <td>{{$Evento->categorias["nombre_categoria"]}}</td>
               <td>@if ($Evento->inscripcion_habilitada==1) Abierta @else Cerrada @endif</td>
               <td>@if ($Evento->auto_email==1) Si @else No @endif</td>
               <td>@if ($Evento->auto_numeracion==1) Si @else No @endif</td>
-              <td style="display: flex;">
-                <button onclick="editarParticipante('{{$Evento}}', '1')" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-primary mr-2"><i style="font-size: 25px" class="material-icons">border_color</i></button>
-                <button onclick="editarParticipante('{{$Evento}}', '1')" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-danger mr-2"><i style="font-size: 25px" class="material-icons">delete</i></button>
+              <td>{{$Evento->categorias["nombre_categoria"]}}</td>
+              <td style="display: flex;" id="btn_eve">
+                <button onclick="editarevento('{{$Evento}}')" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-primary mr-2"><i style="font-size: 25px" class="material-icons">border_color</i></button>
+                <button onclick="eliminarEvento('{{$Evento->id}}')" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-danger mr-2"><i style="font-size: 25px" class="material-icons">delete</i></button>
               </td>
             </tr>
           @endforeach

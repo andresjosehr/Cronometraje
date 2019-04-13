@@ -17,7 +17,7 @@ class EventosTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('nombre_evento');
-            $table->date('fecha');
+            $table->string('fecha');
             $table->string('email_evento')->unique();
             $table->string('localidad')->nullable();
             $table->integer('tipo')->unsigned();
@@ -27,6 +27,10 @@ class EventosTable extends Migration
             $table->boolean('inscripcion_habilitada');
             $table->boolean('auto_email');
             $table->boolean('auto_numeracion');
+            $table->text('mensaje_inscripcion');
+            $table->text('mensaje_aprobacion_pago');
+            $table->integer('id_categoria')->unsigned()->nullable()->defaul(null);
+            $table->foreign('id_categoria')->references('id')->on('categorias');
             $table->integer('id_usuario')->unsigned();
             $table->foreign('id_usuario')->references('id')->on('usuarios');
         });

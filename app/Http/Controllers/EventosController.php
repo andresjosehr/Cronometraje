@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Eventos;
+use App\Formularios;
+use App\Categorias;
 
 class EventosController extends Controller
 {
@@ -15,7 +17,13 @@ class EventosController extends Controller
     public function index()
     {   
         $Eventos = Eventos::where("id_usuario", session()->get("id"))->with("categorias")->get();
-        return view("eventos.eventos", ["Eventos" => $Eventos]);
+
+        $Categorias = Categorias::select("categorias.id", "categorias.nombre_categoria")
+                                    ->join("eventos", "categorias.id", "=", "eventos.id_categoria")
+                                    ->join("usuarios", "eventos.id_usuario", "=", "usuarios.id")
+                                    ->where("usuarios.id", session()->get("id"))->get();
+
+        return view("eventos.eventos", ["Eventos" => $Eventos, "Categorias" => $Categorias]);
     }
 
     /**
@@ -23,10 +31,47 @@ class EventosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function eventos_act()
+    {
+        $Eventos = Eventos::where("id_usuario", session()->get("id"))->with("categorias")->get();
+        $Categorias = Categorias::select("categorias.id", "categorias.nombre_categoria")
+                                    ->join("eventos", "categorias.id", "=", "eventos.id_categoria")
+                                    ->join("usuarios", "eventos.id_usuario", "=", "usuarios.id")
+                                    ->where("usuarios.id", session()->get("id"))->get();
+
+        return view("eventos.lista", ["Eventos" => $Eventos, "Categorias" => $Categorias]);
+    }
     public function create()
     {
         //
     }
+
+public function createPost(Request $Request)
+{
+
+    $Request->merge(["id_usuario" => session()->get("id")]);
+
+    $v = \Validator::make($Request->all(), [
+            'nombre_evento'          => 'required',
+            'fecha'                  => 'required',
+            'email_evento'           => 'required|unique:eventos',
+            'tipo'                   => 'required|numeric',
+            'localidad'              => 'required',
+            'estado_pago'            => 'required',
+            'precio'                 => 'required|numeric',
+            'inscripcion_habilitada' => 'required|numeric',
+            'auto_email'             => 'required|numeric',
+            'auto_numeracion'        => 'required|numeric',
+        ]);
+
+        if ($v->fails()){
+            return $v->errors();
+        } else{
+             Eventos::insert($Request->except("_token"));
+             return "Exito";
+        } 
+}
 
     /**
      * Store a newly created resource in storage.
@@ -34,9 +79,9 @@ class EventosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $Request)
     {
-        //
+
     }
 
     /**
@@ -68,9 +113,27 @@ class EventosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $Request, $id)
     {
-        //
+        $v = \Validator::make($Request->all(), [
+            'nombre_evento'          => 'required',
+            'fecha'                  => 'required',
+            'email_evento'           => 'required|unique:eventos,email_evento,'.$Request->id,
+            'tipo'                   => 'required|numeric',
+            'estado_pago'            => 'required',
+            'precio'                 => 'required|numeric',
+            'inscripcion_habilitada' => 'required|numeric',
+            'auto_email'             => 'required|numeric',
+            'auto_numeracion'        => 'required|numeric',
+        ]);
+
+        if ($v->fails()){
+            return $v->errors();
+        } else{
+             Eventos::where($Request->only("id"))->update($Request->except("_method"));
+        } 
+
+        return Eventos::where($Request->only("id"))->with("categorias")->get();
     }
 
     /**
@@ -80,7 +143,9 @@ class EventosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
+    {   
+        Formularios::where("id_evento", $id)->delete();
+        Eventos::where("id", $id)->delete();
+        return "Exito";
     }
 }

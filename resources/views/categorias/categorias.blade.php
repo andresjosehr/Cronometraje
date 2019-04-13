@@ -6,7 +6,7 @@
             <div class="page-header row no-gutters py-4">
               <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
                 <span class="text-uppercase page-subtitle">Panel de control</span>
-                <h3 class="page-title">Gestion de Eventos</h3>
+                <h3 class="page-title">Gestion de Categorias</h3>
               </div>
             </div>
             <!-- End Page Header -->
@@ -17,27 +17,27 @@
                 <div class="card card-small">
                   <div class="card-header border-bottom">
                     <div id='contenedor_status_participante'></div>
-                    <h6 class="m-0">Eventos</h6>
+                    <h6 class="m-0">Categorias</h6>
                   </div>
                   <div class="card-body" id="participantes">
                     <div class="row ">
                       <div class="col-12 col-sm-12">
                         <ul class="nav nav-tabs praticipantes_nav" id="myTab" role="tablist">
                           <li class="nav-item participante_tab_lista">
-                            <a class="nav-link tab1 active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Vista de Eventos</a>
+                            <a class="nav-link tab1 active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Vista de Categorias</a>
                           </li>
                           <li class="nav-item participante_tab_crear">
-                            <a onclick="limp()" class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Agregar Evento</a>
+                            <a onclick="limp()" class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Agregar Categorias</a>
                           </li>
                         </ul>
                       </div>
                     </div>
                     <div class="tab-content" id="myTabContent">
                       <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        @include("eventos.lista")
+                        @include("categorias.lista")
                       </div>
                       <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                         @include("eventos.crear")
+                        @include("categorias.crear")
                       </div>
                     </div>
                   </div>
@@ -87,5 +87,5 @@
         <a class="pp-cta extra-action" href="http://bit.ly/shards-dashboard-pro">Download</a>
       </div>
     </div>
-    @include("eventos.editar")
+
     @include("footer");

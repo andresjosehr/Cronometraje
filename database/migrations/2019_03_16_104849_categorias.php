@@ -20,7 +20,8 @@ class Categorias extends Migration
             $table->integer('edad_minima');
             $table->integer('edad_maxima');
             $table->string('sexo');
-            $table->integer('id_evento')->unsigned()->nullable()->defaul(null);
+            $table->integer('id_usuario')->unsigned();
+            $table->foreign('id_usuario')->references('id')->on('usuarios');
         });
     }
 
