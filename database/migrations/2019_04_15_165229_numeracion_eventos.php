@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ParticipantesCategoriasTable extends Migration
+class NumeracionEventos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class ParticipantesCategoriasTable extends Migration
      */
     public function up()
     {
-         Schema::create('participantes_categorias', function (Blueprint $table) {
+        Schema::create('numeracion_eventos', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_evento')->unsigned();
+            $table->foreign('id_evento')->references('id')->on('eventos');
             $table->integer('id_participante')->unsigned();
             $table->foreign('id_participante')->references('id')->on('participantes');
-            $table->integer('id_categoria')->unsigned();
-            $table->foreign('id_categoria')->references('id')->on('categorias');
-            $table->integer('id_estado_inscripcion')->default('1')->unsigned();
-            $table->foreign('id_estado_inscripcion')->references('id')->on('estado_inscripcion');
+            $table->integer('numeracion');
         });
     }
 

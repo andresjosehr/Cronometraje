@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\RolesDeUsuario;
 use App\Usuarios;
+use App\Eventos;
+use App\Participantes;
 use App\CambiarEmail;
 use App\ResetearContrasena;
 use App\RegistroAdminTemp;
@@ -17,6 +19,12 @@ class UsuariosController extends Controller
 {
     public function index(){
     	return view("usuario",["Rol" => RolesDeUsuario::where("id", session()->get('rol'))->first()]);
+    }
+
+    public function PrePanel(){
+        $Participantes = Participantes::where("id_usuario", session()->get("id"))->with("estado_inscripcion")->get();
+        $Eventos = Eventos::where("id_usuario", session()->get("id"))->count();
+        return view("panel-de-control", ["Participantes" => $Participantes, "Eventos" => $Eventos]);
     }
 
     public function editarPerfil(Request $Request){

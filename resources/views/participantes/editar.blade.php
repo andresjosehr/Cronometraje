@@ -63,6 +63,28 @@
             <input type="hidden" id="cate">
             <input type="hidden" id="id_part">
             <input type="hidden" id="iden">
+
+            <div class="form-group col-md-12">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Evento</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Evento 1</td>
+                    <td>Acreditado</td>
+                    <td>
+                      <button onclick="chan('', '2', 'inscrito')" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2 btn_inscrito_{{-- {{$Participante->id}} @if ($Participante->categorias->pivot->estado_inscripcion>=2 && $Participante->categorias->pivot->estado_inscripcion!=4) pul @endif --}}"><i style="font-size: 25px" class="material-icons">folder_shared</i></button>
+                      <button onclick="chan('', '3', 'acreditado')" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2 btn_acreditado_{{-- {{$Participante->id}} @if ($Participante->categorias->pivot->estado_inscripcion>=3 && $Participante->categorias->pivot->estado_inscripcion!=4) pul @endif --}}"><i style="font-size: 25px" class="material-icons">attach_money</i></button>
+                    </td>
+                </tbody>
+              </table>
+            </div>
+
         </div>
         <div class="col-sm-12 col-md-6">
           <div id="custom_form" style="display: none">
@@ -103,7 +125,7 @@
 
 <script>
   $(document).ready(function(){
-  $('.id_catt').multiselect({
+  $('.id_categoria').multiselect({
          nonSelectedText: "Seleccionada una o varias categorias",
          nSelectedText: "Seleccionados",
          allSelectedText: false,

@@ -34,9 +34,8 @@ Route::group([], function() {
 
 
 Route::group(['middleware' => ['VerificarSesion']], function () {
-    Route::get('panel-de-control', function(){
-    	return view("panel-de-control");
-	});
+	
+    Route::get('panel-de-control', "UsuariosController@PrePanel");
 		
 		Route::group([], function() {
 		    Route::get('perfil', "UsuariosController@index");
@@ -58,6 +57,7 @@ Route::post('inscripcion/{codigo_form}', "InscripcionController@storeData");
 Route::post('inscripcion', "InscripcionController@showDatosParticipantes");
 
 Route::post('participantes/createPost', 'ParticipantesController@createPost');
+Route::post('participantes/updateListPart', 'ParticipantesController@updateListPart');
 Route::resource('participantes', 'ParticipantesController');
 
 Route::post('formularios/createPost', "FormulariosController@createPost");

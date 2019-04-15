@@ -24,8 +24,6 @@ class ParticipantesTable extends Migration
             $table->string('sexo')->nullable();
             $table->integer('id_usuario')->unsigned();
             $table->foreign('id_usuario')->references('id')->on('usuarios');
-            $table->integer('id_estado_inscripcion')->default('1')->unsigned();
-            $table->foreign('id_estado_inscripcion')->references('id')->on('estado_inscripcion');;
         });
     }
 

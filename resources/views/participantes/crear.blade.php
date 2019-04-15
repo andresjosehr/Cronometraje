@@ -31,7 +31,7 @@
       </select>
     </div>
     <div class="form-group">
-      <select class="form-control" id="id_categoria" name="id_categoria">
+      <select class="form-control" id="id_categoria" name="id_categoria" multiple="multiple">
         <option value="0"><--- Dejar que el sistema asigne automaticamente la categoria ---></option>
         @foreach ($Categorias as $Categoria)
           <option value="{{$Categoria->id}}" >{{$Categoria->nombre_categoria}}</option>
@@ -40,15 +40,22 @@
       </select>
     </div>
     <div class="form-group">
-      <select class="form-control" id="id_estado_inscripcion">
-        <option value="0"><--- Estado Inscripcion ---></option>
-        <option value="1">Pre-Inscrito</option>
-        <option value="2">Inscrito</option>
-        <option value="3">Acreditado</option>
-        <option value="4">Anulado</option>
-      </select>
-    </div>
-    <div class="form-group">
       <button type="button" onclick="crearPart()" class="mb-2 btn btn-primary mr-2 btn-block crear_part_btn">Guardar</button>
+      <div align="center">
+        <div class="loading upd_participante_loading"></div>
+      </div>
   </div>
 </div>
+
+
+<script>
+  $(document).ready(function(){
+    $('.crear_usr #id_categoria').multiselect({
+           nonSelectedText: "Seleccionada una o varias categorias",
+           nSelectedText: "Seleccionados",
+           allSelectedText: false,
+         });
+
+    $('.crear_usr #id_categoria').multiselect("select", "0");
+  })
+</script>

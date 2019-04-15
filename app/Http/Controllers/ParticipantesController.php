@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use View;
 use App\Participantes;
 use App\Categorias;
+use App\Eventos;
+use App\EventosNumeracion;
 use App\DatosParticipante;
+use App\Participantes_Categorias;
 
 class ParticipantesController extends Controller
 {
@@ -18,9 +21,8 @@ class ParticipantesController extends Controller
     public function index()
     {
         
-        $Participantes = Participantes::where("id_usuario", session()->get("id"))->with("estado_inscripcion")->with("categorias")->get();
+        $Participantes = Participantes::where("id_usuario", session()->get("id"))->with("categorias")->get();
         $Categorias = Categorias::where("id_usuario", session()->get("id"))->get();
-
 
         return view("participantes.participantes", ["Participantes" => $Participantes, "Categorias" => $Categorias]);
 
@@ -45,28 +47,88 @@ class ParticipantesController extends Controller
 
     public function createPost(Request $Request)
     {
+
+        $Request->merge(["id_usuario" => session()->get("id")]);
+
+        if (count($Request->id_categoria)>1){
+        } else{
+            $Categorias = Categorias::where("id_usuario", session()->get("id"))->get();
+            $i=0;
+            foreach ($Categorias as $Categoria) {
+                if ($Categoria->edad_minima<=$Request->edad && $Categoria->edad_maxima>=$Request->edad && $Categoria->sexo==$Request->sexo) {
+                    $Cate[$i]=$Categoria->id;
+                    $i++;
+                }
+            }
+            $Request->merge(["id_categoria" => $Cate]);
+        }
+
         $v = \Validator::make($Request->all(), [
             'nombre_participante'   => 'required',
             'apellido'              => 'required',
             'email_participante'    => 'required|unique:participantes',
             'dni'                   => 'required|unique:participantes',
             'nacimiento'            => 'required|date|date_format:Y-m-d',
-            'sexo'                  => 'required|numeric',
-            'id_categoria'          => 'numeric',
-            'id_estado_inscripcion' => 'required|numeric',
+            'sexo'                  => 'required|numeric'
         ]);
        if ($v->fails()){
             return $v->errors();
        }
        else{
 
-        Participantes::insert($Request->all());
-        return Participantes::select('participantes.id as id_participante', 'participantes.*', 'categorias.id as id_categoria_cat', 'categorias.*', 'estado_inscripcion.id as id_estado_inscripcion_ins', 'estado_inscripcion.nombre_estado_inscripcion')
-                                        ->Join("categorias", "participantes.id_categoria", "=", "categorias.id")
-                                        ->Join("eventos", "categorias.id_evento", "=", "eventos.id")
-                                        ->Join("estado_inscripcion", "participantes.id_estado_inscripcion", "=", "estado_inscripcion.id")
-                                        ->where("participantes.email_participante", $Request->email_participante)->first(); 
+        Participantes::insert($Request->except("id_categoria"));
+        $Participante=Participantes::where($Request->only("email_participante"))->first();
+
+        foreach ($Request->id_categoria as $Categoria) {
+            if ($Categoria!=0) {
+                Participantes_Categorias::insert([
+                    "id_participante" => $Participante->id,
+                    "id_categoria" => $Categoria,
+                ]);
+            }
+        }
+
+             $Eventos = Eventos::whereIn("id_categoria", $Request->id_categoria)->with("numeracion")->get();
+            
+
+            foreach ($Eventos as $Evento) {
+                if ($Evento->auto_numeracion==1) {
+                    if ($Evento->numeracion=="[]") {
+                        EventosNumeracion::insert([
+                            "id_evento" => $Evento->id,
+                            "id_participante" => $Participante->id,
+                            "numeracion" => 1,
+                        ]);
+                    } else{
+                        $num=0;
+                        foreach ($Evento->numeracion as $Numeracion) {
+                            if($Numeracion->numeracion>$num){
+                                $num=$Numeracion->numeracion;
+                            }
+                        }
+                        EventosNumeracion::insert([
+                            "id_evento" => $Evento->id,
+                            "id_participante" => $Participante->id,
+                            "numeracion" => $num+1,
+                        ]);
+                    }
+                }
+
+                if ($Evento->auto_email==1) {
+                    self::emailInscripcion($Participante->email, $Evento->mensaje_inscripcion);
+                }
+            }
+
+          return "Exito";
+
        }
+    }
+
+    public function updateListPart(Request $Request){
+        $Participantes = Participantes::where("id_usuario", session()->get("id"))->with("categorias")->get();
+        $Categorias = Categorias::where("id_usuario", session()->get("id"))->get();
+
+        return view("participantes.lista", ["Participantes" => $Participantes, "Categorias" => $Categorias]);
     }
 
 
@@ -174,5 +236,19 @@ class ParticipantesController extends Controller
         $Part = Participantes::where("email_participante", $email)->select("id")->first();
         DatosParticipante::where("id_participante", $Part->id)->delete();
         return "Exito";
+    }
+
+
+    public function emailInscripcion($destinatario, $mensaje){
+
+
+        $header = "From: Cronometraje <no-responder@cronometraje.com> \r\n";
+        $header .= "Bcc: cronometraje@gmail.com \r\n";
+        $header .= "X-Mailer: PHP/" . phpversion() . " \r\n";
+        $header .= "Mime-Version: 1.0 \r\n";
+        $header .= "Content-Type: text/html";
+
+        $body=(string)View::make('emails.inscripcion_participante', ["mensaje" => $mensaje]);
+        mail($destinatario, "Cronometraje - Reseteo de contraseña", $body, $header) or die("No Enviado");
     }
 }

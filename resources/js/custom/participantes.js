@@ -35,12 +35,13 @@ window.editarParticipante=function(participante, convert) {
     participante=JSON.parse(participante);
   }
 
+  confEstadoPart(participante);
+
   var categorias=[]; var i=0;
  for(var cate in participante.categorias){
       categorias[i]= participante.categorias[cate].id;
       i++;
   }
-  console.log(categorias)
 
    DatosParticipanteFormulario(participante["email_participante"]);
 
@@ -321,6 +322,9 @@ window.limp=function(){
 
 
     if (val==0) {
+      // $(".crear_part_btn").hide("slow",function(){
+      //   $(".upd_participante_loading").show("slow");
+      // })
       var date = $("#nacimiento").val();
       var nacimiento = date.split("/").reverse().join("-");
       nacimiento = date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
@@ -343,43 +347,41 @@ window.limp=function(){
           nacimiento: nacimiento,
           edad: edad,
           sexo: $(".crear_usr #sexo option:selected").val(),
-          id_categoria: $(".crear_usr #id_categoria option:selected").val(),
+          id_categoria: $(".crear_usr #id_categoria").val(),
           id_estado_inscripcion: $(".crear_usr #id_estado_inscripcion option:selected").val()
         },
         success: function(msg){
+          console.log(msg);
+          $(".upd_participante_loading").hide("slow",function(){
+            $(".crear_part_btn").show("slow");
+          })
 
-            if (msg["email_participante"] == $(".crear_usr #email_participante").val()) {
-              swal("Listo", "Hemos registrado al participante exitosamente", "success");
-              $(".crear_usr #nombre_participante").val("")
-              $(".crear_usr #apellido").val("")
-              $(".crear_usr #email_participante").val("")
-              $(".crear_usr #dni").val("")
-              $(".crear_usr #sexo").val("0")
-              $(".crear_usr #id_categoria").val("0")
-              $(".crear_usr #id_estado_inscripcion").val("0")
-
-              var participanteActualizado = JSON.stringify(msg);
-              $("#ListaParticipantes").append('<tr id="'+participanteActualizado["id_participante"]+'"><td>'+participanteActualizado["id_participante"]+'</td>'+
-                '<td class="inscrito_'+participanteActualizado["id_estado_inscripcion_ins"]+'">'+participanteActualizado["nombre_estado_inscripcion"]+'</td>'+
-               '<td>'+participanteActualizado["nombre_participante"]+' '+participanteActualizado["apellido"]+'</td>'+
-               '<td>'+participanteActualizado["email_participante"]+'</td>'+
-               '<td>'+participanteActualizado["nombre_categoria"]+'</td>'+
-               '<td class="participantes_lista_acciones">'+
-                 "<button id='btn_"+participanteActualizado["id_participante"]+"' style='padding: .25rem .5rem;' type='button' class='mb-2 btn btn-primary mr-2'><i style='font-size: 25px' class='material-icons'>border_color</i></button>"+
-                 '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2"><i style="font-size: 25px" class="material-icons">folder_shared</i></button>'+
-                 '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2"><i style="font-size: 25px" class="material-icons">attach_money</i></button>'+
-                 '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2"><i style="font-size: 25px" class="material-icons">folder</i></button>'+
-              '</td></tr>');
-            } else{
-              $.each(msg, function( key, value ) {
-                $(".crear_usr #"+key).addClass("is-invalid");
-                $(".crear_usr #"+key).after('<small id="us_error err_part" style="color:red;">'+value[0]+'</small>');
-              });
+          if (msg=="Exito") {
+            $(".crear_usr input, .crear_usr select").not(':input[type=checkbox]').map(function(key, val){
+              $(".crear_usr #"+val.id).val("");
+            })
+            $('.crear_usr #id_categoria').multiselect("select", "0");
+              swal("Listo!", "El participnate ha sido registrado exitosamente", "success");
+              updateListPart()
+          } else{
+            for (var error in msg) {
+              $(".crear_usr #"+error).addClass("is-invalid");
+              $(".crear_usr #"+error).after('<small id="us_error err_part" style="color:red;">'+msg[error][0]+'</small>');
             }
+          }
         }
     });
 
     }
+  }
+
+  window.updateListPart=function(){
+
+    $("#home").empty();
+    $("#home").append("<div id='contenListPart'></div>");
+
+    $("#contenListPart").load(url+"/participantes/updateListPart", {Data: "Ex"});
+
   }
 
   window.DatosParticipanteFormulario=function(email_participante){
@@ -452,4 +454,11 @@ window.limp=function(){
                 });
           }
         });
+  }
+
+
+  window.confEstadoPart=function(participante){
+    participante.categorias.map(function(e){
+      console.log(e);
+    })
   }

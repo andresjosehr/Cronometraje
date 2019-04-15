@@ -146,7 +146,6 @@ class DatabaseSeeder extends Seeder
                             'nacimiento'            => $faker->date,
                             'sexo'                  =>  $Usuario["Sexo"],
                             'edad'                  => $Usuario["Edad"],
-                            'id_estado_inscripcion' => $faker->numberBetween(1,4),
                             'id_usuario'            => "1",
                         ]);
 
@@ -154,6 +153,7 @@ class DatabaseSeeder extends Seeder
                         DB::table("participantes_categorias")->insert([
                             'id_participante'     => $i,
                             'id_categoria'     => $Cate,
+                            'id_estado_inscripcion' => $faker->numberBetween(1,4),
                         ]);
                         $i++;
                     }
