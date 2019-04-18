@@ -7,7 +7,7 @@ $(document).ready(function() {
 
       window.calculateAge=function(){
 
-        if ($("#nacimiento").html()) {
+        if ($("#nacimiento").val()) {
 
          var date = $("#nacimiento").val();
          var nacimiento = date.split("/").reverse().join("-");
@@ -25,9 +25,10 @@ $(document).ready(function() {
           }
 
           var Categoria = JSON.parse($("#info_categorias").text());
-
           $("#edad").val(edad)
           $("#nacimiento").val(nacimiento);
+
+          console.log(edad)
 
           var val = 0;
 
@@ -54,11 +55,11 @@ $(document).ready(function() {
             }
           } else{
             
-             $("#submitButton").click();
+             // $("#submitButton").click();
           }
 
         } else {
-          $("#submitButton").click();
+          // $("#submitButton").click();
         }
       }
 

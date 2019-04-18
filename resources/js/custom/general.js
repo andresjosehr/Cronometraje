@@ -12,15 +12,19 @@ $(document).ready(function() {
 	if (urlPath=="registrar-admin") {
 		$(".sidebar_registrar_admin").addClass("active");
 	}
-	if (urlPath=="participantes") {
+	if (urlPath=="participantes" || urlPath=="1") {
 		$(".sidebar_participantes").addClass("active");
 	}
 	if (urlPath=="formularios") {
 		$(".sidebar_formularios").addClass("active");
 	}
 
-	if (urlPath=="eventos") {
+	if (urlPath=="eventos" || urlPath=="2") {
 		$(".sidebar_eventos").addClass("active");
+	}
+
+	if (urlPath=="informes") {
+		$(".sidebar_informes").addClass("active");
 	}
 
 

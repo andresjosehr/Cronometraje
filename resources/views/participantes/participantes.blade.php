@@ -17,7 +17,7 @@
                 <div class="card card-small">
                   <div class="card-header border-bottom">
                     <div id='contenedor_status_participante'></div>
-                    <h6 class="m-0">Parcitipantes</h6>
+                    <h6 class="m-0">Parcitipantes {{\Request::path()}}</h6>
                   </div>
                   <div class="card-body" id="participantes">
                     <div class="row ">
@@ -27,14 +27,31 @@
                             <a class="nav-link tab1 active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Vista de Participantes</a>
                           </li>
                           <li class="nav-item participante_tab_crear">
-                            <a onclick="limp()" class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Agregar Participante</a>
+                            <a onclick="limp()" class="nav-link tab2" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Agregar Participante</a>
                           </li>
                         </ul>
                       </div>
                     </div>
                     <div class="tab-content" id="myTabContent">
                       <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        @include("participantes.lista")
+                        @if ($Participantes!=0)
+                        <div class="row" style="margin-top: 20px">
+                          <div class="form-group col-md-12">
+                            <label for="feInputState">Selecciona el evento sobre el cual deseas mostrar los participantes</label>
+                            <select id="feInputState" class="form-control">
+                              @foreach ($Eventos as $Evento)
+                                <option value="{{$Evento->id}}">{{$Evento->nombre_evento}}</option>
+                              @endforeach
+                            </select>
+                          </div>
+                        </div>
+                        @endif
+                        <div align="center">
+                          <div class="loading upd_participante_loading act_list"></div>
+                        </div> 
+                        <div id="ParticipantesLista">
+                          @include("participantes.lista")
+                        </div>
                       </div>
                       <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         @include("participantes.crear")
@@ -87,5 +104,37 @@
         <a class="pp-cta extra-action" href="http://bit.ly/shards-dashboard-pro">Download</a>
       </div>
     </div>
-    @include("participantes.editar");
+@if ($Participantes!=0)
+      <script>
+
+        $(document).ready(function() {
+
+          var parts = window.location.pathname.split('/');
+          var urlPath = parts.pop() || parts.pop();  // handle potential trailing slash
+        if (urlPath=="1") {
+          $(".tab1").removeClass("active");
+          $("#home").removeClass("show");
+          $("#home").removeClass("active");
+
+          $(".tab2").addClass("active");
+          $("#profile").addClass("show");
+          $("#profile").addClass("active");
+        }
+
+        $("#feInputState").val("{{$Evento->id}}")
+
+        $("#feInputState option[value={{$Evento->id}}]").attr("checked");
+        $("#feInputState option[value={{$Evento->id}}]").attr("selected");
+
+         $("#feInputState").change(function () {
+          $(".act_list").show("slow");
+            $("#ParticipantesLista").hide("slow", function(){
+              $("#ParticipantesLista").empty();
+              $("#ParticipantesLista").load(url+"/participantes/updateList", {id: $("#feInputState").val() });
+            })
+          });
+        });
+      </script>
+      @include("participantes.editar");
+@endif
     @include("footer");

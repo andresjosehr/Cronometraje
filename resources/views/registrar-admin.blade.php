@@ -61,13 +61,14 @@
                       </thead>
                       <tbody id="pre_admin_show">
                         @foreach ($AdminTemps as $AdminTemp)
-                        <tr>
+                        <tr id="user_temp{{$AdminTemp->id}}">
                           <td>{{$AdminTemp->email}}</td>
                           <td>{{$Roles[$AdminTemp->rol-1]->nombre}}</td>
                           <td>
-                            <button type="button" class="mb-2 btn btn-sm btn-primary mr-1">Enviar email de nuevo</button>
-                            <button type="button" class="mb-2 btn btn-sm btn-secondary mr-1">Editar</button>
-                            <button type="button" class="mb-2 btn btn-sm btn-danger mr-1">Eliminar</button>
+                            <button onclick="reg_admin_send('{{$AdminTemp}}')" type="button" class="mb-2 btn btn-sm btn-primary mr-1 reg_btn_1">Enviar email de nuevo</button>
+                            <div style="top: 32px;" class="loading loading_admin1"></div>
+                            <button onclick="reg_admin_delete('{{$AdminTemp->id}}')" type="button" class="mb-2 btn btn-sm btn-danger mr-1">Eliminar</button>
+                            <div class="loading loading_admin3"></div>
                           </td>
                         </tr>
                         @endforeach

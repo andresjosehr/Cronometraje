@@ -1,4 +1,4 @@
-     
+     @if (count($Categorias)>0)
      <div class="tab_head">
       
     </div>
@@ -49,6 +49,15 @@
 
     <div id="example_wrapper tabla_participantes" class="dataTables_wrapper dt-bootstrap4">
     </div>
+
+    @else
+<div class="error no_form" style="margin-top: 20px">
+  <div class="error__content">
+    <h3>No tienes categorias registradas</h3>
+    <p>Puedes crear una categoria haciendo click en "Agregar Categorias" en la pestaña de arriba</p>
+  </div> <!-- / .error_content -->
+</div>
+@endif
 
     <style>
 

@@ -27,7 +27,7 @@
                             <a class="nav-link tab1 active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Vista de Eventos</a>
                           </li>
                           <li class="nav-item participante_tab_crear">
-                            <a onclick="limp()" class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Agregar Evento</a>
+                            <a onclick="limp()" class="nav-link tab2" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Agregar Evento</a>
                           </li>
                         </ul>
                       </div>
@@ -87,5 +87,22 @@
         <a class="pp-cta extra-action" href="http://bit.ly/shards-dashboard-pro">Download</a>
       </div>
     </div>
+
+    <script>
+      $(document).ready(function() {
+
+          var parts = window.location.pathname.split('/');
+          var urlPath = parts.pop() || parts.pop();  // handle potential trailing slash
+        if (urlPath=="2") {
+          $(".tab1").removeClass("active");
+          $("#home").removeClass("show");
+          $("#home").removeClass("active");
+
+          $(".tab2").addClass("active");
+          $("#profile").addClass("show");
+          $("#profile").addClass("active");
+        }
+        });
+    </script>
     @include("eventos.editar")
     @include("footer");

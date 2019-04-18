@@ -1,7 +1,7 @@
 <!-- Large modal -->
-<button style="display: none;" type="button" class="btn btn-primary editar_modal" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+<button style="display: none" type="button" class="btn btn-primary editar_modal" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
 
-<div class="modal fade bd-example-modal-lg edt_modal" style="z-index: 9999;" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div style="z-index: 999999;" class="modal fade bd-example-modal-lg edt_modal modal_editar" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="row vdivide edit_sub">
@@ -44,7 +44,7 @@
             <div class="form-row">
               <div class="form-group col-md-6">
                 <strong class="text-muted d-block mb-2">Categoria</strong>
-                <select id="id_categoria" class="id_catt" multiple="multiple" class="form-control">
+                <select class="form-control" id="id_categoria" name="id_categoria">
                   @foreach ($Categorias as $Categoria)
                     <option value="{{$Categoria->id}}" >{{$Categoria->nombre_categoria}}</option>
                   @endforeach
@@ -63,28 +63,6 @@
             <input type="hidden" id="cate">
             <input type="hidden" id="id_part">
             <input type="hidden" id="iden">
-
-            <div class="form-group col-md-12">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Evento</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Evento 1</td>
-                    <td>Acreditado</td>
-                    <td>
-                      <button onclick="chan('', '2', 'inscrito')" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2 btn_inscrito_{{-- {{$Participante->id}} @if ($Participante->categorias->pivot->estado_inscripcion>=2 && $Participante->categorias->pivot->estado_inscripcion!=4) pul @endif --}}"><i style="font-size: 25px" class="material-icons">folder_shared</i></button>
-                      <button onclick="chan('', '3', 'acreditado')" style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2 btn_acreditado_{{-- {{$Participante->id}} @if ($Participante->categorias->pivot->estado_inscripcion>=3 && $Participante->categorias->pivot->estado_inscripcion!=4) pul @endif --}}"><i style="font-size: 25px" class="material-icons">attach_money</i></button>
-                    </td>
-                </tbody>
-              </table>
-            </div>
-
         </div>
         <div class="col-sm-12 col-md-6">
           <div id="custom_form" style="display: none">
@@ -113,7 +91,7 @@
 
         </div>
       </div>
-      <div class="btn_update_participantes">
+      <div class="btn_update_participantes upd_seg">
         <button type="button" class="mb-2 btn btn-block btn-primary upd_participante_btn" onclick="actualizarParticipante()">Guardar cambios</button>
         <div class="load_pad">
         <div class="loading upd_participante_loading"></div>
@@ -122,16 +100,6 @@
     </div>
   </div>
 </div>
-
-<script>
-  $(document).ready(function(){
-  $('.id_categoria').multiselect({
-         nonSelectedText: "Seleccionada una o varias categorias",
-         nSelectedText: "Seleccionados",
-         allSelectedText: false,
-       });
-  })
-</script>
 
 <style>
   #custom_form{

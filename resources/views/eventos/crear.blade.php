@@ -1,25 +1,25 @@
-
+@if (count($Categorias)>0)
 <div class="col-sm-12 col-md-12 crear_evento" style="padding-top: 25px">
   <strong class="text-muted d-block mb-2">Agregar Evento</strong>
   <div id="#contenedor_crearPart"></div>
     <div class="form-row">
       <div class="form-group col-md-12">
         <strong class="text-muted d-block mb-2">Nombre</strong>
-        <input type="text" class="form-control" id="nombre_evento" placeholder="Escibe el nombre del evento" required="" value="Nombre Evento">
+        <input type="text" class="form-control" id="nombre_evento" placeholder="Escibe el nombre del evento" required="">
       </div>
       <div class="form-group col-md-12">
         <strong class="text-muted d-block mb-2">Email</strong>
-        <input type="text" class="form-control" id="email_evento" placeholder="Escribe el email del evento" required="" value="email_evento@gmail.com">
+        <input type="text" class="form-control" id="email_evento" placeholder="Escribe el email del evento" required="">
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-12">
         <strong class="text-muted d-block mb-2">Fecha</strong>
-        <input type="text" class="form-control" id="fecha" placeholder="Ecoge la fecha del evento" required="" value="06/04/2020">
+        <input type="text" class="form-control" id="fecha" placeholder="Ecoge la fecha del evento" required="">
       </div>
       <div class="form-group col-md-12">
         <strong class="text-muted d-block mb-2">Localidad</strong>
-        <input type="text" class="form-control" id="localidad" placeholder="Escribe la localidad del evento" required="" value="Localidad del evento">
+        <input type="text" class="form-control" id="localidad" placeholder="Escribe la localidad del evento" required="">
       </div>
     </div>
     <div class="form-row">
@@ -34,11 +34,11 @@
     <div class="form-row">
       <div class="form-group col-md-12">
         <strong class="text-muted d-block mb-2">Estado de Pago</strong>
-        <input type="text" class="form-control" id="estado_pago" placeholder="Ecoge el estado de pago" required="" value="Pagado">
+        <input type="text" class="form-control" id="estado_pago" placeholder="Ecoge el estado de pago" required="" >
       </div>
       <div class="form-group col-md-12">
         <strong class="text-muted d-block mb-2">Precio</strong>
-        <input type="text" class="form-control" id="precio" placeholder="Escribe el precio del evento" required="" value="500">
+        <input type="text" class="form-control" id="precio" placeholder="Escribe el precio del evento" required="">
       </div>
       <div class="form-group col-md-12">
         <strong class="text-muted d-block mb-2">Categoria asociada</strong>
@@ -86,3 +86,12 @@
       </div>
   </div>
 </div>
+@else
+<div class="error no_form" style="margin-top: 20px">
+  <div class="error__content">
+    <h3>Aun no puedes registrar un evento</h3>
+    <p>Antes de registrar un evento, debes tener al menos una categoria creada para asociar el evento a una categoria</p>
+    <a href="categorias" class="btn btn-accent btn-pill">Crear Categoria</a>
+  </div> <!-- / .error_content -->
+</div>
+@endif

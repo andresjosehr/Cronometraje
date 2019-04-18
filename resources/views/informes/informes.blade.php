@@ -5,8 +5,8 @@
             <!-- Page Header -->
             <div class="page-header row no-gutters py-4">
               <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
-                <span class="text-uppercase page-subtitle">Pnael de Control</span>
-                <h3 class="page-title">Informes breves y accesos rapidos</h3>
+                <span class="text-uppercase page-subtitle">Informes</span>
+                <h3 class="page-title">Consulta y descarga de informes</h3>
               </div>
             </div>
             <!-- End Page Header -->
@@ -91,7 +91,6 @@
                   <div class="card-body p-0 d-flex">
                     <div class="d-flex flex-column m-auto">
                       <div class="stats-small__data text-center">
-                        <div id="contenedor_status_participante"></div>
                         <span class="stats-small__label text-uppercase">Participantes acreditados</span>
                         <h6 class="stats-small__value count my-3">
                           @php $i=0; @endphp
@@ -120,8 +119,8 @@
                   <div class="card-body p-0 d-flex">
                     <div class="d-flex flex-column m-auto">
                       <div class="stats-small__data text-center">
-                        <span class="stats-small__label text-uppercase">Categorias registrados</span>
-                        <h6 class="stats-small__value count my-3">{{$CategoriasNum}}</h6>
+                        <span class="stats-small__label text-uppercase">Categorias registradas</span>
+                        <h6 class="stats-small__value count my-3">{{$Categorias}}</h6>
                       </div>
                       <div class="stats-small__data">
                         <span class="stats-small__percentage">
@@ -133,106 +132,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4 btn_acceso_rapido registrar_part">
-                <a href="participantes/acc/1">
-                <div class="stats-small stats-small--1 card card-small">
-                  <div class="card-body p-0 d-flex">
-                    <div class="d-flex flex-column m-auto">
-                      <div class="stats-small__data text-center">
-                        <span class="stats-small__label text-uppercase"><i style="font-size: 35px;" class="material-icons">accessibility</i></span>
-                        <h6 class="stats-small__value count my-3">Inscribir Participante</h6>
-                      </div>
-                      <div class="stats-small__data">
-                      </div>
-                    </div>
-                    <canvas height="120" class="blog-overview-stats-small-1"></canvas>
-                  </div>
-                </div>
-                </a>
-              </div>
-              <div class="col-md-4 btn_acceso_rapido lista_part">
-                <a href="participantes">
-                <div class="stats-small stats-small--1 card card-small">
-                  <div class="card-body p-0 d-flex">
-                    <div class="d-flex flex-column m-auto">
-                      <div class="stats-small__data text-center">
-                        <span class="stats-small__label text-uppercase"><i style="font-size: 35px;" class="material-icons">format_list_numbered</i></span>
-                        <h6 class="stats-small__value count my-3">
-                          Lista de Participantes
-                        </h6>
-                      </div>
-                      <div class="stats-small__data">
-                      </div>
-                    </div>
-                    <canvas height="120" class="blog-overview-stats-small-2"></canvas>
-                  </div>
-                </div>
-              </a>
-              </div>
-              <div class="col-md-4 btn_acceso_rapido registrar_event">
-                <a href="@if (session()->get("rol")!=3) eventos/acc/2 @else formularios @endif">
-                <div class="stats-small stats-small--1 card card-small">
-                  <div class="card-body p-0 d-flex">
-                    <div class="d-flex flex-column m-auto">
-                      <div class="stats-small__data text-center">
-                        <span class="stats-small__label text-uppercase"><i style="font-size: 35px;" class="material-icons">event</i></span>
-                        <h6 class="stats-small__value count my-3">
-                          @if (session()->get("rol")!=3) Registrar Evento @else Lista de formularios @endif
-                        </h6>
-                      </div>
-                      <div class="stats-small__data">
-                      </div>
-                    </div>
-                    <canvas height="120" class="blog-overview-stats-small-2"></canvas>
-                  </div>
-                </div>
-              </a>
-              </div>
-            </div>
-            <!-- End Small Stats Blocks -->
-            <div class="row">
-              <!-- Users Stats -->
-              <div class="col-md-12">
-                <div class="card card-small">
-                  <div class="card-header border-bottom">
-                    <h6 class="m-0">Lista de Participantes</h6>
-                  </div>
-                  <div class="card-body pt-0" >
-                    <div class="row border-bottom py-2 bg-light" style="padding-left: 20px;padding-right: 20px;">
-                      <div class="row" style="margin-top: 20px; width: 100%">
-                          <div class="form-group col-md-12">
-                            @if(count($Eventos)>0)
-                            <label for="feInputState">Selecciona el evento sobre el cual deseas mostrar los participantes</label>
-                            <select id="feInputState" class="form-control">
-                              @php $i=0; @endphp
-                              @foreach ($Eventos as $Evento)
-                                <option @if (count($Eventos)-1==$i) selected="selected" @endif value="{{$Evento->id}}">{{$Evento->nombre_evento}}</option>
-                                @php $i++; @endphp
-                              @endforeach
-                            </select>
-                            <div align="center" style="margin-top: 30px">
-                              <div class="loading upd_participante_loading act_list" style="display: block;"></div>
-                            </div> 
-                              @else
-                                <div class="error no_form">
-                                 <div class="error__content">
-                                   <h3>Aun no existe ningun participante registrado</h3>
-                                   <p>Puedes registrar un usuario manualmente o puedes crear un formulario de registro para los participantes</p>
-                                   <a href="participantes/acc/1" class="btn btn-accent btn-pill">Inscribir Participante</a>
-                                 </div> <!-- / .error_content -->
-                               </div>
-                              @endif
-                          </div>
-                        </div>
-                      <div id="ParticipantesLista" style="width: 100%;">
-                      </div>        
-                    </div>
-              </div>
-            </div>
-              <!-- End Users Stats -->
-
             </div>
           </div>
           <footer class="main-footer d-flex p-2 px-3 bg-white border-top">
@@ -279,6 +178,7 @@
     </div>
     <script>
       $(document).ready(function() {
+        index();
 
         $(".registrar_part").click(function(){
           window.location="participantes";
@@ -295,7 +195,6 @@
       });
     </script>
     <style>
-
       .btn_acceso_rapido{
         cursor: pointer;
         margin-bottom: 20px;
@@ -370,22 +269,6 @@
 
 
     </style>
-    <script>
-      $(document).ready(function(){
-        $("#ParticipantesLista").load(url+"/participantes/panel_lista_part", {Data: "Data"});
 
-        $("#feInputState").change(function () {
-          $(".act_list").show("slow");
-            $("#ParticipantesLista").hide("slow", function(){
-              $("#ParticipantesLista").empty();
-              $("#ParticipantesLista").load(url+"/participantes/updateList", {id: $("#feInputState").val() });
-            })
-          });
-        $("#feInputState option:last").attr("checked");
-        $("#feInputState option:last").attr("selected");
-        $(".act_list").hide("slow")
-      })
-    </script>
-    
-    @include("participantes.editar");
+
     @include("footer");

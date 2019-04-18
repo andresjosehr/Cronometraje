@@ -47,6 +47,7 @@ class LoginController extends Controller
 				session()->put('ciudad', $Usuario->ciudad);
 				session()->put('estado', $Usuario->estado);
 				session()->put('rol', $Usuario->rol);
+				session()->put('usuario_padre', $Usuario->usuario_padre);
 				session()->put('codigo_postal', $Usuario->codigo_postal);
 				?><script>window.location.href = "panel-de-control";</script><?php
 			} else{

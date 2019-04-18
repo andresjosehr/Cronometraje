@@ -105,9 +105,6 @@
 // require('./../../node_modules/sharrre/dist/jquery.sharrre.min.js');
 // require('./../../node_modules/sweetalert/dist/sweetalert.min');
 // require('./../../node_modules/datatables/media/js/jquery.dataTables.min.js');
-// require('./../../resources/js/template/extras.1.1.0.min.js');
-// require('./../../resources/js/template/shards-dashboards.1.1.0.js');
-// require('./../../resources/js/template/app-blog-overview.1.1.0.js');
 // require('./../../resources/js/template/login.js');
 // require('./../../resources/js/template/login.js');
 __webpack_require__(/*! ./../../resources/js/custom/general.js */ "./resources/js/custom/general.js");
@@ -1549,7 +1546,7 @@ $(document).ready(function () {
     $(".sidebar_registrar_admin").addClass("active");
   }
 
-  if (urlPath == "participantes") {
+  if (urlPath == "participantes" || urlPath == "1") {
     $(".sidebar_participantes").addClass("active");
   }
 
@@ -1557,8 +1554,12 @@ $(document).ready(function () {
     $(".sidebar_formularios").addClass("active");
   }
 
-  if (urlPath == "eventos") {
+  if (urlPath == "eventos" || urlPath == "2") {
     $(".sidebar_eventos").addClass("active");
+  }
+
+  if (urlPath == "informes") {
+    $(".sidebar_informes").addClass("active");
   }
 
   $(".pp-intro-bar").remove();
@@ -1580,7 +1581,7 @@ $(document).ready(function () {
 });
 
 window.calculateAge = function () {
-  if ($("#nacimiento").html()) {
+  if ($("#nacimiento").val()) {
     var date = $("#nacimiento").val();
     var nacimiento = date.split("/").reverse().join("-");
     var nacimiento = date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
@@ -1596,6 +1597,7 @@ window.calculateAge = function () {
     var Categoria = JSON.parse($("#info_categorias").text());
     $("#edad").val(edad);
     $("#nacimiento").val(nacimiento);
+    console.log(edad);
     var val = 0;
     $('input').filter('[required]:visible').map(function (input, objeto) {
       if ($("input[name='" + objeto.name + "']").val() == undefined) {
@@ -1616,12 +1618,10 @@ window.calculateAge = function () {
       } else {
         swal("Error", "Los datos ingresados no aplican para este evento. Ponte en contacto con el administrador del evento para mas información", "error");
       }
-    } else {
-      $("#submitButton").click();
+    } else {// $("#submitButton").click();
     }
-  } else {
-    $("#submitButton").click();
-  }
+  } else {// $("#submitButton").click();
+    }
 };
 
 window.InscripFile = function (id_input, id_div) {
@@ -1707,17 +1707,16 @@ window.onload = function () {
 };
 
 window.editarParticipante = function (participante, convert) {
+  var ty = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '1';
+
   if (convert == 1) {
     participante = JSON.parse(participante);
   }
 
-  confEstadoPart(participante);
-  var categorias = [];
-  var i = 0;
-
-  for (var cate in participante.categorias) {
-    categorias[i] = participante.categorias[cate].id;
-    i++;
+  if (ty == 2) {
+    var cat = participante.categorias[0]["id"];
+  } else {
+    var cat = participante.pivot["id_categoria"];
   }
 
   DatosParticipanteFormulario(participante["email_participante"]);
@@ -1728,13 +1727,65 @@ window.editarParticipante = function (participante, convert) {
   $("#edit_path #iden").val(participante["dni"]);
   $("#edit_path #nacimiento").val(participante["nacimiento"]);
   $("#edit_path #sexo").val(participante["sexo"]);
-  $("#edit_path #id_categoria").val(participante.categorias.id);
-  $('.id_catt ').multiselect('select', categorias);
-  $("#edit_path #cate").val(participante["id_categoria_cat"]);
-  $("#edit_path #id_estado_inscripcion").val(participante["id_estado_inscripcion_ins"]);
-  $("#edit_path #id_part").val(participante["id_participante"]);
+  $("#edit_path #id_categoria").val(cat);
+  $("#edit_path #cate").val(cat);
+  $("#edit_path #id_estado_inscripcion").val(participante["id_inscripcion"]);
+  $("#edit_path #id_part").val(participante["id"]);
   $(".editar_modal").click();
   $("#myselect").val(3);
+};
+
+window.DetallesParticipante = function (participante, convert) {
+  var ty = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '1';
+
+  if (convert == 1) {
+    participante = JSON.parse(participante);
+  }
+
+  if (ty == 2) {
+    var cat = participante.categorias[0]["id"];
+  } else {
+    var cat = participante.pivot["id_categoria"];
+  }
+
+  $("#id_categoria option").map(function (key, val) {
+    if (val.value == participante.pivot["id_categoria"]) {
+      $("#lista_categoria").text(val.text);
+    }
+  });
+
+  if (participante["sexo"] == 0) {
+    var sex = "Masculino";
+  } else {
+    var sex = "Femenino";
+  }
+
+  if (participante.pivot["id_estado_inscripcion"] == 1) {
+    var EstadIns = "Pre-Inscrito";
+  }
+
+  if (participante.pivot["id_estado_inscripcion"] == 2) {
+    var EstadIns = "Inscrito";
+  }
+
+  if (participante.pivot["id_estado_inscripcion"] == 3) {
+    var EstadIns = "Acreditado";
+  }
+
+  if (participante.pivot["id_estado_inscripcion"] == 4) {
+    var EstadIns = "Anulado";
+  }
+
+  $("#lista_nombre").text(participante["nombre_participante"]);
+  $("#lista_email").text(participante["email_participante"]);
+  $("#lista_apellido").text(participante["apellido"]);
+  $("#lista_dni").text(participante["dni"]);
+  $("#lista_dni").text(participante["dni"]);
+  $("#lista_nacimiento").text(participante["nacimiento"]);
+  $("#lista_sexo").text(sex);
+  $("#lista_inscripcion").text(EstadIns);
+  $("#list_id").val(participante["id"]);
+  $(".editar_modal2").click();
 };
 
 window.actualizarParticipante = function () {
@@ -1815,8 +1866,8 @@ window.actualizarParticipanteUPD = function (nacimiento_, edad_) {
   DataForm.DefaultDataForm.id_categoria = $("#edit_path #id_categoria option:selected").val();
   DataForm.DefaultDataForm.id_estado_inscripcion = $("#edit_path #id_estado_inscripcion option:selected").val();
   DataForm.DefaultDataForm.act_status = false;
-  $(".upd_participante_btn").fadeOut(250, function () {
-    $(".upd_participante_loading").fadeIn(250);
+  $(".upd_seg .upd_participante_btn").fadeOut(250, function () {
+    $(".upd_seg .upd_participante_loading").fadeIn(250);
   });
   $.ajax({
     type: 'POST',
@@ -1830,18 +1881,30 @@ window.actualizarParticipanteUPD = function (nacimiento_, edad_) {
 
 window.exitoUpdatePart = function (participanteActualizado) {
   var ParticipanteActualizado_ = JSON.stringify(participanteActualizado);
-  $("#" + participanteActualizado["id_participante"]).empty();
-  $("#" + participanteActualizado["id_participante"]).html('<td>' + participanteActualizado["id_participante"] + '</td>' + '<td class="inscrito_' + participanteActualizado["id_estado_inscripcion_ins"] + '">' + participanteActualizado["nombre_estado_inscripcion"] + '</td>' + '<td>' + participanteActualizado["nombre_participante"] + ' ' + participanteActualizado["apellido"] + '</td>' + '<td>' + participanteActualizado["apellido"] + '</td>' + '<td>' + participanteActualizado["dni"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '</td>' + '<td class="participantes_lista_acciones">' + "<button id='btn_" + participanteActualizado["id_participante"] + "' style='padding: .25rem .5rem;' type='button' class='mb-2 btn btn-primary mr-2'><i style='font-size: 25px' class='material-icons'>border_color</i></button>" + '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2"><i style="font-size: 25px" class="material-icons">folder_shared</i></button>' + '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2"><i style="font-size: 25px" class="material-icons">attach_money</i></button>' + '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2"><i style="font-size: 25px" class="material-icons">folder</i></button>' + '</td>');
-  $('#btn_' + participanteActualizado["id_participante"]).click(function () {
-    editarParticipante(ParticipanteActualizado_, '1');
+  var btn_inscrito = "";
+  var btn_acreditado = "";
+
+  if (participanteActualizado.categorias[0].pivot.id_estado_inscripcion >= 2 && participanteActualizado.categorias[0].pivot.id_estado_inscripcion != 4) {
+    btn_inscrito = "pul";
+  }
+
+  if (participanteActualizado.categorias[0].pivot.id_estado_inscripcion >= 3 && participanteActualizado.categorias[0].pivot.id_estado_inscripcion != 4) {
+    btn_acreditado = "pul";
+  }
+
+  $("#" + participanteActualizado["id"]).empty();
+  $("#" + participanteActualizado["id"]).html('<td>' + participanteActualizado["id"] + '</td>' + '<td class="inscrito_' + participanteActualizado["id_inscripcion"] + '">' + participanteActualizado["estado_inscripcion"] + '</td>' + '<td>' + participanteActualizado["nombre_participante"] + ' ' + participanteActualizado["apellido"] + '</td>' + '<td>' + participanteActualizado["apellido"] + '</td>' + '<td>' + participanteActualizado["dni"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '</td>' + '<td class="participantes_lista_acciones">' + "<button id='btn_" + participanteActualizado["id"] + "' style='padding: .25rem .5rem;' type='button' class='mb-2 btn btn-primary mr-2'><i style='font-size: 25px' class='material-icons'>border_color</i></button>" + '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2 ' + btn_inscrito + '"><i style="font-size: 25px" class="material-icons">folder_shared</i></button>' + '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2 ' + btn_acreditado + '"><i style="font-size: 25px" class="material-icons">attach_money</i></button>' + '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2"><i style="font-size: 25px" class="material-icons">folder</i></button>' + '</td>');
+  $('#btn_' + participanteActualizado["id"]).click(function () {
+    editarParticipante(ParticipanteActualizado_, '1', '2');
   });
   $(".upd_participante_loading").fadeOut(250, function () {
     $(".upd_participante_btn").fadeIn(250);
   });
   swal("Listo", "Datos actualizados exitosamente", "success");
+  location.reload();
 };
 
-window.chan = function (id_participante, status, tipo) {
+window.chan = function (id_participante, status, tipo, id_categoria) {
   var act = false;
   var ins_class = $(".btn_" + tipo + "_" + id_participante).attr("class");
   ins_class = ins_class.split(" ");
@@ -1873,6 +1936,7 @@ window.chan = function (id_participante, status, tipo) {
         $("#contenedor_status_participante").load(url + "/participantes", {
           id: id_participante,
           id_estado_inscripcion: status,
+          id_categoria: id_categoria,
           act_status: true
         });
       }
@@ -1905,6 +1969,7 @@ window.chan = function (id_participante, status, tipo) {
 
         $("#contenedor_status_participante").load(url + "/participantes", {
           id: id_participante,
+          id_categoria: id_categoria,
           id_estado_inscripcion: status,
           act_status: true
         });
@@ -1977,9 +2042,9 @@ window.crearPart = function () {
   }
 
   if (val == 0) {
-    // $(".crear_part_btn").hide("slow",function(){
-    //   $(".upd_participante_loading").show("slow");
-    // })
+    $(".crear_part_btn").hide("slow", function () {
+      $(".upd_participante_loading").show("slow");
+    });
     var date = $("#nacimiento").val();
     var nacimiento = date.split("/").reverse().join("-");
     nacimiento = date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
@@ -2007,7 +2072,6 @@ window.crearPart = function () {
         id_estado_inscripcion: $(".crear_usr #id_estado_inscripcion option:selected").val()
       },
       success: function success(msg) {
-        console.log(msg);
         $(".upd_participante_loading").hide("slow", function () {
           $(".crear_part_btn").show("slow");
         });
@@ -2018,7 +2082,6 @@ window.crearPart = function () {
           });
           $('.crear_usr #id_categoria').multiselect("select", "0");
           swal("Listo!", "El participnate ha sido registrado exitosamente", "success");
-          updateListPart();
         } else {
           for (var error in msg) {
             $(".crear_usr #" + error).addClass("is-invalid");
@@ -2073,6 +2136,46 @@ window.DatosParticipanteFormulario = function (email_participante) {
   });
 };
 
+window.enviomail = function (email) {
+  var wrapper = document.createElement('div');
+  wrapper.innerHTML = EmailConf(email);
+  swal({
+    title: "Informacion del campo",
+    content: wrapper,
+    closeOnClickOutside: false
+  });
+  $(".swal-footer").css("display", "none");
+  var editor = new Quill('#editor-container', {
+    theme: 'snow'
+  });
+};
+
+window.EmailConf = function (email) {
+  return '<form class="add-new-post">' + '<input class="form-control form-control-lg mb-3" id="asunto" type="text" placeholder="Asunto del mensaje">' + '<div id="editor-container" class="add-new-post__editor mb-1"></div>' + '<div class"form-row btn_email">' + '<div class="form-group col-md-12 btn_email">' + '<input type="hidden" id="hidden_tipe_field">' + '<button onclick="SendEmail(' + "'" + email + "'" + ')" class="btn btn-primary btn-block" type="button">Enviar Email</button>' + '</div>' + '<div class="form-group col-md-12">' + '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>' + '</div>';
+  '</<div>' + '</form>';
+};
+
+window.SendEmail = function (email) {
+  $.ajax({
+    type: 'POST',
+    url: url + "/participantes/enviar_mail",
+    data: {
+      email_participante: email,
+      asunto: $("#asunto").val(),
+      contenido: $(".ql-editor").html()
+    },
+    success: function success(msg) {
+      if (msg == "Exito") {
+        $("#custom_form").hide("slow", function () {
+          $("#no_nada").show("slow");
+        });
+      }
+    }
+  });
+  swal.close();
+  swal("Listo!", "Email enviado exitosamente al participante", "success");
+};
+
 window.deleteCustomFormData = function (email_participante) {
   swal({
     title: "Advertencia",
@@ -2097,10 +2200,9 @@ window.deleteCustomFormData = function (email_participante) {
   });
 };
 
-window.confEstadoPart = function (participante) {
-  participante.categorias.map(function (e) {
-    console.log(e);
-  });
+window.AbrirEdit = function () {
+  var btn_ed = $("#list_id").val();
+  $(".boton_editar" + btn_ed).click();
 };
 
 /***/ }),
@@ -2294,6 +2396,52 @@ window.CambiarContraseña = function () {
       $("#campos_contra").after('<small id="con_error" style="color:red;">La contraseña debe tener mas de 6 caracteres</small>');
     }
   }
+};
+
+window.reg_admin_send = function (id) {
+  $(".reg_btn_1").hide("slow", function () {
+    $(".loading_admin1").show("slow");
+  });
+  Data = JSON.parse(id);
+  $.ajax({
+    type: 'POST',
+    url: url + "/reg_admin_send",
+    data: Data,
+    success: function success(msg) {
+      if (msg) {
+        $(".loading_admin1").hide("slow", function () {
+          $(".reg_btn_1").show("slow");
+        });
+        swal("Listo!", "Hemos enviado el email al usuario a registrar exitosamente", "success");
+      } else {
+        console.log("Error");
+      }
+    }
+  });
+};
+
+window.reg_admin_delete = function (id) {
+  $("#user_temp" + id).hide("slow", function () {
+    $("#user_temp" + id).remove();
+    swal("Listo!", "Usuario eliminado exitosamente", "success");
+  });
+  $.ajax({
+    type: 'POST',
+    url: url + "/reg_admin_delete",
+    data: {
+      id: id
+    },
+    success: function success(msg) {
+      if (msg) {
+        $(".loading_admin1").hide("slow", function () {
+          $(".reg_btn_1").show("slow");
+        });
+        swal("Listo!", "Hemos enviado el email al usuario a registrar exitosamente", "success");
+      } else {
+        console.log("Error");
+      }
+    }
+  });
 };
 
 /***/ }),

@@ -19,7 +19,7 @@ class ParticipantesTable extends Migration
             $table->string('apellido');
             $table->string('email_participante')->unique();
             $table->string('dni')->unique();
-            $table->date('nacimiento');
+            $table->string('nacimiento');
             $table->integer('edad')->unsigned();
             $table->string('sexo')->nullable();
             $table->integer('id_usuario')->unsigned();

@@ -29,22 +29,19 @@ window.onload=function(){
 }
 
 
-window.editarParticipante=function(participante, convert) {
+window.editarParticipante=function(participante, convert, ty = '1') {
 
   if (convert==1) {
     participante=JSON.parse(participante);
   }
-
-  confEstadoPart(participante);
-
-  var categorias=[]; var i=0;
- for(var cate in participante.categorias){
-      categorias[i]= participante.categorias[cate].id;
-      i++;
+  if (ty==2) {
+    var cat = participante.categorias[0]["id"];
+  } else{
+    var cat = participante.pivot["id_categoria"];
   }
 
-   DatosParticipanteFormulario(participante["email_participante"]);
 
+   DatosParticipanteFormulario(participante["email_participante"]);
 
   $("#edit_path #nombre").val(participante["nombre_participante"])
   $("#edit_path #email").val(participante["email_participante"])
@@ -53,14 +50,53 @@ window.editarParticipante=function(participante, convert) {
   $("#edit_path #iden").val(participante["dni"])
   $("#edit_path #nacimiento").val(participante["nacimiento"])
   $("#edit_path #sexo").val(participante["sexo"])
-  $("#edit_path #id_categoria").val(participante.categorias.id)
-  $('.id_catt ').multiselect('select', categorias);
-  $("#edit_path #cate").val(participante["id_categoria_cat"])
-  $("#edit_path #id_estado_inscripcion").val(participante["id_estado_inscripcion_ins"])
-  $("#edit_path #id_part").val(participante["id_participante"])
+  $("#edit_path #id_categoria").val(cat)
+  $("#edit_path #cate").val(cat)
+  $("#edit_path #id_estado_inscripcion").val(participante["id_inscripcion"])
+  $("#edit_path #id_part").val(participante["id"])
   $(".editar_modal").click();
   $("#myselect").val(3);
 }
+
+window.DetallesParticipante=function(participante, convert, ty = '1') {
+
+  if (convert==1) {
+    participante=JSON.parse(participante);
+  }
+  if (ty==2) {
+    var cat = participante.categorias[0]["id"];
+  } else{
+    var cat = participante.pivot["id_categoria"];
+  }
+
+  $("#id_categoria option").map(function(key, val){
+    if (val.value==participante.pivot["id_categoria"]){
+        $("#lista_categoria").text(val.text);
+    }
+})
+  if (participante["sexo"]==0) {
+    var sex="Masculino"
+  } else{
+    var sex="Femenino"
+  }
+  if (participante.pivot["id_estado_inscripcion"]==1) {var EstadIns="Pre-Inscrito"}
+  if (participante.pivot["id_estado_inscripcion"]==2) {var EstadIns="Inscrito"}
+  if (participante.pivot["id_estado_inscripcion"]==3) {var EstadIns="Acreditado"}
+  if (participante.pivot["id_estado_inscripcion"]==4) {var EstadIns="Anulado"}
+
+  $("#lista_nombre").text(participante["nombre_participante"])
+  $("#lista_email").text(participante["email_participante"])
+  $("#lista_apellido").text(participante["apellido"])
+  $("#lista_dni").text(participante["dni"])
+  $("#lista_dni").text(participante["dni"])
+  $("#lista_nacimiento").text(participante["nacimiento"])
+  $("#lista_sexo").text(sex)
+  $("#lista_inscripcion").text(EstadIns)
+  $("#list_id").val(participante["id"])
+  $(".editar_modal2").click();
+}
+
+
 
 window.actualizarParticipante=function() {
 
@@ -147,8 +183,8 @@ window.actualizarParticipanteUPD=function(nacimiento_, edad_) {
   DataForm.DefaultDataForm.id_estado_inscripcion = $("#edit_path #id_estado_inscripcion option:selected").val();
   DataForm.DefaultDataForm.act_status =  false;
 
-  $( ".upd_participante_btn" ).fadeOut(250, function () {
-      $( ".upd_participante_loading" ).fadeIn(250);
+  $( ".upd_seg .upd_participante_btn" ).fadeOut(250, function () {
+      $( ".upd_seg .upd_participante_loading" ).fadeIn(250);
     });
 
    $.ajax({
@@ -165,21 +201,31 @@ window.actualizarParticipanteUPD=function(nacimiento_, edad_) {
 window.exitoUpdatePart=function(participanteActualizado) {
 
   var ParticipanteActualizado_ = JSON.stringify(participanteActualizado);
+  var btn_inscrito="";
+  var btn_acreditado="";
 
-  $("#"+participanteActualizado["id_participante"]).empty();
-  $("#"+participanteActualizado["id_participante"]).html('<td>'+participanteActualizado["id_participante"]+'</td>'+
-                                                            '<td class="inscrito_'+participanteActualizado["id_estado_inscripcion_ins"]+'">'+participanteActualizado["nombre_estado_inscripcion"]+'</td>'+
+  if (participanteActualizado.categorias[0].pivot.id_estado_inscripcion>=2 && participanteActualizado.categorias[0].pivot.id_estado_inscripcion!=4){
+    btn_inscrito="pul";
+  }
+
+  if (participanteActualizado.categorias[0].pivot.id_estado_inscripcion>=3 && participanteActualizado.categorias[0].pivot.id_estado_inscripcion!=4){
+    btn_acreditado="pul";
+  }
+
+  $("#"+participanteActualizado["id"]).empty();
+  $("#"+participanteActualizado["id"]).html('<td>'+participanteActualizado["id"]+'</td>'+
+                                                            '<td class="inscrito_'+participanteActualizado["id_inscripcion"]+'">'+participanteActualizado["estado_inscripcion"]+'</td>'+
                                                            '<td>'+participanteActualizado["nombre_participante"]+' '+participanteActualizado["apellido"]+'</td>'+
                                                            '<td>'+participanteActualizado["apellido"]+'</td>'+
                                                            '<td>'+participanteActualizado["dni"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")+'</td>'+
                                                            '<td class="participantes_lista_acciones">'+
-                                                             "<button id='btn_"+participanteActualizado["id_participante"]+"' style='padding: .25rem .5rem;' type='button' class='mb-2 btn btn-primary mr-2'><i style='font-size: 25px' class='material-icons'>border_color</i></button>"+
-                                                             '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2"><i style="font-size: 25px" class="material-icons">folder_shared</i></button>'+
-                                                             '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2"><i style="font-size: 25px" class="material-icons">attach_money</i></button>'+
+                                                             "<button id='btn_"+participanteActualizado["id"]+"' style='padding: .25rem .5rem;' type='button' class='mb-2 btn btn-primary mr-2'><i style='font-size: 25px' class='material-icons'>border_color</i></button>"+
+                                                             '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2 '+btn_inscrito+'"><i style="font-size: 25px" class="material-icons">folder_shared</i></button>'+
+                                                             '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2 '+btn_acreditado+'"><i style="font-size: 25px" class="material-icons">attach_money</i></button>'+
                                                              '<button style="padding: .25rem .5rem;" type="button" class="mb-2 btn btn-outline-primary mr-2"><i style="font-size: 25px" class="material-icons">folder</i></button>'+
                                                            '</td>');
 
-$('#btn_'+participanteActualizado["id_participante"]).click(function(){ editarParticipante(ParticipanteActualizado_, '1'); });
+$('#btn_'+participanteActualizado["id"]).click(function(){ editarParticipante(ParticipanteActualizado_, '1', '2'); });
 
 
 
@@ -187,12 +233,13 @@ $('#btn_'+participanteActualizado["id_participante"]).click(function(){ editarPa
       $( ".upd_participante_btn" ).fadeIn(250);
     });
   swal("Listo","Datos actualizados exitosamente", "success");
+
+    location.reload();
 }
 
-window.chan=function(id_participante, status, tipo){
+window.chan=function(id_participante, status, tipo, id_categoria){
 
     var act=false;
-
     var ins_class =($(".btn_"+tipo+"_"+id_participante).attr("class"));
     ins_class=ins_class.split(" ");
     for (var i = 0; i < ins_class.length; i++) {
@@ -222,6 +269,7 @@ window.chan=function(id_participante, status, tipo){
               $("#contenedor_status_participante").load(url+"/participantes",{
                 id: id_participante,
                 id_estado_inscripcion: status,
+                id_categoria: id_categoria,
                 act_status: true
               });
             }
@@ -253,6 +301,7 @@ window.chan=function(id_participante, status, tipo){
               }
               $("#contenedor_status_participante").load(url+"/participantes",{
                 id: id_participante,
+                id_categoria: id_categoria,
                 id_estado_inscripcion: status,
                 act_status: true
               });
@@ -322,9 +371,9 @@ window.limp=function(){
 
 
     if (val==0) {
-      // $(".crear_part_btn").hide("slow",function(){
-      //   $(".upd_participante_loading").show("slow");
-      // })
+      $(".crear_part_btn").hide("slow",function(){
+        $(".upd_participante_loading").show("slow");
+      })
       var date = $("#nacimiento").val();
       var nacimiento = date.split("/").reverse().join("-");
       nacimiento = date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
@@ -351,7 +400,7 @@ window.limp=function(){
           id_estado_inscripcion: $(".crear_usr #id_estado_inscripcion option:selected").val()
         },
         success: function(msg){
-          console.log(msg);
+
           $(".upd_participante_loading").hide("slow",function(){
             $(".crear_part_btn").show("slow");
           })
@@ -362,7 +411,6 @@ window.limp=function(){
             })
             $('.crear_usr #id_categoria').multiselect("select", "0");
               swal("Listo!", "El participnate ha sido registrado exitosamente", "success");
-              updateListPart()
           } else{
             for (var error in msg) {
               $(".crear_usr #"+error).addClass("is-invalid");
@@ -374,6 +422,8 @@ window.limp=function(){
 
     }
   }
+
+
 
   window.updateListPart=function(){
 
@@ -431,6 +481,60 @@ window.limp=function(){
     });
   }
 
+
+  window.enviomail=function(email){
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = EmailConf(email);
+
+    swal({
+      title: "Informacion del campo", 
+      content: wrapper,
+      closeOnClickOutside: false  
+    });
+    $(".swal-footer").css("display", "none");
+
+      var editor = new Quill('#editor-container', {
+        theme: 'snow'
+      });
+  }
+
+  window.EmailConf=function(email){
+    return '<form class="add-new-post">'+
+                      '<input class="form-control form-control-lg mb-3" id="asunto" type="text" placeholder="Asunto del mensaje">'+
+                      '<div id="editor-container" class="add-new-post__editor mb-1"></div>'+
+                      '<div class"form-row btn_email">'+
+                      '<div class="form-group col-md-12 btn_email">'+
+                        '<input type="hidden" id="hidden_tipe_field">'+
+                        '<button onclick="SendEmail('+"'"+email+"'"+')" class="btn btn-primary btn-block" type="button">Enviar Email</button>'+
+                      '</div>'+
+                      '<div class="form-group col-md-12">'+
+                        '<button onclick="swal.close();" class="btn btn-danger btn-block" type="button">Cancelar</button>'+
+                      '</div>'
+                      '</<div>'+
+                    '</form>'
+  }
+
+  window.SendEmail=function(email){
+    $.ajax({
+         type: 'POST',
+         url: url+"/participantes/enviar_mail",
+         data: {
+          email_participante: email,
+          asunto: $("#asunto").val(),
+          contenido: $(".ql-editor").html()
+         },
+         success: function(msg){
+             if (msg=="Exito") {
+               $("#custom_form").hide("slow", function(){
+                 $("#no_nada").show("slow")
+               })
+             }
+         }
+     });
+    swal.close()
+    swal("Listo!", "Email enviado exitosamente al participante", "success");
+  }
+
   window.deleteCustomFormData=function(email_participante){
     swal({
           title: "Advertencia",
@@ -457,8 +561,8 @@ window.limp=function(){
   }
 
 
-  window.confEstadoPart=function(participante){
-    participante.categorias.map(function(e){
-      console.log(e);
-    })
+window.AbrirEdit=function(){
+    var btn_ed = $("#list_id").val();
+   $(".boton_editar"+btn_ed).click();
+
   }

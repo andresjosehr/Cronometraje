@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\RolesDeUsuario;
 use App\Usuarios;
 use App\Eventos;
+use App\Categorias;
 use App\Participantes;
 use App\CambiarEmail;
 use App\ResetearContrasena;
@@ -22,9 +23,13 @@ class UsuariosController extends Controller
     }
 
     public function PrePanel(){
-        $Participantes = Participantes::where("id_usuario", session()->get("id"))->with("estado_inscripcion")->get();
-        $Eventos = Eventos::where("id_usuario", session()->get("id"))->count();
-        return view("panel-de-control", ["Participantes" => $Participantes, "Eventos" => $Eventos]);
+        if (session()->get("rol")==1) { $ConsultaRol=Usuarios::select("id")->get()->toArray();  } if(session()->get("rol")==2) { $ConsultaRol[0]=session()->get("id"); }   if(session()->get("rol")==3) { $ConsultaRol[0]=session()->get("usuario_padre"); }  
+        $Participantes = Participantes::whereIn('id_usuario', $ConsultaRol)->with("estado_inscripcion")->get();
+        $Categorias = Categorias::whereIn('id_usuario', $ConsultaRol)->get();
+        $CategoriasNum = Categorias::whereIn('id_usuario', $ConsultaRol)->count();
+        $Eventos=Eventos::whereIn("id_usuario", $ConsultaRol)->get();
+
+        return view("panel-de-control", ["Participantes" => $Participantes, "Categorias" => $Categorias, "Eventos" => $Eventos, "CategoriasNum" => $CategoriasNum]);
     }
 
     public function editarPerfil(Request $Request){
@@ -249,11 +254,12 @@ class UsuariosController extends Controller
             $Request->merge(['codigo' => self::GenerarCodigo(), 'id_usuario_padre' => session()->get("id")]);
 
             RegistroAdminTemp::insert($Request->all());
+            $UserTemp=RegistroAdminTemp::orderBy("id", "desc")->first();
 
              self::emailUsuario($Request->email, $Request->codigo, "registrar_admin");
             ?><script>
                 var rol=$('#rol option[value="<?php echo $Request->rol ?>"]').text();
-                $("#pre_admin_show").append('<tr><td><?php echo $Request->email ?></td><td>'+rol+'</td><td><button type="button" class="mb-2 btn btn-sm btn-primary mr-1">Enviar email de nuevo</button><button type="button" class="mb-2 btn btn-sm btn-secondary mr-1">Editar</button><button type="button" class="mb-2 btn btn-sm btn-danger mr-1">Eliminar</button></td></tr>')
+                $("#pre_admin_show").append('<tr id="user_temp<?php echo $UserTemp->id ?>"><td><?php echo $Request->email ?></td><td>'+rol+'</td><td><button type="button" class="mb-2 btn btn-sm btn-primary mr-1">Enviar email de nuevo</button><button type="button" class="mb-2 btn btn-sm btn-danger mr-1">Eliminar</button></td></tr>')
                 swal("Listo", "Hemos enviado un correo electronico para el registro del administrador seleccionado", "success");
             </script><?php
         }
@@ -276,6 +282,18 @@ class UsuariosController extends Controller
         }
     }
 
+    public function reg_admin_send(Request $Request)
+    {
+        self::emailUsuario($Request->email, $Request->codigo, "registrar_admin");
+
+        return "Exito";
+    }
+
+    public function reg_admin_delete(Request $Request)
+    {
+        RegistroAdminTemp::where(["id" => $Request->id])->delete();
+    }
+
     public function registrarAdmin_paso4(Request $Request)
     {   
         $Request->merge(['password' => Hash::make($Request->password)]);
@@ -287,6 +305,8 @@ class UsuariosController extends Controller
         if ($v->fails()) {
             ?><script>alert("Error, contacte al administrador del sistema")</script><?php
         } else{
+            $id_padre=RegistroAdminTemp::where("email", $Request->email)->first();
+            $Request->merge(["usuario_padre" => $id_padre->id_usuario_padre]);
             Usuarios::insert($Request->all());
             RegistroAdminTemp::where($Request->only("email"))->delete();
         }

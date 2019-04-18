@@ -20,22 +20,6 @@
                       <h4 class="mb-0 nom_per">{{session()->get('nombre')}}</h4>
                       <span class="text-muted d-block mb-2">{{$Rol->nombre}}</span>
                     </div>
-                    <ul class="list-group list-group-flush">
-                      <li class="list-group-item px-4">
-                        <div class="progress-wrapper">
-                          <strong class="text-muted d-block mb-2">Workload</strong>
-                          <div class="progress progress-sm">
-                            <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="74" aria-valuemin="0" aria-valuemax="100" style="width: 74%;">
-                              <span class="progress-value">74%</span>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li class="list-group-item p-4">
-                        <strong class="text-muted d-block mb-2">Description</strong>
-                        <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio eaque, quidem, commodi soluta qui quae minima obcaecati quod dolorum sint alias, possimus illum assumenda eligendi cumque?</span>
-                      </li>
-                    </ul>
                   </div>
                 </div>
                 <div class="col-lg-12">
@@ -102,15 +86,11 @@
                                 <input type="text" class="form-control" id="estado" value="{{session()->get('estado')}}">
                               </div>
                               <div class="form-group col-md-2">
-                                <label for="inputZip">Codigo Postal</label>
+                                <label for="inputZip">Postal</label>
                                 <input type="text" class="form-control" id="codigo_postal" value="{{session()->get('codigo_postal')}}">
                               </div>
                             </div>
                             <div class="form-row">
-                              <div class="form-group col-md-12">
-                                <label for="feDescription">Descripción</label>
-                                <textarea class="form-control" name="feDescription" rows="5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio eaque, quidem, commodi soluta qui quae minima obcaecati quod dolorum sint alias, possimus illum assumenda eligendi cumque?</textarea>
-                              </div>
                             </div>
                             <button onclick="EditarUsuario();" class="btn btn-accent edit_us_btn">Editar Cuenta</button>
                             <div class="loading perfil_loading"></div>

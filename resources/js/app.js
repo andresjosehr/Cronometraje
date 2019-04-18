@@ -12,9 +12,6 @@
 	// require('./../../node_modules/sharrre/dist/jquery.sharrre.min.js');
 	// require('./../../node_modules/sweetalert/dist/sweetalert.min');
 	// require('./../../node_modules/datatables/media/js/jquery.dataTables.min.js');
-	// require('./../../resources/js/template/extras.1.1.0.min.js');
-	// require('./../../resources/js/template/shards-dashboards.1.1.0.js');
-	// require('./../../resources/js/template/app-blog-overview.1.1.0.js');
 	// require('./../../resources/js/template/login.js');
 	// require('./../../resources/js/template/login.js');
 

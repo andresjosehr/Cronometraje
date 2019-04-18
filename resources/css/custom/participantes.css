@@ -141,3 +141,6 @@ div .page-item {
     border-color: #42a202;
     box-shadow: 0 5px 15px rgba(0,0,0,.05), 0 4px 10px rgba(0,123,255,.25);
 }
+.btn_email{
+  margin-top: 30px;
+}

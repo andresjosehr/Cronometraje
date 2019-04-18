@@ -48,6 +48,13 @@
 		height: 35px;
 		text-align: -webkit-center;
 }
+
+.loading_admin1{
+		width: 35px;
+		height: 35px;
+		text-align: -webkit-center;
+}
+
 .from_per{
 	display: block !important;
 }
@@ -201,7 +208,9 @@ div .page-item {
     border-color: #42a202;
     box-shadow: 0 5px 15px rgba(0,0,0,.05), 0 4px 10px rgba(0,123,255,.25);
 }
-.crear_form_card{
+.btn_email{
+  margin-top: 30px;
+}.crear_form_card{
 		background: #dedede;
 	}
 	.crear_form{
@@ -537,8 +546,11 @@ div .page-item {
 footer{
 	width: 100%;
     position: fixed;
-}.body_ins .datepicker{
-        top: 816.209px !important;
+}
+.swal-overlay{
+            z-index: 999999999999999999;
+      }    .body_ins .datepicker{
+            margin-top: 200px !important;
       }
       .card {
         margin: 0 auto; /* Added */

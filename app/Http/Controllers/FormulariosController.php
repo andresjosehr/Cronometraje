@@ -8,9 +8,15 @@ use App\Formularios;
 use App\Campos;
 use App\SubCampos;
 use App\Eventos;
+use App\Usuarios;
 
 class FormulariosController extends Controller
 {
+
+    public function Rol() {
+       if (session()->get("rol")==1) { $ConsultaRol=Usuarios::select("id")->get()->toArray();  } if(session()->get("rol")==2) { $ConsultaRol[0]=session()->get("id"); }   if(session()->get("rol")==3) { $ConsultaRol[0]=session()->get("usuario_padre"); }  
+       return $ConsultaRol;
+   }
     /**
      * Display a listing of the resource.
      *
@@ -20,12 +26,11 @@ class FormulariosController extends Controller
     {
 
 
-
         $Formularios = Formularios::whereHas('eventos', function ($query) {
-                    $query->where('id_usuario', session()->get("id"));
+                    $query->whereIn('id_usuario', self::Rol());
                 })->with("campos.subcampos")->orderBy("id", "desc")->get();
         
-        $Eventos = Eventos::select("eventos.id", "eventos.nombre_evento")->join("usuarios",  "eventos.id_usuario", "usuarios.id")->where("usuarios.id", session()->get("id"))->get();
+        $Eventos = Eventos::select("eventos.id", "eventos.nombre_evento")->join("usuarios",  "eventos.id_usuario", "usuarios.id")->whereIn("usuarios.id", self::Rol())->get();
 
         return view("formularios.formularios", ["Eventos" => $Eventos, "Formularios" => $Formularios]);
     }

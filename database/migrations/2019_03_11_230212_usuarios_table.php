@@ -26,6 +26,7 @@ class UsuariosTable extends Migration
             $table->string('estado')->nullable();
             $table->integer('codigo_postal')->nullable();
             $table->integer('rol')->unsigned()->fillable();
+            $table->integer('usuario_padre')->unsigned()->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('rol')->references('id')->on('roles_de_usuario');

@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Formularios;
 use App\Participantes;
 use App\DatosParticipante;
+use App\Eventos;
+use View;
+use App\Participantes_Categorias;
 use Redirect;
 
 class InscripcionController extends Controller
@@ -26,7 +29,6 @@ class InscripcionController extends Controller
               'apellido'              => 'required',
               'email_participante'    => 'required|unique:participantes',
               'dni'                   => 'required|unique:participantes',
-              'nacimiento'            => 'required|date|date_format:Y-m-d',
               'sexo'                  => 'required|numeric',
               'id_estado_inscripcion' => 'required|numeric',
           ]); 
@@ -34,9 +36,14 @@ class InscripcionController extends Controller
               return Redirect::back()->withErrors($v)->withInput();
               die();
          } 
-            $DatEx=$Request->except('_token', "nombre_participante", "apellido", "email_participante", "dni", "nacimiento", "sexo", "id_estado_inscripcion", "edad", "id_categoria");
-         		Participantes::insert($Request->only("nombre_participante", "apellido", "email_participante", "dni", "nacimiento", "sexo", "edad", "id_estado_inscripcion", "id_categoria"));
+
+            $Evento = Eventos::where($Request->only($Request->id_categoria))->first();
+            $Request->merge(["id_usuario" => $Evento->id_usuario]);
+            $DatEx=$Request->except("id_usuario", '_token', "nombre_participante", "apellido", "email_participante", "dni", "nacimiento", "sexo", "id_estado_inscripcion", "edad", "id_categoria");
+         		Participantes::insert($Request->only("nombre_participante", "apellido", "email_participante", "dni", "nacimiento", "sexo", "edad", "id_usuario"));
            	$Part = Participantes::where("email_participante", $Request->email_participante)->select("id")->first();
+            $Request->merge(["id_participante" => $Part->id]);
+            Participantes_Categorias::insert($Request->only("id_participante", "id_estado_inscripcion", "id_categoria"));
       } else{
           $v = \Validator::make($Request->only("email_participante"), [
               'email_participante'    => 'required|exists:participantes',
@@ -47,7 +54,7 @@ class InscripcionController extends Controller
               die();
          }
 
-         $DatEx = $Request->except('_token', "email_participante", "id_categoria");
+         $DatEx = $Request->except('_token', "email_participante", "id_categoria", "id_usuario", "id_participante");
          $Part =  Participantes::where("email_participante", $Request->email_participante)->select("id")->first();
       }
 
@@ -55,6 +62,7 @@ class InscripcionController extends Controller
           return redirect()->back()->with('error_participante_existente', 'El usuario registrado al email que ingresaste ya ha llenado este formulario anteriormente')->withInput();
           die();
         } else{
+
             foreach ($DatEx as $key => $part) {
               if (explode("_", $key)[0]=="file") {
 
@@ -79,18 +87,12 @@ class InscripcionController extends Controller
               }
             }
         }
+          if ($Evento->auto_email==1) {
+            self::emailInscripcion($Request->email, $Evento->mensaje_aprobacion_pago);
+          }
+
+
             return redirect()->back()->with('mensaje', 'Listo! Tus datos han sido almacenados exitosamente, muchas gracias por tu registro');
-
-
-
-
-
-
-
-
-
-
-
 
      }
 
@@ -99,4 +101,18 @@ class InscripcionController extends Controller
         $Part = Participantes::where("email_participante", $Request->email_participante)->first();
         return DatosParticipante::where("id_participante", $Part->id)->with("campos.formularios")->get();
       }
+
+
+      public function emailInscripcion($destinatario, $mensaje){
+
+
+        $header = "From: Cronometraje <no-responder@cronometraje.com> \r\n";
+        $header .= "Bcc: cronometraje@gmail.com \r\n";
+        $header .= "X-Mailer: PHP/" . phpversion() . " \r\n";
+        $header .= "Mime-Version: 1.0 \r\n";
+        $header .= "Content-Type: text/html";
+
+        $body=(string)View::make('emails.inscripcion_participante', ["mensaje" => $mensaje]);
+        mail($destinatario, "Cronometraje", $body, $header) or die("No Enviado");
+    }
 }

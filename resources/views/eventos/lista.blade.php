@@ -1,6 +1,5 @@
-     
+     @if (count($Eventos)>0)
      <div class="tab_head">
-      
     </div>
       <div style="overflow-x: auto;" class="eventos_div_tab">
       <div id="tabla_de">
@@ -70,6 +69,14 @@
 
     <div id="example_wrapper tabla_participantes" class="dataTables_wrapper dt-bootstrap4">
     </div>
+    @else
+    <div class="error no_form" style="margin-top: 20px">
+      <div class="error__content">
+        <h3>No tienes eventos registrados</h3>
+        <p>Puedes crear un evento en la pestaña "Agregar evento" de la parte de arriba</p>
+      </div> <!-- / .error_content -->
+    </div>
+    @endif
 
     <style>
 

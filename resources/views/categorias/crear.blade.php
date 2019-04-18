@@ -5,7 +5,7 @@
     <div class="form-row">
       <div class="form-group col-md-12">
         <strong class="text-muted d-block mb-2">Nombre</strong>
-        <input type="text" class="form-control" id="nombre_categoria" placeholder="Escibe el nombre del evento" required="" value="Nombre Evento">
+        <input type="text" class="form-control" id="nombre_categoria" placeholder="Escibe el nombre del evento" required="">
       </div>
       <div class="form-group col-md-12">
         <strong class="text-muted d-block mb-2">Sexo</strong>
@@ -18,11 +18,11 @@
     <div class="form-row">
       <div class="form-group col-md-12">
         <strong class="text-muted d-block mb-2">Edad Minima</strong>
-        <input type="text" class="form-control" id="edad_minima" placeholder="Ecoge la fecha del evento" required="" value="9">
+        <input type="text" class="form-control" id="edad_minima" placeholder="Ecoge la fecha del evento" required="">
       </div>
       <div class="form-group col-md-12">
         <strong class="text-muted d-block mb-2">Edad Maxima</strong>
-        <input type="text" class="form-control" id="edad_maxima" placeholder="Escribe la localidad del evento" required="" value="19">
+        <input type="text" class="form-control" id="edad_maxima" placeholder="Escribe la localidad del evento" required="" >
       </div>
     </div>
     <div class="form-group">

@@ -76,3 +76,56 @@ window.CambiarContraseña= function () {
 	    }
 	}
 }
+
+
+window.reg_admin_send=function(id){
+
+	$(".reg_btn_1").hide("slow", function(){
+		$(".loading_admin1").show("slow");
+	})
+
+	Data=JSON.parse(id);
+	$.ajax({
+        type: 'POST',
+        url: url+"/reg_admin_send",
+        data: Data,
+        success: function(msg){
+        	if (msg) {
+        		$(".loading_admin1").hide("slow", function(){
+					$(".reg_btn_1").show("slow");
+				})
+        		swal("Listo!", "Hemos enviado el email al usuario a registrar exitosamente", "success");
+        	} else{
+        		console.log("Error");
+        	}
+        }
+    });
+
+}
+
+
+window.reg_admin_delete=function(id){
+
+	$("#user_temp"+id).hide("slow", function(){
+		$("#user_temp"+id).remove();
+		swal("Listo!", "Usuario eliminado exitosamente", "success");
+	})
+
+	$.ajax({
+        type: 'POST',
+        url: url+"/reg_admin_delete",
+        data: {
+        	id: id,
+        },
+        success: function(msg){
+        	if (msg) {
+        		$(".loading_admin1").hide("slow", function(){
+					$(".reg_btn_1").show("slow");
+				})
+        		swal("Listo!", "Hemos enviado el email al usuario a registrar exitosamente", "success");
+        	} else{
+        		console.log("Error");
+        	}
+        }
+    });
+}

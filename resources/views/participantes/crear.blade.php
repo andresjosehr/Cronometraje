@@ -1,3 +1,4 @@
+@if ($Eventos!="[]")
 
 <div class="col-sm-12 col-md-12 crear_usr" style="padding-top: 25px">
   <strong class="text-muted d-block mb-2">Agregar participante</strong>
@@ -46,6 +47,15 @@
       </div>
   </div>
 </div>
+
+@else
+<div class="error no_form" style="margin-top: 20px">
+        <div class="error__content">
+          <h3>Aun no puedes registrar un participante</h3>
+          <p>Debes tener al menos un evento creado para poder asociar un participante al evento</p>
+        </div> <!-- / .error_content -->
+      </div>
+@endif
 
 
 <script>

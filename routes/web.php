@@ -42,10 +42,13 @@ Route::group(['middleware' => ['VerificarSesion']], function () {
 		    Route::get('confirmar-email/{codigo}', "UsuariosController@confirmarEmail");
 		    Route::get('registrar-admin', "UsuariosController@registrarAdmin");
 		});
+
 		Route::group([], function() {
 		    Route::post('editar_perfil', "UsuariosController@editarPerfil");
 		    Route::post('editar_contrasena', "UsuariosController@editarContrasena");
 		    Route::post('registrar-admin', "UsuariosController@registrarAdmin_paso2");
+		    Route::post('reg_admin_send', "UsuariosController@reg_admin_send");
+		    Route::post('reg_admin_delete', "UsuariosController@reg_admin_delete");
 		});
 });
 
@@ -59,6 +62,10 @@ Route::post('inscripcion', "InscripcionController@showDatosParticipantes");
 Route::post('participantes/createPost', 'ParticipantesController@createPost');
 Route::post('participantes/updateListPart', 'ParticipantesController@updateListPart');
 Route::resource('participantes', 'ParticipantesController');
+Route::get('participantes/acc/{inscribir}', 'ParticipantesController@index');
+Route::post('participantes/updateList', 'ParticipantesController@updateList');
+Route::post('participantes/enviar_mail', 'ParticipantesController@enviar_mail');
+Route::post('participantes/panel_lista_part', 'ParticipantesController@panel_lista_part');
 
 Route::post('formularios/createPost', "FormulariosController@createPost");
 Route::post('formularios/uploadImgAyuda', "FormulariosController@uploadImgAyuda");
@@ -67,7 +74,14 @@ Route::resource('formularios', 'FormulariosController');
 Route::resource('eventos', 'EventosController');
 Route::post('eventos', 'EventosController@createPost');
 Route::get('eventos_act', 'EventosController@eventos_act');
+Route::get('eventos/acc/{inscribir}', 'EventosController@index');
 
 
 Route::resource('categorias', 'CategoriasController');
 Route::get('categoriras_act', 'CategoriasController@categoriras_act');
+
+
+Route::get('DescargarInforme/{tipo}', 'InformesController@DescargarInforme');
+
+Route::resource('informes', 'InformesController');
+

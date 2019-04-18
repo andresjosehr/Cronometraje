@@ -7,12 +7,54 @@ use View;
 use App\Participantes;
 use App\Categorias;
 use App\Eventos;
+use App\Usuarios;
 use App\EventosNumeracion;
 use App\DatosParticipante;
 use App\Participantes_Categorias;
 
 class ParticipantesController extends Controller
 {
+
+    public function panel_lista_part()
+    {
+        $Eventos=Eventos::whereIn("id_usuario", self::Rol())->get();
+        $PriEvento = Eventos::whereIn("eventos.id_usuario", self::Rol())->orderBy("id", "desc")->with("categorias.participantes")->first();
+
+        if (isset($PriEvento->Categorias->Participantes)) {
+        $i=0;
+        foreach ($PriEvento->Categorias->Participantes as $Participante) {
+            if ($Participante->pivot->id_estado_inscripcion==1) {
+                $PriEvento->Categorias->Participantes[$i]['id_inscripcion']='1';
+                $PriEvento->Categorias->Participantes[$i]['estado_inscripcion']='Pre-Inscrito';
+            }
+
+            if ($Participante->pivot->id_estado_inscripcion==2) {
+                $PriEvento->Categorias->Participantes[$i]['id_inscripcion']='2';
+                $PriEvento->Categorias->Participantes[$i]['estado_inscripcion']='Inscrito';
+            }
+
+            if ($Participante->pivot->id_estado_inscripcion==3) {
+                $PriEvento->Categorias->Participantes[$i]['id_inscripcion']='3';
+                $PriEvento->Categorias->Participantes[$i]['estado_inscripcion']='Acreditado';
+            }
+
+            if ($Participante->pivot->id_estado_inscripcion==4) {
+                $PriEvento->Categorias->Participantes[$i]['id_inscripcion']='4';
+                $PriEvento->Categorias->Participantes[$i]['estado_inscripcion']='Anulado';
+            }
+
+            $i++;
+        }
+        }
+        $PriEvento->Categorias->Participantes;
+        $Categorias = Categorias::where("id_usuario", self::Rol())->get();
+
+        return view("participantes.lista", ["Participantes" => $PriEvento->Categorias->Participantes, "Categorias" => $Categorias, "Evento" => $PriEvento, "Eventos" => $Eventos]);
+    }
+
+   public function Rol() {
+       if (session()->get("rol")==1) { return $ConsultaRol=Usuarios::select("id")->get()->toArray();  } if(session()->get("rol")==2) { return $ConsultaRol[0]=session()->get("id"); }   if(session()->get("rol")==3) { return $ConsultaRol[0]=session()->get("usuario_padre"); }  
+   }
     /**
      * Display a listing of the resource.
      *
@@ -20,11 +62,45 @@ class ParticipantesController extends Controller
      */
     public function index()
     {
-        
-        $Participantes = Participantes::where("id_usuario", session()->get("id"))->with("categorias")->get();
-        $Categorias = Categorias::where("id_usuario", session()->get("id"))->get();
+     
+        $Eventos=Eventos::whereIn("id_usuario", self::Rol())->get();
+        $PriEvento = Eventos::whereIn("eventos.id_usuario", self::Rol())->orderBy("id", "desc")->with("categorias.participantes")->first();
+        if (isset($PriEvento->Categorias->Participantes)) {
+        $i=0;
+        foreach ($PriEvento->Categorias->Participantes as $Participante) {
+            if ($Participante->pivot->id_estado_inscripcion==1) {
+                $PriEvento->Categorias->Participantes[$i]['id_inscripcion']='1';
+                $PriEvento->Categorias->Participantes[$i]['estado_inscripcion']='Pre-Inscrito';
+            }
 
-        return view("participantes.participantes", ["Participantes" => $Participantes, "Categorias" => $Categorias]);
+            if ($Participante->pivot->id_estado_inscripcion==2) {
+                $PriEvento->Categorias->Participantes[$i]['id_inscripcion']='2';
+                $PriEvento->Categorias->Participantes[$i]['estado_inscripcion']='Inscrito';
+            }
+
+            if ($Participante->pivot->id_estado_inscripcion==3) {
+                $PriEvento->Categorias->Participantes[$i]['id_inscripcion']='3';
+                $PriEvento->Categorias->Participantes[$i]['estado_inscripcion']='Acreditado';
+            }
+
+            if ($Participante->pivot->id_estado_inscripcion==4) {
+                $PriEvento->Categorias->Participantes[$i]['id_inscripcion']='4';
+                $PriEvento->Categorias->Participantes[$i]['estado_inscripcion']='Anulado';
+            }
+
+            $i++;
+        }
+
+        $PriEvento->Categorias->Participantes;
+        $Partici=$PriEvento->Categorias->Participantes;
+        $CateCate=$Categorias;
+    } else{
+        $Partici=0;
+        $CateCate=0;
+    }
+        $Categorias = Categorias::where("id_usuario", self::Rol())->get();
+
+        return view("participantes.participantes", ["Participantes" => $Partici, "Categorias" => $CateCate, "Evento" => $PriEvento, "Eventos" => $Eventos]);
 
     }
 
@@ -88,8 +164,16 @@ class ParticipantesController extends Controller
             }
         }
 
-             $Eventos = Eventos::whereIn("id_categoria", $Request->id_categoria)->with("numeracion")->get();
-            
+
+
+        $Eventos = Eventos::whereIn("id_categoria", $Request->id_categoria)->with("numeracion")->get();
+        
+        foreach ($Eventos as $Evento) {
+            if ($Evento->auto_email==1) {
+                self::emailInscripcion($Request->email_participante, $Evento->mensaje_inscripcion);
+            }
+        }
+
 
             foreach ($Eventos as $Evento) {
                 if ($Evento->auto_numeracion==1) {
@@ -168,18 +252,40 @@ class ParticipantesController extends Controller
              $DefaultDataForm=$Request->DefaultDataForm;
              unset($DefaultDataForm["act_status"]);
 
+             Participantes_Categorias::where("id_participante", $Request->DefaultDataForm["id"])->where("id_categoria", $DefaultDataForm["id_categoria"])->update(["id_categoria" => $DefaultDataForm["id_categoria"], "id_estado_inscripcion" => $DefaultDataForm["id_estado_inscripcion"]]);
+             unset($DefaultDataForm["id_categoria"]);
+             $Id_Categoria=$DefaultDataForm["id_estado_inscripcion"];
+             unset($DefaultDataForm["id_estado_inscripcion"]);
              Participantes::where("id", $Request->DefaultDataForm["id"])->update($DefaultDataForm);
-             $ParticipanteActualizado = Participantes::select('participantes.id as id_participante', 'participantes.*', 'categorias.id as id_categoria_cat', 'categorias.*', 'estado_inscripcion.id as id_estado_inscripcion_ins', 'estado_inscripcion.nombre_estado_inscripcion')
-                                        ->Join("categorias", "participantes.id_categoria", "=", "categorias.id")
-                                        ->Join("eventos", "categorias.id_evento", "=", "eventos.id")
-                                        ->Join("estado_inscripcion", "participantes.id_estado_inscripcion", "=", "estado_inscripcion.id")
-                                        ->where("participantes.id", $Request->DefaultDataForm["id"])->first(); 
 
-            foreach ($Request->CustomDataForm as $key => $value) {
+             $ParticipanteActualizado=Participantes::where("id", $Request->DefaultDataForm["id"])->with("categorias")->first();
+      
 
-                DatosParticipante::where("id", explode("_", $key)[count(explode("_", $key))-1])->update([
-                    "valor" => $value
-                ]);
+             $ParticipanteActualizado['id_inscripcion']=$ParticipanteActualizado->categorias[0]->pivot->id_estado_inscripcion;
+
+             if ($ParticipanteActualizado['id_inscripcion']==1) {
+                $ParticipanteActualizado['estado_inscripcion']='Pre-Inscrito';
+            }
+
+            if ($ParticipanteActualizado['id_inscripcion']==2) {
+                $ParticipanteActualizado['estado_inscripcion']='Inscrito';
+            }
+
+            if ($ParticipanteActualizado['id_inscripcion']==3) {
+                $ParticipanteActualizado['estado_inscripcion']='Acreditado';
+            }
+
+            if ($ParticipanteActualizado['id_inscripcion']==4) {
+                $ParticipanteActualizado['estado_inscripcion']='Anulado';
+            }
+             return $ParticipanteActualizado;
+             if ($Request->CustomDataForm!=0) {
+                foreach ($Request->CustomDataForm as $key => $value) {
+
+                    DatosParticipante::where("id", explode("_", $key)[count(explode("_", $key))-1])->update([
+                        "valor" => $value
+                    ]);
+                }
             }
 
             return $ParticipanteActualizado;
@@ -187,7 +293,16 @@ class ParticipantesController extends Controller
         }
 
         if ($Request->act_status=="true") {
-            Participantes::where("id", $Request->id)->update($Request->only("id_estado_inscripcion"));
+            if ($Request->id_estado_inscripcion==3) {
+
+                 $Categoria = Categorias::where("id", $Request->id_categoria)->first();
+                 $Evento = Eventos::where("id", $Categoria->id)->first();
+                 $Participante=Participantes::where("id", $Request->id)->first();
+                 if ($Evento->auto_email==1) {
+                     self::emailInscripcion($Participante->email_participante, $Evento->mensaje_aprobacion_pago);
+                 }
+             }
+             Participantes_Categorias::where("id_participante", $Request->id)->where("id_categoria", $Request->id_categoria)->update($Request->only("id_estado_inscripcion"));
         }
     }
 
@@ -197,6 +312,48 @@ class ParticipantesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function updateList(Request $Request)
+    {
+        $Eventos=Eventos::where("id_usuario", session()->get("id"))->get();
+        $PriEvento = Eventos::where("id", $Request->id)->orderBy("id", "desc")->with("categorias.participantes")->first();
+
+        $i=0;
+        foreach ($PriEvento->Categorias->Participantes as $Participante) {
+            if ($Participante->pivot->id_estado_inscripcion==1) {
+                $PriEvento->Categorias->Participantes[$i]['id_inscripcion']='1';
+                $PriEvento->Categorias->Participantes[$i]['estado_inscripcion']='Pre-Inscrito';
+            }
+
+            if ($Participante->pivot->id_estado_inscripcion==2) {
+                $PriEvento->Categorias->Participantes[$i]['id_inscripcion']='2';
+                $PriEvento->Categorias->Participantes[$i]['estado_inscripcion']='Inscrito';
+            }
+
+            if ($Participante->pivot->id_estado_inscripcion==3) {
+                $PriEvento->Categorias->Participantes[$i]['id_inscripcion']='3';
+                $PriEvento->Categorias->Participantes[$i]['estado_inscripcion']='Acreditado';
+            }
+
+            if ($Participante->pivot->id_estado_inscripcion==4) {
+                $PriEvento->Categorias->Participantes[$i]['id_inscripcion']='4';
+                $PriEvento->Categorias->Participantes[$i]['estado_inscripcion']='Anulado';
+            }
+
+            $i++;
+        }
+        $PriEvento->Categorias->Participantes;
+        $Categorias = Categorias::where("id_usuario", session()->get("id"))->get();
+
+        echo (string)View::make("participantes.lista", ["Participantes" => $PriEvento->Categorias->Participantes, "Categorias" => $Categorias, "Evento" => $PriEvento, "Eventos" => $Eventos]);
+        ?><script>
+            $(".upd_seg .act_list").hide("slow", function(){
+                $("#ParticipantesLista").show("slow");
+            });
+            $(".act_list").hide("slow", function(){
+                $("#ParticipantesLista").show("slow");
+            });
+        </script><?php
+    }
     public function show($id)
     {
         //
@@ -238,6 +395,10 @@ class ParticipantesController extends Controller
         return "Exito";
     }
 
+    public function enviar_mail(Request $Request)
+    {
+        self::CustomInscripcion($Request->email_participante, $Request->contenido, $Request->asunto);
+    }
 
     public function emailInscripcion($destinatario, $mensaje){
 
@@ -249,6 +410,19 @@ class ParticipantesController extends Controller
         $header .= "Content-Type: text/html";
 
         $body=(string)View::make('emails.inscripcion_participante', ["mensaje" => $mensaje]);
-        mail($destinatario, "Cronometraje - Reseteo de contraseña", $body, $header) or die("No Enviado");
+        mail($destinatario, "Cronometraje", $body, $header) or die("No Enviado");
+    }
+
+    public function CustomInscripcion($destinatario, $mensaje, $Asunto){
+
+
+        $header = "From: Cronometraje <no-responder@cronometraje.com> \r\n";
+        $header .= "Bcc: cronometraje@gmail.com \r\n";
+        $header .= "X-Mailer: PHP/" . phpversion() . " \r\n";
+        $header .= "Mime-Version: 1.0 \r\n";
+        $header .= "Content-Type: text/html";
+
+        $body=(string)View::make('emails.inscripcion_participante', ["mensaje" => $mensaje]);
+        mail($destinatario, "Cronometraje | ".$Asunto , $body, $header) or die("No Enviado");
     }
 }

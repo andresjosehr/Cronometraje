@@ -11,7 +11,7 @@ class Participantes extends Model
 
     public function categorias()
     {
-        return $this->belongsToMany(Categorias::class, "participantes_categorias", "id_participante", "id_categoria")->withPivot('id_estado_inscripcion');
+        return $this->belongsToMany(Categorias::class, "participantes_categorias", "id_participante", "id_categoria")->withPivot("id_estado_inscripcion");;
     }
 
     public function estado_inscripcion()
