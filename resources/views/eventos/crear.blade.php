@@ -1,3 +1,6 @@
+<link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
+
 @if (count($Categorias)>0)
 <div class="col-sm-12 col-md-12 crear_evento" style="padding-top: 25px">
   <strong class="text-muted d-block mb-2">Agregar Evento</strong>
@@ -52,14 +55,16 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <strong class="text-muted d-block mb-2">Mensaje de correo de Inscripcion</strong>
-        <textarea name="" id="mensaje_inscripcion" cols="30" rows="10" class="form-control"></textarea>
+        <div id="editor_container" class="add-new-post__editor mb-1" style=" min-height: 0px; "></div>
+       {{--  <textarea name="" id="mensaje_inscripcion" cols="30" rows="10" class="form-control"></textarea> --}}
       </div>
       <div class="form-group col-md-6">
         <strong class="text-muted d-block mb-2">Mensaje de correo de Aprobación de pago</strong>
-        <textarea name="" id="mensaje_aprobacion_pago" cols="30" rows="10" class="form-control"></textarea>
+        <div id="editor_container2" class="add-new-post__editor mb-1" style="min-height: 0px; "></div>
+        {{-- <textarea name="" id="mensaje_aprobacion_pago" cols="30" rows="10" class="form-control"></textarea> --}}
       </div>
     </div>
-    <div class="form-row" style="margin-top: 20px;margin-bottom: 20px;">
+    <div class="form-row" style="margin-top:80px;margin-bottom: 20px;">
       <div class="form-group col-md-4">
         <div class="custom-control custom-toggle custom-toggle-sm mb-1">
           <input type="checkbox" id="inscripcion_habilitada" name="inscripcion_habilitada" class="custom-control-input">
@@ -95,3 +100,16 @@
   </div> <!-- / .error_content -->
 </div>
 @endif
+
+<script>
+  $(document).ready(function() {
+    var editor = new Quill('#editor_container', {
+        theme: 'snow'
+      });
+
+    var editor = new Quill('#editor_container2', {
+        theme: 'snow'
+      });
+
+  });
+</script>

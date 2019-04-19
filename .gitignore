@@ -1,10 +1,11 @@
 /node_modules
 /public/hot
+/vendor
 /public/storage
 /public/img/crono
 /storage/*.key
-/vendor
 .env
+Cronometraje.zip
 .htaccess
 .phpunit.result.cache
 Homestead.json

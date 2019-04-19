@@ -112,6 +112,12 @@
                   <span>Informes</span>
                 </a>
               </li>
+              <li class="nav-item" id="sidebar_eventos">
+                <a class="nav-link sidebar_eventos" href="eventos" style="text-align: center;">
+                  <i class="material-icons"></i>
+                  <p>Eventos</p>
+                </a>
+              </li>
             </ul>
           </div>
         </aside>
@@ -191,4 +197,32 @@
               </nav>
             </nav>
           </div>
+          <style>
+            .evento_generado{
+              display: none
+            }
+          </style>
+  <script>
+          $(document).ready(function(){
+              $.ajax({
+                  type: 'post',
+                  url: url+"/general",
+                  success: function(result){
+                   result.map(function(key, value){
+
+                    $("#sidebar_eventos").after().append('<li class="nav-item evento_generado">'+
+                                                            '<a class="nav-link sidebar_eventos" href="eventos">'+
+                                                              '<i class="material-icons">event</i>'+
+                                                              '<span>'+key.nombre_evento+'</span><br>'+
+                                                              '<p style="font-size:10px">Categoria: '+key.categorias.nombre_categoria+'</p>'+
+                                                              '<p style="font-size:10px">Participantes: '+key.categorias.participantes.length+'</p>'+
+                                                            '</a>'+
+                                                          '</li>')
+                    console.log(key)
+                    console.log(value)
+                   })
+                   $(".evento_generado").show("slow");                  }
+              });
+          });
+  </script>
           <!-- / .main-navbar -->

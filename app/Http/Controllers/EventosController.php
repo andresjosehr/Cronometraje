@@ -153,4 +153,8 @@ public function createPost(Request $Request)
         Eventos::where("id", $id)->delete();
         return "Exito";
     }
+    public function general()
+    {
+       return $Eventos = Eventos::whereIn("id_usuario", self::Rol())->with("categorias.participantes")->get();
+    }
 }

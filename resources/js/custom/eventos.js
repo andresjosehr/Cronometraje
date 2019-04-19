@@ -129,10 +129,12 @@ window.crearEvento=function(){
 
 
   var DatCre={};
-  $(".crear_evento input, .crear_evento select, .crear_evento textarea").map(function(key, val){
-
-    $(".crear_evento #"+val.id).removeClass("is-invalid");
-    $("small").remove();
+  $(".crear_evento input, .crear_evento select").map(function(key, val){
+    console.log(val.id);
+    if (val.id!="") {
+      $(".crear_evento #"+val.id).removeClass("is-invalid");
+      $("small").remove();
+    }
 
 
     DatCre[val.id]=val.value;
@@ -146,7 +148,9 @@ window.crearEvento=function(){
   $(".crear_part_btn").hide("fast", function(){
     $(".crear_eve_lo").show("fast");
   });
-  console.log(DatCre);
+  DatCre["mensaje_inscripcion"]=$("#editor_container .ql-editor").html()
+  DatCre["mensaje_aprobacion_pago"]=$("#editor_container2 .ql-editor").html()
+
   $.ajax({
       type: 'post',
       url: url+"/eventos",
@@ -157,8 +161,10 @@ window.crearEvento=function(){
         });
         if (result!="Exito") {
           for (var key in result){
+            if (key!="") {
             $(".crear_evento #"+key).addClass("is-invalid");
             $(".crear_evento #"+key).after('<small id="us_error err_part" style="color:red;">'+result[key]+'</small>');
+          }
            }
         } else{
           $("#home").empty();
@@ -166,7 +172,9 @@ window.crearEvento=function(){
           $("#vista_eventos").load("eventos_act");
 
           $(".crear_evento input, .crear_evento select").map(function(key, val){
-            $(".crear_evento #"+val.id).val("");
+            if (val.id!="") {
+                $(".crear_evento #"+val.id).val("");
+              }
           })
 
           swal("Listo!", "El evento ha sido registrado exitosamente", "success")

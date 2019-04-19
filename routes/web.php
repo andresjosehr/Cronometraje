@@ -73,6 +73,7 @@ Route::resource('formularios', 'FormulariosController');
 
 Route::resource('eventos', 'EventosController');
 Route::post('eventos', 'EventosController@createPost');
+Route::post('general', 'EventosController@general');
 Route::get('eventos_act', 'EventosController@eventos_act');
 Route::get('eventos/acc/{inscribir}', 'EventosController@index');
 
