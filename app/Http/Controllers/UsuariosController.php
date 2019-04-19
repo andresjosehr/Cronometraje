@@ -227,14 +227,20 @@ class UsuariosController extends Controller
         $header .= "Content-Type: text/html";
 
         $body=(string)View::make('emails.'.$tipo, ["codigo" => $codigo]);
-        mail($destinatario, "Cronometraje - Reseteo de contraseña", $body, $header) or die("No Enviado");
+        mail($destinatario, "Cronometraje", $body, $header) or die("No Enviado");
     }
 
     public function registrarAdmin(){
-        return view("registrar-admin", ["Roles" => RolesDeUsuario::where("id", ">=", session()->get('rol'))->get(), "AdminTemps" => RegistroAdminTemp::where("id_usuario_padre", session()->get("id"))->get()]);
+        if (session()->get("rol")==2) {
+            $AdminTemps=RegistroAdminTemp::where("id_usuario_padre", session()->get("id"))->get();
+        } else{
+            $AdminTemps=RegistroAdminTemp::all();
+        }
+        return view("registrar-admin", ["Roles" => RolesDeUsuario::where("id", ">=", session()->get('rol'))->get(), "AdminTemps" => $AdminTemps, "Usuarios" => Usuarios::where("rol", 2)->get(), "MiRol" => session()->get("id")]);
     }
 
     public function registrarAdmin_paso2(Request $Request){
+
 
         $v = \Validator::make($Request->all(), [
             'email' => 'email|unique:usuarios,email|unique:cambiar_email,email_nuevo|unique:registro_admin_temp,email',
@@ -251,7 +257,12 @@ class UsuariosController extends Controller
             }
 
         } else{
-            $Request->merge(['codigo' => self::GenerarCodigo(), 'id_usuario_padre' => session()->get("id")]);
+            if (session()->get("rol")==2 && $Request->rol==3) {
+               $Request->merge(['codigo' => self::GenerarCodigo(), 'id_usuario_padre' => session()->get("id")]);
+            } else{
+                $Request->merge(['codigo' => self::GenerarCodigo()]);
+            }
+
 
             RegistroAdminTemp::insert($Request->all());
             $UserTemp=RegistroAdminTemp::orderBy("id", "desc")->first();

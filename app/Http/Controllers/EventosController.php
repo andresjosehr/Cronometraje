@@ -12,7 +12,7 @@ class EventosController extends Controller
 {
 
     public function Rol() {
-       if (session()->get("rol")==1) { $ConsultaRol=Usuarios::select("id")->get()->toArray();  } if(session()->get("rol")==2) { $ConsultaRol[0]=session()->get("id"); }   if(session()->get("rol")==3) { $ConsultaRol[0]=session()->get("usuario_padre"); }  
+       if (session()->get("rol")==1) { $ConsultaRol=Usuarios::select("id")->get()->toArray();  } if(session()->get("rol")==2) { $ConsultaRol[0]=session()->get("id"); }   if(session()->get("rol")==3) { $ConsultaRol[0]=session()->get("usuario_padre"); $ConsultaRol[1]=session()->get("usuario_padre"); }  
        return $ConsultaRol;
    }
 

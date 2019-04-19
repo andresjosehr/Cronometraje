@@ -17,7 +17,7 @@
                 <div class="card card-small">
                   <div class="card-header border-bottom">
                     <div id='contenedor_status_participante'></div>
-                    <h6 class="m-0">Parcitipantes {{\Request::path()}}</h6>
+                    <h6 class="m-0">Parcitipantes </h6>
                   </div>
                   <div class="card-body" id="participantes">
                     <div class="row ">
@@ -34,7 +34,7 @@
                     </div>
                     <div class="tab-content" id="myTabContent">
                       <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        @if ($Participantes!=0)
+                        @if (count($Eventos)>0)
                         <div class="row" style="margin-top: 20px">
                           <div class="form-group col-md-12">
                             <label for="feInputState">Selecciona el evento sobre el cual deseas mostrar los participantes</label>
@@ -104,7 +104,7 @@
         <a class="pp-cta extra-action" href="http://bit.ly/shards-dashboard-pro">Download</a>
       </div>
     </div>
-@if ($Participantes!=0)
+@if (count($Eventos)>0)
       <script>
 
         $(document).ready(function() {

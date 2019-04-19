@@ -19,7 +19,7 @@ class RegistroAdminTempTable extends Migration
             $table->string('email');
             $table->integer('rol')->unsigned();
             $table->string('codigo');
-            $table->integer('id_usuario_padre')->unsigned()->fillable();
+            $table->integer('id_usuario_padre')->unsigned()->fillable()->nullable();
             // $table->foreign('id_usuario_padre')->references('id')->on('usuario');
         });
     }

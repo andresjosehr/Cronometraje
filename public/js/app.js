@@ -2225,7 +2225,7 @@ window.AbrirEdit = function () {
 /***/ (function(module, exports) {
 
 window.registrarAdmin = function () {
-  $('#email_admin, #rol').removeClass("is-invalid");
+  $('#email_admin, #rol, #usuario_padre').removeClass("is-invalid");
   $('#invalid-feedback').remove();
   emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
 
@@ -2237,13 +2237,27 @@ window.registrarAdmin = function () {
       $('#rol').addClass("is-invalid");
       $('#rol').after('<small id="invalid-feedback" style="color:red;">Debes elegir un rol para el administrador</small>');
     } else {
-      $(".reg_admin_btn").fadeOut(250, function () {
-        $(".loading_admin").fadeIn(250);
-      });
-      $("#registrar_admin_contenedor").load(url + "/registrar-admin", {
-        email: $("#email_admin").val(),
-        rol: $("#rol").val()
-      });
+      if ($("#rol").val() == 3 && $("#usuario_padre").val() == 0) {
+        $('#usuario_padre').addClass("is-invalid");
+        $('#usuario_padre').after('<small id="invalid-feedback" style="color:red;">Debes elegir un un usuario padre para el loader</small>');
+      } else {
+        $(".reg_admin_btn").fadeOut(250, function () {
+          $(".loading_admin").fadeIn(250);
+        });
+
+        if ($("#rol").val() != 3) {
+          $("#registrar_admin_contenedor").load(url + "/registrar-admin", {
+            email: $("#email_admin").val(),
+            rol: $("#rol").val()
+          });
+        } else {
+          $("#registrar_admin_contenedor").load(url + "/registrar-admin", {
+            email: $("#email_admin").val(),
+            usuario_padre: $("#usuario_padre").val(),
+            rol: $("#rol").val()
+          });
+        }
+      }
     }
   }
 };

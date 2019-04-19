@@ -5,10 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Categorias;
 use App\Eventos;
+use App\Usuarios;
 use App\Participantes_Categorias;
 
 class CategoriasController extends Controller
 {
+
+     public function Rol() {
+       if (session()->get("rol")==1) { $ConsultaRol=Usuarios::select("id")->get()->toArray();  } if(session()->get("rol")==2) { $ConsultaRol[0]=session()->get("id"); }   if(session()->get("rol")==3) { $ConsultaRol[0]=session()->get("usuario_padre"); $ConsultaRol[1]=session()->get("usuario_padre"); } 
+
+       return $ConsultaRol;
+   }
     /**
      * Display a listing of the resource.
      *
@@ -16,14 +23,14 @@ class CategoriasController extends Controller
      */
     public function index()
     {
-        $Categorias = Categorias::where("id_usuario", session()->get("id"))->get();
+        $Categorias = Categorias::whereIn("id_usuario", self::rol())->get();
 
         return view("categorias.categorias", ["Categorias" => $Categorias]);
     }
 
     public function categoriras_act()
     {
-        $Categorias = Categorias::where("id_usuario", session()->get("id"))->get();
+        $Categorias = Categorias::where("id_usuario", self::rol())->get();
 
         return view("categorias.lista", ["Categorias" => $Categorias]);
     }

@@ -53,36 +53,47 @@ Route::group(['middleware' => ['VerificarSesion']], function () {
 });
 
 
-Route::get('CerrarSesion', "LoginController@cerrarSesion");
+Route::group(['middleware' => ['VerificarSesion']], function () {
 
-Route::get('inscripcion/{codigo_form}', "InscripcionController@showForm");
-Route::post('inscripcion/{codigo_form}', "InscripcionController@storeData");
-Route::post('inscripcion', "InscripcionController@showDatosParticipantes");
+	Route::group(['middleware' => ['AccesoPorRoles']], function () {
 
-Route::post('participantes/createPost', 'ParticipantesController@createPost');
-Route::post('participantes/updateListPart', 'ParticipantesController@updateListPart');
-Route::resource('participantes', 'ParticipantesController');
-Route::get('participantes/acc/{inscribir}', 'ParticipantesController@index');
-Route::post('participantes/updateList', 'ParticipantesController@updateList');
-Route::post('participantes/enviar_mail', 'ParticipantesController@enviar_mail');
-Route::post('participantes/panel_lista_part', 'ParticipantesController@panel_lista_part');
+	});
+
+		Route::post('participantes/createPost', 'ParticipantesController@createPost');
+		Route::post('participantes/updateListPart', 'ParticipantesController@updateListPart');
+		Route::resource('participantes', 'ParticipantesController');
+		Route::get('participantes/acc/{inscribir}', 'ParticipantesController@index');
+		Route::post('participantes/updateList', 'ParticipantesController@updateList');
+		Route::post('participantes/enviar_mail', 'ParticipantesController@enviar_mail');
+
+
+		Route::resource('categorias', 'CategoriasController');
+		Route::get('categoriras_act', 'CategoriasController@categoriras_act');
+
+	Route::post('participantes/panel_lista_part', 'ParticipantesController@panel_lista_part');
+
+	Route::resource('eventos', 'EventosController');
+		Route::post('eventos', 'EventosController@createPost');
+		Route::get('eventos_act', 'EventosController@eventos_act');
+		Route::get('eventos/acc/{inscribir}', 'EventosController@index');
+
+
 
 Route::post('formularios/createPost', "FormulariosController@createPost");
 Route::post('formularios/uploadImgAyuda', "FormulariosController@uploadImgAyuda");
 Route::resource('formularios', 'FormulariosController');
 
-Route::resource('eventos', 'EventosController');
-Route::post('eventos', 'EventosController@createPost');
-Route::post('general', 'EventosController@general');
-Route::get('eventos_act', 'EventosController@eventos_act');
-Route::get('eventos/acc/{inscribir}', 'EventosController@index');
-
-
-Route::resource('categorias', 'CategoriasController');
-Route::get('categoriras_act', 'CategoriasController@categoriras_act');
-
-
 Route::get('DescargarInforme/{tipo}', 'InformesController@DescargarInforme');
 
 Route::resource('informes', 'InformesController');
 
+Route::get('CerrarSesion', "LoginController@cerrarSesion");
+
+});
+
+Route::post('general', 'EventosController@general');
+
+
+Route::get('inscripcion/{codigo_form}', "InscripcionController@showForm");
+Route::post('inscripcion/{codigo_form}', "InscripcionController@storeData");
+Route::post('inscripcion', "InscripcionController@showDatosParticipantes");

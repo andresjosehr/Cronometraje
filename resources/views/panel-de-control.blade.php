@@ -203,7 +203,7 @@
                     <div class="row border-bottom py-2 bg-light" style="padding-left: 20px;padding-right: 20px;">
                       <div class="row" style="margin-top: 20px; width: 100%">
                           <div class="form-group col-md-12">
-                            @if(count($Eventos)>0)
+                            @if($Eventos!="[]")
                             <label for="feInputState">Selecciona el evento sobre el cual deseas mostrar los participantes</label>
                             <select id="feInputState" class="form-control">
                               @php $i=0; @endphp
@@ -370,6 +370,7 @@
 
 
     </style>
+    @if($Eventos!="[]")
     <script>
       $(document).ready(function(){
         $("#ParticipantesLista").load(url+"/participantes/panel_lista_part", {Data: "Data"});
@@ -386,6 +387,7 @@
         $(".act_list").hide("slow")
       })
     </script>
+    @endif
     
     @include("participantes.editar");
     @include("footer");

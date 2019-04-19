@@ -30,10 +30,26 @@
                         <select class="form-control" id="rol" name="rol">
                             <option value="0" selected=""><----- Rol del administrador ------></option>
                             @foreach ($Roles as $Rol)
+                            @if ($Usuarios=="[]")
+                              @if ($Rol->id!=3)
+                                <option value="{{$Rol->id}}">{{$Rol->nombre}}</option>
+                              @endif
+                              @else
                               <option value="{{$Rol->id}}">{{$Rol->nombre}}</option>
+                            @endif
                             @endforeach
                         </select>
                       </div>
+                      @if ($MiRol==1)
+                        <div class="form-group from_per elegir_usuario">
+                          <select class="form-control" id="usuario_padre" name="rol"  style="display: none;    margin-top: -7px;">
+                              <option value="0" selected=""><----- Usuario padre del loader ------></option>
+                              @foreach ($Usuarios as $Usuario)
+                                <option value="{{$Usuario->id}}">{{$Usuario->nombre}}</option>
+                              @endforeach
+                          </select>
+                        </div>
+                      @endif
                       <div class="form-group mb-0" align="center">
                         <button type="button" onclick="registrarAdmin();" class="btn btn-accent btn-block reg_admin_btn">Registrar</button>
                         <div class="loading loading_admin"></div>
@@ -128,5 +144,20 @@
         <a class="pp-cta extra-action" href="http://bit.ly/shards-dashboard-pro">Download</a>
       </div>
     </div>
+
+
+    <script>
+
+        $(document).ready(function() {
+
+         $("#rol").change(function () {
+            if ($("#rol").val()==3) {
+              $(".elegir_usuario select").show("slow")
+            } else{
+              $(".elegir_usuario select").hide("slow")
+            }
+          });
+        });
+      </script>
           
     @include("footer");

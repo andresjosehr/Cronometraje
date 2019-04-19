@@ -1,4 +1,6 @@
-@if ($Participantes!=0)
+
+
+@if ($Participantes!="[]")
 <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
 
@@ -50,11 +52,11 @@
 
     <div id="example_wrapper tabla_participantes" class="dataTables_wrapper dt-bootstrap4">
     </div>
-    @else
+     @else(count($Participantes)=="[]")
       <div class="error no_form" style="margin-top: 20px">
         <div class="error__content">
           <h3>No tienes participantes registrados</h3>
-          <p>Puedes crear un participante haciendo click en "Agregar Participante" en la pestaña de arriba</p>
+          <p>Puedes crear un participante en la seccion de agregar participantes del sistema</p>
         </div> <!-- / .error_content -->
       </div>
     @endif

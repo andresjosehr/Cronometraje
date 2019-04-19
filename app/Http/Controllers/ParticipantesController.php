@@ -16,10 +16,10 @@ class ParticipantesController extends Controller
 {
 
     public function panel_lista_part()
-    {
+    {   
+        
         $Eventos=Eventos::whereIn("id_usuario", self::Rol())->get();
         $PriEvento = Eventos::whereIn("eventos.id_usuario", self::Rol())->orderBy("id", "desc")->with("categorias.participantes")->first();
-
         if (isset($PriEvento->Categorias->Participantes)) {
         $i=0;
         foreach ($PriEvento->Categorias->Participantes as $Participante) {
@@ -45,15 +45,30 @@ class ParticipantesController extends Controller
 
             $i++;
         }
-        }
-        $PriEvento->Categorias->Participantes;
-        $Categorias = Categorias::where("id_usuario", self::Rol())->get();
 
-        return view("participantes.lista", ["Participantes" => $PriEvento->Categorias->Participantes, "Categorias" => $Categorias, "Evento" => $PriEvento, "Eventos" => $Eventos]);
+        $PriEvento->Categorias->Participantes;
+        $Partici=$PriEvento->Categorias->Participantes;
+        $CateCate=Categorias::where("id_usuario", self::Rol())->get();
+    } else{
+        $Partici="[]";
+        $CateCate="[]";
+    }
+
+        return view("participantes.lista", ["Participantes" => $Partici, "Categorias" => $CateCate, "Evento" => $PriEvento, "Eventos" => $Eventos]);
     }
 
    public function Rol() {
-       if (session()->get("rol")==1) { return $ConsultaRol=Usuarios::select("id")->get()->toArray();  } if(session()->get("rol")==2) { return $ConsultaRol[0]=session()->get("id"); }   if(session()->get("rol")==3) { return $ConsultaRol[0]=session()->get("usuario_padre"); }  
+       if (session()->get("rol")==1) { 
+        $ConsultaRol=Usuarios::select("id")->get()->toArray();  
+    } 
+    if(session()->get("rol")==2) { 
+        $ConsultaRol[0]=session()->get("id"); 
+        $ConsultaRol[1]=session()->get("id"); 
+    }   if(session()->get("rol")==3) { 
+        $ConsultaRol[0]=session()->get("usuario_padre"); 
+        $ConsultaRol[1]=session()->get("usuario_padre"); 
+    }  
+    return $ConsultaRol;
    }
     /**
      * Display a listing of the resource.
@@ -93,12 +108,11 @@ class ParticipantesController extends Controller
 
         $PriEvento->Categorias->Participantes;
         $Partici=$PriEvento->Categorias->Participantes;
-        $CateCate=$Categorias;
+        $CateCate=Categorias::where("id_usuario", self::Rol())->get();
     } else{
         $Partici=0;
         $CateCate=0;
     }
-        $Categorias = Categorias::where("id_usuario", self::Rol())->get();
 
         return view("participantes.participantes", ["Participantes" => $Partici, "Categorias" => $CateCate, "Evento" => $PriEvento, "Eventos" => $Eventos]);
 
