@@ -137,15 +137,15 @@
                   <input class="navbar-search form-control" type="text" aria-label="Search"> </div>
               </form>
               <ul class="navbar-nav border-left flex-row ">
-                <li class="nav-item border-right dropdown notifications" style="display: none;">
+                <li class="nav-item border-right dropdown notifications">
                   <a class="nav-link nav-link-icon text-center" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="nav-link-icon__wrapper">
                       <i class="material-icons">&#xE7F4;</i>
-                      <span class="badge badge-pill badge-danger">2</span>
+                      <span class="badge badge-pill badge-danger numero_notificaciones"></span>
                     </div>
                   </a>
-                  <div class="dropdown-menu dropdown-menu-small" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="#">
+                  <div class="dropdown-menu dropdown-menu-small lista_notifiaciones" aria-labelledby="dropdownMenuLink">
+                    {{-- <a class="dropdown-item" href="#">
                       <div class="notification__icon-wrapper">
                         <div class="notification__icon">
                           <i class="material-icons">&#xE6E1;</i>
@@ -168,8 +168,8 @@
                         <p>Last week your store’s sales count decreased by
                           <span class="text-danger text-semibold">5.52%</span>. It could have been worse!</p>
                       </div>
-                    </a>
-                    <a class="dropdown-item notification__all text-center" href="#"> View all Notifications </a>
+                    </a> --}}
+                    {{-- <a class="dropdown-item notification__all text-center" href="#"> View all Notifications </a> --}}
                   </div>
                 </li>
                 <li class="nav-item dropdown custom_dropdown">
@@ -222,6 +222,46 @@
                      $(".evento_generado").show("slow");                  
                    }
                 });
+
+
+                $.ajax({
+                    type: 'post',
+                    url: url+"/notificaciones",
+                    success: function(result){
+                      var visto=0;
+                      result.map(function(e){
+                        if (e.visto==0) { visto++ }
+                        $(".lista_notifiaciones").append('<a class="dropdown-item" href="#">'+
+                            '<div class="notification__icon-wrapper">'+
+                              '<div class="notification__icon">'+
+                                '<i class="material-icons">accessibility_new</i>'+
+                              '</div>'+
+                            '</div>'+
+                            '<div class="notification__content">'+
+                              '<span class="notification__category">Nuevo participante inscrito</span>'+
+                              '<p>Un nuevo participante se ha inscrito en el evento: '+e.evento+'</p>'+
+                            '</div>'+
+                          '</a>');
+                      });
+                      if (visto>0) {
+                        $(".numero_notificaciones").text(visto);
+                      }
+                   }
+                });
+
+                $("#dropdownMenuLink").click(function(){
+                    $.ajax({
+                      type: 'post',
+                      url: url+"/marcar_notificaciones_vistas",
+                      success: function(result){
+                        if (result=="Exito") {
+                          $(".numero_notificaciones").text("");
+                        }
+                        
+                     }
+                  });
+                })
             });
+
   </script>
           <!-- / .main-navbar -->

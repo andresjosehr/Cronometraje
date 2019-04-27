@@ -78,6 +78,8 @@ Route::group(['middleware' => ['VerificarSesion']], function () {
 		Route::get('eventos/acc/{inscribir}', 'EventosController@index');
 
 
+Route::post('notificaciones', "UsuariosController@notificaciones");
+Route::post('marcar_notificaciones_vistas', "UsuariosController@marcar_notificaciones_vistas");
 
 Route::post('formularios/createPost', "FormulariosController@createPost");
 Route::post('formularios/uploadImgAyuda', "FormulariosController@uploadImgAyuda");

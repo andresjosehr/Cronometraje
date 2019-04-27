@@ -7,6 +7,8 @@ use App\Formularios;
 use App\Participantes;
 use App\DatosParticipante;
 use App\Eventos;
+use App\Usuarios;
+use App\Notificaciones;
 use View;
 use App\Participantes_Categorias;
 use Redirect;
@@ -14,9 +16,14 @@ use Redirect;
 class InscripcionController extends Controller
 {
     public function showForm($codigo){
-    	$Formulario=Formularios::whereHas('eventos', function ($query) {
-                    $query->where('id_usuario', session()->get("id"));
-                })->with("campos.subcampos")->with("eventos.categorias")->where("codigo", $codigo)->get();
+
+
+      $Formulario=Formularios::where("codigo", $codigo)->whereHas("eventos")->with("campos.subcampos")->with("eventos.categorias")->get();
+
+
+    	// return $Formulario=Formularios::whereHas('eventos', function ($query) {
+     //                $query->where('id_usuario', session()->get("id"));
+     //            })->with("campos.subcampos")->with("eventos.categorias")->where("codigo", $codigo)->get();
 
     	return view("inscripcion.inscripcion", ["Formulario" => $Formulario]);
     }
@@ -38,6 +45,7 @@ class InscripcionController extends Controller
          } 
 
             $Evento = Eventos::where($Request->only($Request->id_categoria))->first();
+            $Usuarios=Usuarios::where("id", $Evento->id_usuario)->with("usuario_hijo")->get();
             $Request->merge(["id_usuario" => $Evento->id_usuario]);
             $DatEx=$Request->except("id_usuario", '_token', "nombre_participante", "apellido", "email_participante", "dni", "nacimiento", "sexo", "id_estado_inscripcion", "edad", "id_categoria");
          		Participantes::insert($Request->only("nombre_participante", "apellido", "email_participante", "dni", "nacimiento", "sexo", "edad", "id_usuario"));
@@ -89,6 +97,22 @@ class InscripcionController extends Controller
         }
           if ($Evento->auto_email==1) {
             self::emailInscripcion($Request->email, $Evento->mensaje_aprobacion_pago);
+          }
+
+          Notificaciones::insert([
+            "tipo"       => 1,
+            "evento"     => $Evento->nombre_evento,
+            "visto"      => 0,
+            "id_usuario" => $Usuarios[0]->id
+          ]);
+
+          foreach ($Usuarios[0]->usuario_hijo as $UsuarioHijo) {
+            Notificaciones::insert([
+              "tipo"       => 1,
+              "evento"     => $Evento->nombre_evento,
+              "visto"      => 0,
+              "id_usuario" => $UsuarioHijo->id
+            ]);
           }
 
 

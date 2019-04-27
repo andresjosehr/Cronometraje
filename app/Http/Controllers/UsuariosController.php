@@ -9,6 +9,7 @@ use App\Eventos;
 use App\Categorias;
 use App\Participantes;
 use App\CambiarEmail;
+use App\Notificaciones;
 use App\ResetearContrasena;
 use App\RegistroAdminTemp;
 use Hash;
@@ -329,6 +330,15 @@ class UsuariosController extends Controller
         </script><?php
 
 
+    }
+
+    public function notificaciones(Request $Request){
+        return Notificaciones::where("id_usuario", session()->get("id"))->get();
+    }
+    public function marcar_notificaciones_vistas()
+    {
+        Notificaciones::where("id_usuario", session()->get("id"))->update(["visto" => 1]);
+        return "Exito";
     }
 
     public function EnviarPreAdmin()
